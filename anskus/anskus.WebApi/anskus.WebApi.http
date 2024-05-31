@@ -1,0 +1,6 @@
+@anskus.WebApi_HostAddress = http://localhost:5166
+
+GET {{anskus.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
