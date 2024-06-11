@@ -19,7 +19,7 @@ namespace anskus.Application.Cuestionarios.Commands.Create
 
         public async Task Handle(CreateCuestionarioCommand request, CancellationToken cancellationToken)
         {
-            await _cuestionarioRepository.Add(request.Cuestionario);
+            await _cuestionarioRepository.Add(request.Cuestionario,request.email);
         }
     }
 

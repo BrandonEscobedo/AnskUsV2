@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Application.Cuestionarios.Commands.Create
+namespace anskus.Application.Cuestionarios.Querys.GetCuestionarioByUser
 {
-    public record CreateCuestionarioCommand (Cuestionario Cuestionario, string email):IRequest;
+    public record GetAllCuestionarioByUser(string Email):IRequest<List<Cuestionario>>;
 }

@@ -1,9 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace anskus.Application.DependencyInjection
 {
@@ -15,6 +11,7 @@ namespace anskus.Application.DependencyInjection
             {
                 config.RegisterServicesFromAssembly(typeof(ServiceContainer).Assembly);
             });
+            services.AddValidatorsFromAssembly(AppicationAssemblyReference.assembly);
             return services;
         }
 

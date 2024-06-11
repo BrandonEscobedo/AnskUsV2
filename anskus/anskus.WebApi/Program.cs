@@ -1,6 +1,7 @@
 using anskus.Application.DependencyInjection;
 using anskus.Infrestructure.DependencyInjection;
 using anskus.WebApi.EndPoints;
+using anskus.WebApi.ExtensionMigration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,8 +17,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigration();
 }
 app.MapCuestionariosEndPoints();
+app.MapAccountEndPoints();
 app.UseHttpsRedirection();
 
 
