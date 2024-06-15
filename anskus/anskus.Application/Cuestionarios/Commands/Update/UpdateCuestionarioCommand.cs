@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.Cuestionarios.Commands.Update
 {
-    public record UpdateCuestionarioCommand(Cuestionario Cuestionario):IRequest;
+    public record UpdateCuestionarioCommand(Cuestionario Cuestionario):IRequest<Cuestionario>;
 }

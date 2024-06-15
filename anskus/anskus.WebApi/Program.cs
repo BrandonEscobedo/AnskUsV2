@@ -9,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ApplicationServices();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 builder.Services.InfrestructureService(builder.Configuration);
 var app = builder.Build();
 
@@ -19,10 +29,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.ApplyMigration();
 }
+app.UseCors("AllowAll");
 app.MapCuestionariosEndPoints();
 app.MapAccountEndPoints();
 app.UseHttpsRedirection();
-
-
 app.Run();
 

@@ -10,8 +10,8 @@ namespace anskus.WebApi.EndPoints
     {
         public static void MapAccountEndPoints(this IEndpointRouteBuilder app)
         {
-            app.MapPost("identity/register", async (CreateAccountDTO createAccount,
-                IValidator<CreateAccountCommand> validator, 
+            app.MapPost("api/identity/Register", async (CreateAccountDTO createAccount,
+                IValidator<CreateAccountCommand> validator,
                 ISender sender) =>
             {
                 CreateAccountCommand createAccountCommand = new CreateAccountCommand(createAccount);
@@ -20,13 +20,23 @@ namespace anskus.WebApi.EndPoints
                 {
                     return Results.ValidationProblem(result.ToDictionary());
                 }
-              var response=  await sender.Send(createAccountCommand);
+                var response = await sender.Send(createAccountCommand);
                 return Results.Ok(response);
             });
-            app.MapPost("identity/Login", async (LoginDTO login, ISender sender) =>
+            app.MapPost("api/identity/Login", async (LoginDTO login, ISender sender) =>
             {
                 var response = await sender.Send(new LoginAccountCommand(login));
                 return Results.Ok(response);
+            });
+            app.MapPost("api/identity/Refresh-token", async (RefreshTokenDTO token,ISender sender) =>
+            {
+                if (token == null)
+                {
+                    return Results.BadRequest();
+                }
+                await sender.Send(new RefreshTokenCommand(token));
+                return Results.Ok();
+
             });
         }
     }

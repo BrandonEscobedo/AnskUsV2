@@ -19,9 +19,9 @@ namespace anskus.WebApi.EndPoints
                 var email = user.FindFirst(ClaimTypes.Email)?.Value;
                 if (email == null)
                     throw new Exception("No se encontro el correo");
-                await sender.Send(new CreateCuestionarioCommand(cuestionario, email));
-                return Results.Ok();
-            });
+                var result = await sender.Send(new CreateCuestionarioCommand(cuestionario, email));
+                return Results.Ok(result);
+            }) ;
             groups.MapGet("", async (Guid id, ISender sender) =>
             {
                 var result = await sender.Send(new GetCuestionarioByIdQuery(id));
@@ -35,8 +35,8 @@ namespace anskus.WebApi.EndPoints
             });
             groups.MapPut("", async (Cuestionario cuestionario, ISender sender) =>
             {
-                await sender.Send(new UpdateCuestionarioCommand(cuestionario));
-                return Results.Ok();
+              var response=  await sender.Send(new UpdateCuestionarioCommand(cuestionario));
+                return Results.Ok(response);
             });
         }
     }

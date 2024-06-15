@@ -24,7 +24,7 @@ namespace anskus.Infrestructure.Repositorys
             _cuestionarios.Indexes.CreateOne(new CreateIndexModel<Cuestionario>(indexDefinition));
             _context = context;
         }
-        public async Task Add(Cuestionario cuestionario, string email)
+        public async Task<Cuestionario> Add(Cuestionario cuestionario, string email)
         {
             var user =await _context.Users.FirstOrDefaultAsync(x=>x.Email == email);   
             if(user == null)
@@ -32,8 +32,9 @@ namespace anskus.Infrestructure.Repositorys
                 throw new Exception("No se encontro el usuario");
             }
             cuestionario.Iduser = user.Id;
-           
+            cuestionario.IdCuestionario = Guid.NewGuid();
             await _cuestionarios.InsertOneAsync(cuestionario);
+            return cuestionario;
         }
         public async Task<Cuestionario> GetbyId(Guid id)
         {
@@ -51,12 +52,13 @@ namespace anskus.Infrestructure.Repositorys
                 return await _cuestionarios.Find(filter).ToListAsync();
             //Aplicar paginacion
         }
-        public async Task Update(Cuestionario cuestionario)
+        public async Task<Cuestionario> Update(Cuestionario cuestionario)
         {
            var filter = Builders<Cuestionario>
                 .Filter
                 .Eq(s=>s.IdCuestionario,cuestionario.IdCuestionario);
             await _cuestionarios.ReplaceOneAsync(filter, cuestionario);
+            return cuestionario;
         }
     }
 }

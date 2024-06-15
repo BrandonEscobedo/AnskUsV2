@@ -1,14 +1,16 @@
 ﻿using anskus.Domain.Cuestionarios;
+using anskus.Domain.Models;
 using MediatR;
 
 namespace anskus.Application.Cuestionarios.Commands.Update
 {
-    internal sealed class UpdateCuestionarioCommandHandler(ICuestionarioRepository _cuestionarioRepository) : IRequestHandler<UpdateCuestionarioCommand>
+    internal sealed class UpdateCuestionarioCommandHandler(ICuestionarioRepository _cuestionarioRepository) : IRequestHandler<UpdateCuestionarioCommand,Cuestionario>
     {
       
-        public async Task Handle(UpdateCuestionarioCommand request, CancellationToken cancellationToken)
+        public async Task<Cuestionario> Handle(UpdateCuestionarioCommand request, CancellationToken cancellationToken)
         {
-            await _cuestionarioRepository.Update(request.Cuestionario);
+          var response=  await _cuestionarioRepository.Update(request.Cuestionario);
+            return response;
         }
     }
 }

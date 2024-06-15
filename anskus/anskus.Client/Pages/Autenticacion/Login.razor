@@ -1,0 +1,95 @@
+﻿@page "/login"
+@inject NavigationManager NavigationManager
+@layout ComponentBaseLogin
+@inject IAccountServices accountservices
+@inject AuthenticationStateProvider AuthStateProvider
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@Error</p>
+    </div>
+}
+<div class="d-flex align-items-center bg-secondary vh-100">
+    <div class="container d-flex justify-content-center">
+        <div class="card p-4 rounded" style="width: 30rem;">
+            <h1 class="display-1 text-center text-primary pb-5"><a class="text-decoration-none" href="/">!¿Ansks Us?!</a></h1>
+            <div class="container-fluid w-75">
+                <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <h2 class="text-center pb-3">Bienvenido de vuelta</h2>
+                    <div class="mb-3">
+                        <label for="email">Correo Electronico</label>
+                        <InputText Id="email" Class="form-control" @bind-Value="loginModel.Email" />
+                        <ValidationMessage For="@(() => loginModel.Email)" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password">Password</label>
+                        <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
+                        <ValidationMessage For="@(() => loginModel.Password)" />
+                    </div>
+                    <div class="d-flex justify-content-center pt-3">
+                        <h6>¿No tienes cuenta? ¡registrate ahora!</h6>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary me-2">Iniciar sesión</button>
+                        <button class="btn btn-secondary ms-2"><a href="/register" class="text-decoration-none text-white">Regístrate</a> </button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    public LoginDTO loginModel { get; set; } = new();
+    private bool ShowErrors = false;
+    private string Error = "";
+
+    public Task<AuthenticationState>? ClientAuthState { get; set; }
+    private async Task HandleLogin()
+    {
+        ShowErrors = false;
+        try
+        {
+            var response = await accountservices.LoginAccountAsync(loginModel);
+            if (response.Flag)
+            {
+                var customAuthStateProvider = (CustomAuthenticationProvider)AuthStateProvider;
+                await customAuthStateProvider.UpdateAthenticationState(new LocalStorageDTO()
+                    {
+                        Token = response.token,
+                        Refresh = response.RefreshToken
+                    });
+                NavigationManager.NavigateTo("#");
+            }
+            else {
+                Error = "Error";
+                ShowErrors = true;
+            }
+        }
+        catch(Exception ){
+
+        }
+    }
+    [CascadingParameter]
+    public Task<AuthenticationState>? clientAuthState{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if ((await clientAuthState!).User.Identity!.IsAuthenticated == true)
+            {
+                Console.WriteLine((await clientAuthState!).User!.Identity!.Name);
+                NavigationManager.NavigateTo("#", false, true);
+
+            }
+
+        }
+        catch
+        {
+            
+        }
+    }
+   
+
+}

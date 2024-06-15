@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.Cuestionarios.Commands.Create
 {
-    public record CreateCuestionarioCommand (Cuestionario Cuestionario, string email):IRequest;
+    public record CreateCuestionarioCommand (Cuestionario Cuestionario, string email):IRequest<Cuestionario>;
 }

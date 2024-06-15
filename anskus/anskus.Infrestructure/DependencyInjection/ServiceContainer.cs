@@ -57,6 +57,7 @@ namespace anskus.Infrestructure.DependencyInjection
                             });
             services.AddAuthentication();
             services.AddAuthorization();
+
             services.AddScoped<ICuestionarioRepository, CuestionarioRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             return services;

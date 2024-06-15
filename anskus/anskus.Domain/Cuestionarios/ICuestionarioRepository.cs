@@ -9,10 +9,10 @@ namespace anskus.Domain.Cuestionarios
 {
     public interface ICuestionarioRepository
     {
-        Task Add(Cuestionario cuestionario,string email );
+        Task<Cuestionario> Add(Cuestionario cuestionario,string email );
         Task<List<Cuestionario>> GetbyUser(string email);
         Task<Cuestionario> GetbyId(Guid id);
-        Task Update(Cuestionario cuestionario);
+        Task<Cuestionario> Update(Cuestionario cuestionario);
 
     }
 }

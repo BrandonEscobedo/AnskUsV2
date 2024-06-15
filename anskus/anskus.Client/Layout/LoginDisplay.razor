@@ -1,1 +1,28 @@
 ﻿
+<AuthorizeView>
+    <Authorized>
+        @if(clientAuthState!=null && clientAuthState.Result.User.Identity!.IsAuthenticated)
+        {
+         <p> @clientAuthState.Result.User.Identity.Name</p>
+            <a href="Logout">Log Out</a>
+        }
+       
+    </Authorized>
+    
+    <NotAuthorized >
+        <li class="nav-item">
+            <NavLink class="nav-link font-weight-bold" href="Login">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Login
+            </NavLink>
+        </li><li class="nav-item">
+            <NavLink class="nav-link btn-sign-up" href="Register">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Sign up
+            </NavLink>
+        </li>
+
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState>? clientAuthState { get; set; }
+      }

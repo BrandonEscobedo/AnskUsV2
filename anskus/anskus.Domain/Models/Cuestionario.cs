@@ -9,12 +9,15 @@ namespace anskus.Domain.Models
         [BsonElement("_id")]
         [BsonRepresentation(BsonType.String)]
         public Guid? IdCuestionario { get; set; }
-        public string? Titulo { get; set; }
-        public string Iduser { get; set; }
+        public string? Titulo { get; set; } = "";
+        public EstadoCuestionario Estado { get; set; } 
+        public string Iduser { get; set; } = "";
         public Cuestionario()
         {
-            IdCuestionario = Guid.NewGuid();
+            Estado = EstadoCuestionario.Borrador;     
         }
-        public  ICollection<Pregunta> Pregunta { get; set; } = new List<Pregunta>();
+        public int TiempoRespuesta { get; set; } = 10;
+        public int MaximoUsuarios { get; set; } = 2;
+        public List<Pregunta> Pregunta { get; set; } = new List<Pregunta>();
     }
 }

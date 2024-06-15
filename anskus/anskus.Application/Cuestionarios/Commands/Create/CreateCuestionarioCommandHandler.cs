@@ -1,4 +1,5 @@
 ﻿using anskus.Domain.Cuestionarios;
+using anskus.Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.Cuestionarios.Commands.Create
 {
-    internal sealed class CreateCuestionarioCommandHandler : IRequestHandler<CreateCuestionarioCommand>
+    internal sealed class CreateCuestionarioCommandHandler : IRequestHandler<CreateCuestionarioCommand,Cuestionario>
     {
         private readonly ICuestionarioRepository _cuestionarioRepository;
 
@@ -17,9 +18,10 @@ namespace anskus.Application.Cuestionarios.Commands.Create
             _cuestionarioRepository = cuestionarioRepository;
         }
 
-        public async Task Handle(CreateCuestionarioCommand request, CancellationToken cancellationToken)
+        public async Task<Cuestionario> Handle(CreateCuestionarioCommand request, CancellationToken cancellationToken)
         {
-            await _cuestionarioRepository.Add(request.Cuestionario,request.email);
+            var result=  await _cuestionarioRepository.Add(request.Cuestionario,request.email);
+            return result;
         }
     }
 

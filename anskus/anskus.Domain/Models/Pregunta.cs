@@ -9,11 +9,20 @@ using System.Threading.Tasks;
 namespace anskus.Domain.Models
 {
     public class Pregunta
-    {    
-     
-  
-        public string pregunta { get; set; } = null!;
+    {
 
-        public  ICollection<Respuesta>? Respuesta { get; set; } = new List<Respuesta>();
+        public Guid IdPregunta { get; set; }
+        public Pregunta()
+        {
+            IdPregunta = Guid.NewGuid();
+        }
+        public string pregunta { get; set; } = "";
+
+        public  List<Respuesta> Respuesta { get; set; } = new List<Respuesta>();
+
+        public static implicit operator string(Pregunta v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

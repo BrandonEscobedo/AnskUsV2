@@ -1,0 +1,10 @@
+﻿@inherits LayoutComponentBase
+<div>
+    @Body
+</div>
+<script type="text/javascript">
+    window.addEventListener('beforeunload', (e) => {
+        e.returnValue = 'Estas seguro';
+    });
+</script>
+

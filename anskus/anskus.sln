@@ -5,17 +5,17 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F4C73267-3E9A-4CD3-A240-147BF17A6179}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anskus.Domain", "anskus.Domain\anskus.Domain.csproj", "{EF731946-E8EE-45BB-B660-B006E00D80E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "anskus.Domain", "anskus.Domain\anskus.Domain.csproj", "{EF731946-E8EE-45BB-B660-B006E00D80E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anskus.Infrestructure", "anskus.Infrestructure\anskus.Infrestructure.csproj", "{49350F53-EC64-4F52-BFCC-54E6D96271A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "anskus.Infrestructure", "anskus.Infrestructure\anskus.Infrestructure.csproj", "{49350F53-EC64-4F52-BFCC-54E6D96271A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anskus.Application", "anskus.Application\anskus.Application.csproj", "{C1047EB9-30EE-4558-8F4E-EBBD902A3F5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "anskus.Application", "anskus.Application\anskus.Application.csproj", "{C1047EB9-30EE-4558-8F4E-EBBD902A3F5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentacion", "Presentacion", "{33521B44-EE13-4EF1-850E-D2250235EF64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anskus.WebApi", "anskus.WebApi\anskus.WebApi.csproj", "{4B750E4F-A89D-4542-A0AC-95FF42AE5694}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "anskus.WebApi", "anskus.WebApi\anskus.WebApi.csproj", "{4B750E4F-A89D-4542-A0AC-95FF42AE5694}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anskus.Client", "anskus.Client\anskus.Client.csproj", "{3B9F4916-C8C6-40CE-B894-B0C23C92B210}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "anskus.Client", "anskus.Client\anskus.Client.csproj", "{3B9F4916-C8C6-40CE-B894-B0C23C92B210}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

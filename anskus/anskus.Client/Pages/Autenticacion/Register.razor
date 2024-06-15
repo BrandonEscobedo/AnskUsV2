@@ -1,0 +1,89 @@
+﻿@page "/register"
+@inject IAccountServices accountservices
+@inject NavigationManager NavigationManager
+@layout ComponentBaseLogin
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var error in Errors!)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+
+<div class="d-flex align-items-center bg-secondary vh-100">
+
+    <div class="container d-flex justify-content-center">
+        <div class="card p-2 rounded" style="width: 30rem;">
+            <h1 class="display-1 text-center text-primary pb-2 pt-3"><a class="text-decoration-none" href="/">!¿Ansks Us?!</a></h1>
+            <div class="container-fluid w-75">
+                <EditForm Model="RegisterModel" OnValidSubmit="HandleRegistration">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <h2 class="text-center pb-1">¡Unete a la diversión!</h2>
+                    <h5 class="text-center pb-3">Estás a punto de disfrutar de todas las funciones que ofrecemos</h5>
+                    <div class="mb-3">
+                        <h6>Correo electrónico</h6>
+                        <InputText Id="email" class="form-control" @bind-Value="RegisterModel.Email" />
+                        <ValidationMessage For="@(() => RegisterModel.Email)" />
+                    </div>
+                    <div class="mb-3">
+                        <h6>Contraseña</h6>
+                        <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterModel.Password" />
+                        <ValidationMessage For="@(() => RegisterModel.Password)" />
+                    </div>
+                    <div class="mb-3">
+                        <h6>Confirmar contraseña</h6>
+                        <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterModel.ConfirmPassword" />
+                        <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
+                    </div>
+                    <div class="d-flex justify-content-center pt-3">
+                        <h6>¿Ya tienes una cuenta? ¡Inicia sesión!</h6>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success me-2">Regístrate</button>
+                        <div class="btn btn-primary ms-2"><a href="/login" class="text-decoration-none text-white">Iniciar sesión</a></div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private CreateAccountDTO RegisterModel { get; set; } = new();
+    private bool ShowErrors;
+    private string Errors = "";
+
+    private async Task HandleRegistration()
+    {
+        try
+        {
+            ShowErrors = false;
+
+            var response = await accountservices.CreateAccountAsync(RegisterModel);
+            if (response.Flag)
+            {
+                NavigationManager.NavigateTo("/login");
+
+            }
+            else
+            {
+                Errors = response.Message;
+                ShowErrors = true;
+            }
+        }
+        catch
+        {
+
+
+        }
+        ShowErrors = false;
+
+    }
+
+}
