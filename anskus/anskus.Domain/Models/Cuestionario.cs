@@ -13,13 +13,15 @@ namespace anskus.Domain.Models
         public string? Titulo { get; set; } = "";
     
         public EstadoCuestionario Estado { get; set; }
-        private static readonly ICuestionarioState _borradorState=new BorradorState();
-        private ICuestionarioState _estadoActual = _borradorState;
+
+        private ICuestionarioState _estadoActual;
         public string Iduser { get; set; } = "";
         public Cuestionario()
         {
             Estado = EstadoCuestionario.Borrador;
-         
+            _estadoActual = new BorradorState();
+
+
         }
         public void SetEstado(ICuestionarioState NuevoEstado)
         {

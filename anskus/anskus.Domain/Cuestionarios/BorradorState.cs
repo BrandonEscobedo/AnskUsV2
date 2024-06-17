@@ -26,11 +26,6 @@ namespace anskus.Domain.Cuestionarios
                 cuestionario.Estado = EstadoCuestionario.Guardado;
                 cuestionario.SetEstado(new GuardadoState());
             }
-            else
-            {
-                cuestionario.Estado = EstadoCuestionario.Borrador;
-                cuestionario.SetEstado(new BorradorState());
-            }
         }
     }
 }

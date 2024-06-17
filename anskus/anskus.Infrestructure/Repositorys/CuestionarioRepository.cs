@@ -57,8 +57,21 @@ namespace anskus.Infrestructure.Repositorys
            var filter = Builders<Cuestionario>
                 .Filter
                 .Eq(s=>s.IdCuestionario,cuestionario.IdCuestionario);
+            
             await _cuestionarios.ReplaceOneAsync(filter, cuestionario);
-            cuestionario.Guardar();
+            var cuest= await _cuestionarios.Find(filter).FirstOrDefaultAsync();
+
+            if (cuestionario.Completo())
+            {
+                cuestionario.Estado = EstadoCuestionario.Guardado;
+                cuestionario.SetEstado(new GuardadoState());
+            }
+            else
+            {
+                cuestionario.Estado = EstadoCuestionario.Borrador;
+                cuestionario.SetEstado(new BorradorState());
+            }
+        
             return cuestionario;
         }
     }

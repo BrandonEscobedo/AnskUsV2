@@ -24,7 +24,7 @@ namespace anskus.WebApi.EndPoints
                 return Results.Ok(result);
             }) ;
             groups.MapGet("", async (Guid id, ISender sender,
-                ClaimsPrincipal User, IValidator < GetCuestionarioByIdQuery> validator) =>
+                ClaimsPrincipal User) =>
             {
                 var email = User.FindFirst(ClaimTypes.Email)!.Value;
                 var result = await sender.Send(new GetCuestionarioByIdQuery(id,email));
