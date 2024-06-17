@@ -36,9 +36,9 @@ namespace anskus.Infrestructure.Repositorys
             await _cuestionarios.InsertOneAsync(cuestionario);
             return cuestionario;
         }
-        public async Task<Cuestionario> GetbyId(Guid id)
+        public async Task<Cuestionario> GetbyId(Guid id, string email)
         {
-            var filter = Builders<Cuestionario>.Filter.Eq(c => c.IdCuestionario, id);
+            var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id );
             return await _cuestionarios.Find(filter).FirstOrDefaultAsync();
         }
         public async Task<List<Cuestionario>> GetbyUser(string email)
@@ -58,6 +58,7 @@ namespace anskus.Infrestructure.Repositorys
                 .Filter
                 .Eq(s=>s.IdCuestionario,cuestionario.IdCuestionario);
             await _cuestionarios.ReplaceOneAsync(filter, cuestionario);
+            cuestionario.Guardar();
             return cuestionario;
         }
     }

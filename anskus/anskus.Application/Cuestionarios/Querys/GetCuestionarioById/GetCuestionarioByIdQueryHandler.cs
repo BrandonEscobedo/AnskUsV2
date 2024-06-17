@@ -14,7 +14,7 @@ namespace anskus.Application.Cuestionarios.Querys.GetCuestionarioById
     {
         public Task<Cuestionario> Handle(GetCuestionarioByIdQuery request, CancellationToken cancellationToken)
         {
-            return _cuestionarioRepository.GetbyId(request.id);
+            return _cuestionarioRepository.GetbyId(request.id,request.email);
         }
     }
 }

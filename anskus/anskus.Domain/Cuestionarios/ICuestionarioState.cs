@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Application.State
+namespace anskus.Domain.Cuestionarios
 {
     public interface ICuestionarioState
     {

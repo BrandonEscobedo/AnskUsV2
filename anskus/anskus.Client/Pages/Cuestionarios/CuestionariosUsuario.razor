@@ -1,0 +1,44 @@
+﻿@page "/MisCuestionarios"
+@inject ICuestionarioService _cuestionarioService
+@inject NavigationManager _navigationManager
+@if (Cuestionarios == null)
+{
+    <h1> Cargando Cuestionarios...</h1>
+}
+else if (Cuestionarios.Any())
+{
+    @foreach (var cuestionario in Cuestionarios)
+    {
+        <div class="container d-flex justify-content-center">
+            <div class="card mx-auto" style="width: 30rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Titulo del cuestionario: @cuestionario.Titulo</h5>
+                    <p class="card-text">Cantidad de preguntas: 10</p>
+                    <a href="#" class="card-link"><i class="fas fa-pencil-alt"></i></a>
+                    <a href="#" class="card-link"><i class="fas fa-trash-alt"></i></a>
+                    <a href="#"  class="btn btn-success">Comenzar</a>
+                    <a @onclick="()=>EditarCuestionario(cuestionario)" class="btn btn-secondary">Editar</a>
+                    <a class="btn btn-secondary">@cuestionario.Estado</a>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    <h1>Aun no tienes cuestionarios</h1>
+    <a href="CrearCuestionario">Crear cuestionarios</a>
+}
+@code {
+    private List<Cuestionario> Cuestionarios=new();
+    protected override async Task OnInitializedAsync()
+    {
+        Cuestionarios = await _cuestionarioService.GetCuestionariobyUserAsync();
+    }
+    private void EditarCuestionario(Cuestionario cuestionario)
+    {
+        _navigationManager.NavigateTo($"/Cuestionario/{cuestionario.IdCuestionario}");
+    }
+}

@@ -12,6 +12,8 @@ namespace anskus.Application.Services
         public Task<Cuestionario> CrearCuestionario(Cuestionario cuestionario);
         public Task<Cuestionario> ActualizarCuestionario(Cuestionario cuestionario);
         public Task EliminarCuestionario(Cuestionario cuestionario);
+        public Task<List<Cuestionario>> GetCuestionariobyUserAsync();
+        public Task<Cuestionario> GetCuestionarioByIdAsync(Guid? id);
     }
 
 }

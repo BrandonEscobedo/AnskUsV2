@@ -1,6 +1,7 @@
 ﻿@page "/crearCuestionario"
 @inject ICuestionarioService CuestionarioService
 @inject IJSRuntime JS
+@attribute [Authorize]
 <link rel="stylesheet" href="/css/EstilosCrearCuestionario.css" />
 <div>
     <div class="container custom-container">
@@ -22,7 +23,7 @@
                     <div class="ContainerEstadoGuardar">
 
                         <div class="EstadoContainer">
-                            <div>Guardado en: borradores</div>
+                            <div>Guardado en: @Cuestionario.Estado</div>
                         </div>
                         <div class="btnGuardarContainer">
                             <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal" type="button">Guardar cuestionario</button>

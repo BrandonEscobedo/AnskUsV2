@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.Cuestionarios.Querys.GetCuestionarioById
 {
-    public record GetCuestionarioByIdQuery(Guid id):IRequest<Cuestionario>;
+    public record GetCuestionarioByIdQuery(Guid id, string email):IRequest<Cuestionario>;
 
 }

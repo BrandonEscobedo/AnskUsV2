@@ -11,7 +11,7 @@ namespace anskus.Domain.Cuestionarios
     {
         Task<Cuestionario> Add(Cuestionario cuestionario,string email );
         Task<List<Cuestionario>> GetbyUser(string email);
-        Task<Cuestionario> GetbyId(Guid id);
+        Task<Cuestionario> GetbyId(Guid id,string email);
         Task<Cuestionario> Update(Cuestionario cuestionario);
 
     }

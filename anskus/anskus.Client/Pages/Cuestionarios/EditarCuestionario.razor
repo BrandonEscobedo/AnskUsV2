@@ -1,0 +1,20 @@
+﻿@page "/Cuestionario/{Id:guid}"
+@inject ICuestionarioService CuestionarioService
+<CrearCuestionario Cuestionario="cuestionario"></CrearCuestionario>
+@code {
+    [Parameter]
+    public Guid? Id { get; set; }
+    private Cuestionario cuestionario  = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            var cuest = await CuestionarioService.GetCuestionarioByIdAsync(Id);
+            if (cuest != null)
+            {
+                cuestionario = cuest;
+            }
+        }
+    }
+}

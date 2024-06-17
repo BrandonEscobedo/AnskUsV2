@@ -8,11 +8,13 @@ namespace anskus.Client.Pages.Cuestionarios
 
         [Parameter]
         public Cuestionario Cuestionario { get; set; } = new Cuestionario();
-
+       
         private Pregunta Pregunta = new();
 
-        protected override void OnInitialized()
+
+        protected override  void OnInitialized()
         {
+           
             if (Cuestionario.Pregunta.Count == 0)
             {
                 Cuestionario.Pregunta.Add(Pregunta);
@@ -40,7 +42,7 @@ namespace anskus.Client.Pages.Cuestionarios
         }
         private async void ActualizarPregunta(Pregunta pregunta)
         {
-            await GuardarCuestionario();
+            await GuardarCuestionario(Pregunta);
             Pregunta = pregunta;
             StateHasChanged();
         }

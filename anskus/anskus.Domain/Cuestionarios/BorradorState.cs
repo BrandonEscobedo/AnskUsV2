@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Application.State
+namespace anskus.Domain.Cuestionarios
 {
     public class BorradorState : ICuestionarioState
     {
@@ -16,12 +16,21 @@ namespace anskus.Application.State
 
         public void Borrador(Cuestionario cuestionario)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Editando");
         }
 
         public void Guardar(Cuestionario cuestionario)
         {
-            throw new NotImplementedException();
+            if (cuestionario.Completo())
+            {
+                cuestionario.Estado = EstadoCuestionario.Guardado;
+                cuestionario.SetEstado(new GuardadoState());
+            }
+            else
+            {
+                cuestionario.Estado = EstadoCuestionario.Borrador;
+                cuestionario.SetEstado(new BorradorState());
+            }
         }
     }
 }

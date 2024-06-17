@@ -45,6 +45,26 @@ namespace anskus.Application.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<Cuestionario>> GetCuestionariobyUserAsync()
+        {
+            var response = await (await PrivateClient()).GetFromJsonAsync<List<Cuestionario>>($"{Constant.CuestionarioRoute}/All");
+            if (response != null)
+            {
+                return response.ToList();
+            }
+            return null!;
+        }
+
+        public async Task<Cuestionario> GetCuestionarioByIdAsync(Guid? id)
+        {
+            var response = await (await PrivateClient()).GetFromJsonAsync<Cuestionario>($"{Constant.CuestionarioRoute}?id={id}");
+            if (response != null)
+            {
+                return response;
+            }
+            return null!;
+        }
     }
 
 }

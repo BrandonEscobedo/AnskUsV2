@@ -3,6 +3,7 @@ using anskus.Application.Cuestionarios.Commands.Update;
 using anskus.Application.Cuestionarios.Querys.GetCuestionarioById;
 using anskus.Application.Cuestionarios.Querys.GetCuestionarioByUser;
 using anskus.Domain.Models;
+using FluentValidation;
 using MediatR;
 using System.Security.Claims;
 
@@ -22,9 +23,11 @@ namespace anskus.WebApi.EndPoints
                 var result = await sender.Send(new CreateCuestionarioCommand(cuestionario, email));
                 return Results.Ok(result);
             }) ;
-            groups.MapGet("", async (Guid id, ISender sender) =>
+            groups.MapGet("", async (Guid id, ISender sender,
+                ClaimsPrincipal User, IValidator < GetCuestionarioByIdQuery> validator) =>
             {
-                var result = await sender.Send(new GetCuestionarioByIdQuery(id));
+                var email = User.FindFirst(ClaimTypes.Email)!.Value;
+                var result = await sender.Send(new GetCuestionarioByIdQuery(id,email));
                 return Results.Ok(result);
             });
             groups.MapGet("/All", async (ISender sender, ClaimsPrincipal User) =>

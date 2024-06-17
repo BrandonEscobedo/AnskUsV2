@@ -24,4 +24,10 @@
     <ProjectReference Include="..\anskus.Domain\anskus.Domain.csproj" />
   </ItemGroup>
 
+
+
+  <ItemGroup>
+    <Folder Include="State\" />
+  </ItemGroup>
+
 </Project>
