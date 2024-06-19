@@ -65,6 +65,18 @@ namespace anskus.Infrestructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SalaParticipante",
+                columns: table => new
+                {
+                    code = table.Column<int>(type: "int", nullable: false),
+                    name_user = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalaParticipante", x => new { x.code, x.name_user });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -170,6 +182,25 @@ namespace anskus.Infrestructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "cuestionarioActivo",
+                columns: table => new
+                {
+                    Codigo = table.Column<int>(type: "int", nullable: false),
+                    IdUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Idcuestionario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cuestionarioActivo", x => new { x.Codigo, x.IdUsuario });
+                    table.ForeignKey(
+                        name: "FK_cuestionarioActivo_AspNetUsers_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -203,11 +234,24 @@ namespace anskus.Infrestructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Email",
+                table: "AspNetUsers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cuestionarioActivo_IdUsuario",
+                table: "cuestionarioActivo",
+                column: "IdUsuario",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -229,7 +273,13 @@ namespace anskus.Infrestructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "cuestionarioActivo");
+
+            migrationBuilder.DropTable(
                 name: "RefreshToken");
+
+            migrationBuilder.DropTable(
+                name: "SalaParticipante");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

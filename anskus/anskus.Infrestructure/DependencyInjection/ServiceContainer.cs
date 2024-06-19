@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using anskus.Domain.Account;
+using anskus.Infrestructure.Factory;
+using anskus.Application.Services;
+using anskus.Infrestructure.Services;
 
 namespace anskus.Infrestructure.DependencyInjection
 {
@@ -60,6 +63,9 @@ namespace anskus.Infrestructure.DependencyInjection
 
             services.AddScoped<ICuestionarioRepository, CuestionarioRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ICuestionarioActivoRepository, CuestionarioActivoRepository>();
+            services.AddScoped<IRandomCodeFactory, RandomCodeFactory>();
+            services.AddScoped<ICuestionarioActivoService, CuestionarioActivoService>();
             return services;
 
         }

@@ -12,7 +12,7 @@ using anskus.Infrestructure.Persistence.Context;
 namespace anskus.Infrestructure.Migrations
 {
     [DbContext(typeof(AnskusDbContext))]
-    [Migration("20240602024749_init")]
+    [Migration("20240618001533_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -212,6 +212,10 @@ namespace anskus.Infrestructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -240,6 +244,38 @@ namespace anskus.Infrestructure.Migrations
                     b.HasKey("id");
 
                     b.ToTable("RefreshToken");
+                });
+
+            modelBuilder.Entity("anskus.Domain.Models.CuestionarioActivo", b =>
+                {
+                    b.Property<int>("Codigo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IdUsuario")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("Idcuestionario")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Codigo", "IdUsuario");
+
+                    b.HasIndex("IdUsuario")
+                        .IsUnique();
+
+                    b.ToTable("cuestionarioActivo");
+                });
+
+            modelBuilder.Entity("anskus.Domain.Models.Temp__sala_participante_cuestionario", b =>
+                {
+                    b.Property<int>("code")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name_user")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("code", "name_user");
+
+                    b.ToTable("SalaParticipante");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -291,6 +327,22 @@ namespace anskus.Infrestructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("anskus.Domain.Models.CuestionarioActivo", b =>
+                {
+                    b.HasOne("anskus.Domain.Models.Authentication.ApplicationUser", "IdUsuarioNavigation")
+                        .WithOne("CuestionarioActivo")
+                        .HasForeignKey("anskus.Domain.Models.CuestionarioActivo", "IdUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdUsuarioNavigation");
+                });
+
+            modelBuilder.Entity("anskus.Domain.Models.Authentication.ApplicationUser", b =>
+                {
+                    b.Navigation("CuestionarioActivo");
                 });
 #pragma warning restore 612, 618
         }

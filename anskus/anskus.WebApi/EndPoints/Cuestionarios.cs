@@ -5,6 +5,7 @@ using anskus.Application.Cuestionarios.Querys.GetCuestionarioByUser;
 using anskus.Domain.Models;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNet.SignalR;
 using System.Security.Claims;
 
 namespace anskus.WebApi.EndPoints
@@ -22,7 +23,7 @@ namespace anskus.WebApi.EndPoints
                     throw new Exception("No se encontro el correo");
                 var result = await sender.Send(new CreateCuestionarioCommand(cuestionario, email));
                 return Results.Ok(result);
-            }) ;
+            });
             groups.MapGet("", async (Guid id, ISender sender,
                 ClaimsPrincipal User) =>
             {

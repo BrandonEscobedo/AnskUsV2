@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Application.DTOs.Response.Cuestionarios
+namespace anskus.Application.HubServices
 {
-    public class CuestionarioResponseDto
-    {  
+    public interface IHubconnectionService
+    {
     }
 }

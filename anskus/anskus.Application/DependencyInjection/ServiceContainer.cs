@@ -4,12 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using NetcodeHub.Packages.Extensions.LocalStorage;
 using anskus.Application.Extensions;
 using anskus.Application.Services;
+using anskus.Application.Utility;
 namespace anskus.Application.DependencyInjection
 {
     public static class ServiceContainer
     {
       public static IServiceCollection ApplicationServices(this IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssembly(typeof(ServiceContainer).Assembly);

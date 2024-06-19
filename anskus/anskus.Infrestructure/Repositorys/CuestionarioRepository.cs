@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace anskus.Infrestructure.Repositorys
 {
-    public class CuestionarioRepository : ICuestionarioRepository
+    internal sealed class CuestionarioRepository : ICuestionarioRepository
     {
         private readonly IMongoCollection<Cuestionario> _cuestionarios;
         private readonly AnskusDbContext _context;
@@ -38,7 +38,8 @@ namespace anskus.Infrestructure.Repositorys
         }
         public async Task<Cuestionario> GetbyId(Guid id, string email)
         {
-            var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id );
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id && c.Iduser==user!.Id);
             return await _cuestionarios.Find(filter).FirstOrDefaultAsync();
         }
         public async Task<List<Cuestionario>> GetbyUser(string email)
