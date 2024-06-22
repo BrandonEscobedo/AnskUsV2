@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace anskus.Application.HubServices
 {
-    public class HubconnectionService
+    public class HubconnectionService:IHubconnectionService
     {
         private readonly HubConnection _hubConnection;
         private readonly IHubStateCreador _hubStateCreador;
@@ -35,7 +35,7 @@ namespace anskus.Application.HubServices
         }
         public async Task SiguientePregunta()
         {
-
-        }
+            await _hubConnection.InvokeAsync("SiguientePregunta", _hubStateCreador.Codigo, _hubStateCreador.MandarSiguientePregunta());
+        }   
     }
 }

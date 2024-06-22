@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\ListaParticipantesComponent.razor" />
     <Content Remove="wwwroot\css\EstilosCrearCuestionario.css" />
   </ItemGroup>
 
@@ -39,6 +40,18 @@
 
   <ItemGroup>
     <Folder Include="Pages\EnJuego\Jugador\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\ListaParticipantesComponent.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\ListaParticipantesComponent.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\ListaParticipantesComponent.razor" />
   </ItemGroup>
 
 </Project>

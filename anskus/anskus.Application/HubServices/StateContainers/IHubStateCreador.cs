@@ -14,5 +14,7 @@ namespace anskus.Application.HubServices.StateContainers
         public int Codigo { get; set; }
         public void SetCuestionario(CuestionarioResponse Cuestionario, int Codigo);
         public Pregunta MandarSiguientePregunta();
+        List<ParticipanteEnCuestionario> participanteEnCuestionario { get; set; }
+        event Action<ParticipanteEnCuestionario>? OnParticipante;
     }
 }

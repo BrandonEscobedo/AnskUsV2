@@ -6,6 +6,9 @@ namespace anskus.Client.Pages.EnJuego.Creador
     {
         public int Codigo { get; set; }
         private Cuestionario Cuestionario { get; set; }=new Cuestionario();
-
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
     }
 }
