@@ -3,7 +3,7 @@ using anskus.Domain.Models;
 
 namespace anskus.Application.HubServices.StateContainers
 {
-    public class HubStateCreador : IHubStateCreador
+    public class HubStateCreador : IHubStateCreador,IStateParticipantes
     {
         public CuestionarioResponse Cuestionario { get; set; } = new();
         public int Codigo { get; set; }

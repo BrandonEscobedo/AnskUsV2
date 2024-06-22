@@ -15,15 +15,26 @@ namespace anskus.WebApi.EndPoints
         public static void MapCuestionarioActivoEndPoints(this IEndpointRouteBuilder app)
         {
             app.MapPost("api/CuestionarioActivo", async (Guid idcuestionario,
-                ClaimsPrincipal User, ISender sender) =>
-            {             
+                ClaimsPrincipal User, ISender sender, IValidator<ActivarCuestionarioCommand> validator) =>
+            {
+
                 var email = User.FindFirst(ClaimTypes.Email)!.Value;
-                var response = await sender.Send(new ActivarCuestionarioCommand(idcuestionario, email));
-                return Results.Ok(response);
+                ActivarCuestionarioCommand activarCuestionarioCommand = new ActivarCuestionarioCommand(idcuestionario, email);
+                var resultValid = validator.Validate(activarCuestionarioCommand);
+                if (resultValid.IsValid)
+                {
+                    var response = await sender.Send(activarCuestionarioCommand);
+                    return Results.Ok(response);
+                }
+                else
+                {
+                    return Results.ValidationProblem(resultValid.ToDictionary());
+                }
+
             }).RequireAuthorization();
             app.MapGet("api/CuestionarioActivo", async (int Code, IVerificarCodigo _verificarCodigo) =>
             {
-                var isValid =await _verificarCodigo.ExecuteAsync(Code);
+                var isValid = await _verificarCodigo.ExecuteAsync(Code);
                 if (isValid)
                 {
                     return Results.Ok();
@@ -31,9 +42,9 @@ namespace anskus.WebApi.EndPoints
                 return Results.NotFound();
             });
             app.MapPost("api/CuestionarioActivo/Codigo", async (int code, string Nombre, IValidator<AddUserToRoomCommand> validator,
-               ISender sender )=>
+               ISender sender) =>
             {
-                AddUserToRoomCommand addUserToRoomCommand = new(code,Nombre);
+                AddUserToRoomCommand addUserToRoomCommand = new(code, Nombre);
                 var result = await validator.ValidateAsync(addUserToRoomCommand);
                 if (result.IsValid)
                 {

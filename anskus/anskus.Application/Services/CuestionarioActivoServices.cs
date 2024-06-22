@@ -8,7 +8,6 @@ namespace anskus.Application.Services
     {
         private readonly HttpClientServices _httpClientServices;
         private async Task<HttpClient> PrivateClient() => (await _httpClientServices.GetPrivateClient());
-
         public CuestionarioActivoServices(HttpClientServices httpClientServices)
         {
             _httpClientServices = httpClientServices;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using anskus.Application.DTOs.Response.Cuestionarios;
+using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,9 @@ namespace anskus.Application.HubServices
 {
     public interface IHubconnectionService
     {
+        public  Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo);
+        public Task IniciarCuestionario();
+
+        public  Task SiguientePregunta();
     }
 }

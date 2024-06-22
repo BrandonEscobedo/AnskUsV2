@@ -10,16 +10,24 @@ namespace anskus.Application.HubServices
     {
         private readonly HubConnection _hubConnection;
         private readonly IHubStateCreador _hubStateCreador;
-        public HubconnectionService(HubConnection hubConnection, IHubStateCreador hubStateCreador)
+        private readonly IStateParticipantes _stateParticipantes;
+        public HubconnectionService(HubConnection hubConnection, IHubStateCreador hubStateCreador, IStateParticipantes stateParticipantes)
         {
             _hubConnection = hubConnection;
             _hubStateCreador = hubStateCreador;
-            _hubConnection.On<string, Pregunta>("IniciarCuestionario",OnIniciarCuestionario);
+            _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
+            _hubConnection.On<ParticipanteEnCuestionario>("IniciarCuestionario", OnNewParticipante);
+            _hubConnection.On<ParticipanteEnCuestionario>("IniciarCuestionario", OnRemoveParticipante);
+            _stateParticipantes = stateParticipantes;
         }
+
+        private void OnRemoveParticipante(ParticipanteEnCuestionario participante) => _stateParticipantes.RemoveParticipanteToList(participante);
+
+        private void OnNewParticipante(ParticipanteEnCuestionario participante) => _stateParticipantes.AddParticipanteToList(participante);
 
         private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
         {
-            throw new NotImplementedException();
+          //En Otra Interfaz
         }
 
         public async Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo)

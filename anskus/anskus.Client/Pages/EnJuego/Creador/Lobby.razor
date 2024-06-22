@@ -1,12 +1,14 @@
 ﻿@page "/Lobby"
 @layout ComponentBaseLobby
+@inject IHubconnectionService _hubConnectionService
 <link rel="stylesheet" href="css/codigo.css" />
 <div class="lobby">
     <div class="lobby__info">
         <h2>Codigo de la partida</h2>
             <p>@Codigo</p>       
     </div>
-    <ListaUsuarios></ListaUsuarios>
+  <ListaParticipantesComponent>
+  </ListaParticipantesComponent>
         
         <p>Titulo: @Cuestionario.Titulo</p>
     

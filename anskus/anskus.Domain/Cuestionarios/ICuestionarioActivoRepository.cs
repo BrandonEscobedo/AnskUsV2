@@ -12,6 +12,6 @@ namespace anskus.Domain.Cuestionarios
         Task<bool> IsParticipanteUniqueAsync(int code, string name);
         Task<CuestionarioActivo>     ActivarCuestionarioAsync(Guid idcuestionario, string email);
         Task<Guid> AddParticipanteToRoomAsync(int Code, string Name);
-
+        public  Task<bool> IsCuestionarioActivoUnique(string Email);
     }
 }

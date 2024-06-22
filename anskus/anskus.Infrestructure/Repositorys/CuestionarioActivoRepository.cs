@@ -9,6 +9,7 @@ namespace anskus.Infrestructure.Repositorys
     internal sealed class CuestionarioActivoRepository(AnskusDbContext _context,
         IRandomCodeFactory randomCode) : ICuestionarioActivoRepository
     {
+       
         public async Task<CuestionarioActivo> ActivarCuestionarioAsync(Guid idcuestionario,string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email) ?? throw new Exception("No se encontro el usuario");
@@ -46,6 +47,11 @@ namespace anskus.Infrestructure.Repositorys
         {
             return !await _context.SalaParticipante.AnyAsync(p => p.code == code && p.name_user == name);
            
+        }
+        public async Task<bool> IsCuestionarioActivoUnique(string Email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == Email) ?? throw new Exception("No se encontro el usuario");
+            return !await _context.cuestionarioActivo.Where(x => x.IdUsuario == user.Id).AnyAsync();
         }
     }
 }

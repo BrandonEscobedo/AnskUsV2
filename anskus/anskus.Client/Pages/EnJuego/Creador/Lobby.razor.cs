@@ -1,4 +1,5 @@
 ﻿using anskus.Domain.Models;
+using System.Security.Cryptography;
 
 namespace anskus.Client.Pages.EnJuego.Creador
 {
@@ -9,6 +10,14 @@ namespace anskus.Client.Pages.EnJuego.Creador
         protected override void OnInitialized()
         {
             base.OnInitialized();
+        }
+        private  void Salir()
+        {
+
+        }
+        private async void Iniciar()
+        {
+           await _hubConnectionService.IniciarCuestionario();
         }
     }
 }
