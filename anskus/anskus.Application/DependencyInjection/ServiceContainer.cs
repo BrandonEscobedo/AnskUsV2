@@ -8,6 +8,7 @@ using anskus.Application.Utility;
 using anskus.Application.Codigo;
 using anskus.Domain.Cuestionarios;
 using anskus.Application.HubServices.StateContainers;
+using anskus.Application.HubServices;
 namespace anskus.Application.DependencyInjection
 {
     public static class ServiceContainer
@@ -32,7 +33,8 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<HttpClientServices>();
             services.AddScoped<IAccountServices, AccountServices>();
             services.AddScoped<IStateParticipantes, HubStateCreador>();
-            services.AddScoped<IHubStateCreador, HubStateCreador>();    
+            services.AddScoped<IHubStateCreador, HubStateCreador>();
+            services.AddScoped<IHubconnectionService, HubconnectionService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<LocalStorageServices>();
             services.AddTransient<CustomHttpHandler>();

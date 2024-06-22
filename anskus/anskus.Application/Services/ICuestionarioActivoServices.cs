@@ -11,6 +11,6 @@ namespace anskus.Application.Services
     public interface ICuestionarioActivoServices
     {
        
-        Task<CuestionarioActivoResponse> ActivarCuestionario(Guid? IdCuestionario);
+        Task<Guid> ActivarCuestionario(Guid? IdCuestionario);
     }
 }

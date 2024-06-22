@@ -1,15 +1,21 @@
-﻿using anskus.Domain.Models;
+﻿using anskus.Application.DTOs.Response.Cuestionarios;
+using anskus.Domain.Models;
+using Microsoft.AspNetCore.Components;
 using System.Security.Cryptography;
 
 namespace anskus.Client.Pages.EnJuego.Creador
 {
     public partial class Lobby
     {
+        [Parameter]
+        public Guid IdCuestionarioActivo { get; set; } = Guid.Empty;
         public int Codigo { get; set; }
-        private Cuestionario Cuestionario { get; set; }=new Cuestionario();
+        private CuestionarioResponse Cuestionario { get; set; }=new CuestionarioResponse();
         protected override void OnInitialized()
         {
-            base.OnInitialized();
+
+            Cuestionario = _hubStateCreador.Cuestionario;
+            Codigo = _hubStateCreador.Codigo;
         }
         private  void Salir()
         {

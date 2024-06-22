@@ -20,7 +20,7 @@ namespace anskus.WebApi.EndPoints
 
                 var email = User.FindFirst(ClaimTypes.Email)!.Value;
                 ActivarCuestionarioCommand activarCuestionarioCommand = new ActivarCuestionarioCommand(idcuestionario, email);
-                var resultValid = validator.Validate(activarCuestionarioCommand);
+                var resultValid =await validator.ValidateAsync(activarCuestionarioCommand);
                 if (resultValid.IsValid)
                 {
                     var response = await sender.Send(activarCuestionarioCommand);

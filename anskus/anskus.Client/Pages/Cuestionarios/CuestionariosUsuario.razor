@@ -45,5 +45,9 @@ else
     private async void IniciarCuestionario(Guid? IdCuestionario)
     {
         var result =await _cuestionarioActivoServices.ActivarCuestionario(IdCuestionario);
+        if (result != Guid.Empty)
+        {
+            _navigationManager.NavigateTo($"/Lobby");
+        }
     }
 }
