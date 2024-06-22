@@ -270,6 +270,9 @@ namespace anskus.Infrestructure.Migrations
                     b.Property<string>("name_user")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid>("IdParticipante")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("code", "name_user");
 
                     b.ToTable("SalaParticipante");

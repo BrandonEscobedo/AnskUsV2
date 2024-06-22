@@ -13,13 +13,11 @@ namespace anskus.WebApi.Hubs
         }
         public override async Task OnConnectedAsync()
         {
-           await base.OnConnectedAsync();
+            await base.OnConnectedAsync();
         }
         public async Task<bool> CreateRoom(int code, Cuestionario Cuestionario)
         {
-
             Context.Items["Codigo"] = code;
-            Context.Items["Cuestionario"] = Cuestionario;
             await Groups.AddToGroupAsync(Context.ConnectionId, code.ToString());
             return true;
         }
@@ -29,7 +27,10 @@ namespace anskus.WebApi.Hubs
             await Clients.Clients(participante.Nombre).NewParticipante(participante);
             await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);
             await Groups.AddToGroupAsync(Context.ConnectionId, participante.Codigo.ToString());
-
+        }
+        public async Task IniciarCuestionario(int Codigo ,string Titulo, Pregunta pregunta)
+        {         
+            await Clients.Group(Codigo.ToString()).IniciarCuestionario(Titulo,pregunta);       
         }
     }
     public interface InotificationClient
@@ -37,6 +38,7 @@ namespace anskus.WebApi.Hubs
 
         Task ListaRanking(List<ParticipanteEnCuestDTO> participantes);
         Task PreguntaContestada(ParticipanteEnCuestDTO participante);
+        Task IniciarCuestionario(string Titulo,  Pregunta pregunta);
 
         Task MensajePrueba(string mensaje);
         Task RemoveUser(ParticipanteEnCuestDTO participante);

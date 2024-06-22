@@ -9,7 +9,9 @@ namespace anskus.Domain.Cuestionarios
 {
     public interface ICuestionarioActivoRepository
     {
-        Task<bool> AddParticipanteCuestionarioAsync(string code, string name);
-        Task<CuestionarioActivo>     ActivarCuestionarioAsync(Guid idcuestionario, string email);  
+        Task<bool> IsParticipanteUniqueAsync(int code, string name);
+        Task<CuestionarioActivo>     ActivarCuestionarioAsync(Guid idcuestionario, string email);
+        Task<Guid> AddParticipanteToRoomAsync(int Code, string Name);
+
     }
 }

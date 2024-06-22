@@ -1,4 +1,5 @@
-﻿using anskus.Infrestructure.Persistence.Context;
+﻿using anskus.Domain.Cuestionarios;
+using anskus.Infrestructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace anskus.Infrestructure.Factory
 {
-    public class RandomCodeFactory : IRandomCodeFactory
+    public class RandomCodeFactory : IRandomCodeFactory, ICodeValidator
     {
 
         private readonly AnskusDbContext _context;
@@ -39,12 +40,13 @@ namespace anskus.Infrestructure.Factory
             return codigo;
         }
 
-        public  async Task<bool> IsCodeValid(int code)
+        public  async Task<bool> VerificarCodigoAsync(int code)
         {
             if (await _context.cuestionarioActivo.Where(x => x.Codigo == code).FirstOrDefaultAsync() == null)
                 return false;
             else
                 return true;
         }
+
     }
 }

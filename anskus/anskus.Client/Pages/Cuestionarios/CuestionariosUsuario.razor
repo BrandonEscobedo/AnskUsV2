@@ -1,5 +1,6 @@
 ﻿@page "/MisCuestionarios"
 @inject ICuestionarioService _cuestionarioService
+@inject ICuestionarioActivoServices _cuestionarioActivoServices
 @inject NavigationManager _navigationManager
 @if (Cuestionarios == null)
 {
@@ -17,7 +18,7 @@ else if (Cuestionarios.Any())
                     <p class="card-text">Cantidad de preguntas: 10</p>
                     <a href="#" class="card-link"><i class="fas fa-pencil-alt"></i></a>
                     <a href="#" class="card-link"><i class="fas fa-trash-alt"></i></a>
-                    <a href="#"  class="btn btn-success">Comenzar</a>
+                    <a href="#" @onclick="()=>IniciarCuestionario(cuestionario.IdCuestionario)" class="btn btn-success">Comenzar</a>
                     <a @onclick="()=>EditarCuestionario(cuestionario)" class="btn btn-secondary">Editar</a>
                     <a class="btn btn-secondary">@cuestionario.Estado</a>
                 </div>
@@ -40,5 +41,9 @@ else
     private void EditarCuestionario(Cuestionario cuestionario)
     {
         _navigationManager.NavigateTo($"/Cuestionario/{cuestionario.IdCuestionario}");
+    }
+    private async void IniciarCuestionario(Guid? IdCuestionario)
+    {
+        var result =await _cuestionarioActivoServices.ActivarCuestionario(IdCuestionario);
     }
 }

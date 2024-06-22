@@ -3,6 +3,7 @@ using anskus.Infrestructure.DependencyInjection;
 using anskus.WebApi.EndPoints;
 using anskus.WebApi.ExtensionMigration;
 using anskus.WebApi.Hubs;
+using Microsoft.AspNetCore.SignalR.Client;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

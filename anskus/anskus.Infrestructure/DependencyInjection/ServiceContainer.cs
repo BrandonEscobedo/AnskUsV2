@@ -65,10 +65,12 @@ namespace anskus.Infrestructure.DependencyInjection
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICuestionarioActivoRepository, CuestionarioActivoRepository>();
             services.AddScoped<IRandomCodeFactory, RandomCodeFactory>();
+            services.AddScoped<ICodeValidator, RandomCodeFactory>();
             services.AddScoped<ICuestionarioActivoService, CuestionarioActivoService>();
             return services;
 
         }
+
 
     }
 }

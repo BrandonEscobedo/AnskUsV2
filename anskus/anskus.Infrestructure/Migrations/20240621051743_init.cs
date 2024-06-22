@@ -69,7 +69,8 @@ namespace anskus.Infrestructure.Migrations
                 columns: table => new
                 {
                     code = table.Column<int>(type: "int", nullable: false),
-                    name_user = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    name_user = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdParticipante = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

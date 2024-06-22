@@ -5,7 +5,6 @@ using anskus.Application.Cuestionarios.Querys.GetCuestionarioByUser;
 using anskus.Domain.Models;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNet.SignalR;
 using System.Security.Claims;
 
 namespace anskus.WebApi.EndPoints

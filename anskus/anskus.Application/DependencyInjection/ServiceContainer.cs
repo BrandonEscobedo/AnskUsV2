@@ -5,6 +5,8 @@ using NetcodeHub.Packages.Extensions.LocalStorage;
 using anskus.Application.Extensions;
 using anskus.Application.Services;
 using anskus.Application.Utility;
+using anskus.Application.Codigo;
+using anskus.Domain.Cuestionarios;
 namespace anskus.Application.DependencyInjection
 {
     public static class ServiceContainer
@@ -17,6 +19,7 @@ namespace anskus.Application.DependencyInjection
                 config.RegisterServicesFromAssembly(typeof(ServiceContainer).Assembly);
             });
             services.AddValidatorsFromAssembly(AppicationAssemblyReference.assembly);
+            services.AddScoped<IVerificarCodigo, VerificarCodigo>();
             return services;
         }
         public static IServiceCollection ApplicationClientService(this IServiceCollection services)
@@ -30,11 +33,14 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<LocalStorageServices>();
             services.AddTransient<CustomHttpHandler>();
+           
+            services.AddScoped<ICuestionarioActivoServices, CuestionarioActivoServices>();
             services.AddCascadingAuthenticationState();
             services.AddHttpClient("TestAnskusClient", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7229/");
             }).AddHttpMessageHandler<CustomHttpHandler>();
+
             return services;
         }
 

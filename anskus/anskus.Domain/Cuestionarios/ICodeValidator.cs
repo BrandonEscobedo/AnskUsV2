@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Infrestructure.Factory
+namespace anskus.Domain.Cuestionarios
 {
-    public  interface IRandomCodeFactory
+    public interface ICodeValidator
     {
-        public Task<int> GenerarCodigo();
-    
+        Task<bool> VerificarCodigoAsync(int Code);
     }
 }

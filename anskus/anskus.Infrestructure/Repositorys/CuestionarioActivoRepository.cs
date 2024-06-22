@@ -2,15 +2,7 @@
 using anskus.Domain.Models;
 using anskus.Infrestructure.Factory;
 using anskus.Infrestructure.Persistence.Context;
-using anskus.Infrestructure.Persistence.Dapper;
-using Dapper;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace anskus.Infrestructure.Repositorys
 {
@@ -39,10 +31,21 @@ namespace anskus.Infrestructure.Repositorys
             }
             return null!;
         }
-
-        public Task<bool> AddParticipanteCuestionarioAsync(string code, string name)
+        public async Task<Guid> AddParticipanteToRoomAsync(int Code, string Name)
         {
-            throw new NotImplementedException();
+            Temp__sala_participante_cuestionario ParticipanteSala = new()
+            {
+                code = Code,
+                name_user = Name,
+            };
+            _context.SalaParticipante.Add(ParticipanteSala);
+            await _context.SaveChangesAsync();
+            return ParticipanteSala.IdParticipante;
+        }
+        public async Task<bool> IsParticipanteUniqueAsync(int code, string name)
+        {
+            return !await _context.SalaParticipante.AnyAsync(p => p.code == code && p.name_user == name);
+           
         }
     }
 }
