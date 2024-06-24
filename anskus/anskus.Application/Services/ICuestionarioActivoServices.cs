@@ -12,5 +12,6 @@ namespace anskus.Application.Services
     {
        
         Task<Guid> ActivarCuestionario(Guid? IdCuestionario);
+        Task<bool> VerificarCodigo(int Code);
     }
 }

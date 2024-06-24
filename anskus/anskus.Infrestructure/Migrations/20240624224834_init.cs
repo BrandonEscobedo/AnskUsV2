@@ -15,7 +15,7 @@ namespace anskus.Infrestructure.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -29,7 +29,7 @@ namespace anskus.Infrestructure.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -56,7 +56,7 @@ namespace anskus.Infrestructure.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Token = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -65,25 +65,12 @@ namespace anskus.Infrestructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SalaParticipante",
-                columns: table => new
-                {
-                    code = table.Column<int>(type: "int", nullable: false),
-                    name_user = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdParticipante = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SalaParticipante", x => new { x.code, x.name_user });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -104,7 +91,7 @@ namespace anskus.Infrestructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -126,7 +113,7 @@ namespace anskus.Infrestructure.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,8 +130,8 @@ namespace anskus.Infrestructure.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -167,7 +154,7 @@ namespace anskus.Infrestructure.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -187,18 +174,37 @@ namespace anskus.Infrestructure.Migrations
                 name: "cuestionarioActivo",
                 columns: table => new
                 {
+                    Idcuestionario = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Codigo = table.Column<int>(type: "int", nullable: false),
-                    IdUsuario = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Idcuestionario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IdUsuario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cuestionarioActivo", x => new { x.Codigo, x.IdUsuario });
+                    table.PrimaryKey("PK_cuestionarioActivo", x => x.Idcuestionario);
                     table.ForeignKey(
                         name: "FK_cuestionarioActivo_AspNetUsers_IdUsuario",
                         column: x => x.IdUsuario,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SalaParticipante",
+                columns: table => new
+                {
+                    code = table.Column<int>(type: "int", nullable: false),
+                    name_user = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    IdCuestionario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalaParticipante", x => new { x.code, x.name_user });
+                    table.ForeignKey(
+                        name: "FK_SalaParticipante_cuestionarioActivo_IdCuestionario",
+                        column: x => x.IdCuestionario,
+                        principalTable: "cuestionarioActivo",
+                        principalColumn: "Idcuestionario",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -253,6 +259,11 @@ namespace anskus.Infrestructure.Migrations
                 table: "cuestionarioActivo",
                 column: "IdUsuario",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SalaParticipante_IdCuestionario",
+                table: "SalaParticipante",
+                column: "IdCuestionario");
         }
 
         /// <inheritdoc />
@@ -274,9 +285,6 @@ namespace anskus.Infrestructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "cuestionarioActivo");
-
-            migrationBuilder.DropTable(
                 name: "RefreshToken");
 
             migrationBuilder.DropTable(
@@ -284,6 +292,9 @@ namespace anskus.Infrestructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "cuestionarioActivo");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

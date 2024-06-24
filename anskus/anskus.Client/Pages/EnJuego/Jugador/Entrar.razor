@@ -1,0 +1,29 @@
+﻿@page "/Entrar/{Code:int}"
+@inject NavigationManager _navigationManager
+@layout ComponentBaseLobby
+@inject ICuestionarioActivoServices _cuestionarioActivoServices
+<link rel="stylesheet" href="css/codigo.css" />
+<div class="code__body">
+    <a href="../#">
+        <img src="./img/Logo.png" alt="">
+    </a>
+    <h3 class="code__body__title">
+        Inserta tu nombre
+    </h3>
+    <div class="FormConteiner">
+        <input type="text" @bind="participante.Nombre" placeholder="xXJuanitoGaymerXx">
+        <button @onclick="EntrarSesion">Ingresar</button>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int Code { get; set; }
+
+    public ParticipanteEnCuestionario participante { get; set; } = new();
+    private async Task EntrarSesion()
+    {
+        // participante.codigo = Code;
+        // await HubService.AddUserToRoom(participante);
+    }
+
+}

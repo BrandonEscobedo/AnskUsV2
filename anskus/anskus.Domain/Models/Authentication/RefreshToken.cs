@@ -9,7 +9,7 @@ namespace anskus.Domain.Models.Authentication
     public class RefreshToken
     {
         public int? id { get; set; }
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string? Token { get; set; }
     }
 }

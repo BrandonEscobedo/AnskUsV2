@@ -34,10 +34,12 @@ namespace anskus.Infrestructure.Repositorys
         }
         public async Task<Guid> AddParticipanteToRoomAsync(int Code, string Name)
         {
-            Temp__sala_participante_cuestionario ParticipanteSala = new()
+            var cuestionario = await _context.cuestionarioActivo.FirstOrDefaultAsync(x => x.Codigo == Code);
+            SalaParticipante ParticipanteSala = new()
             {
                 code = Code,
                 name_user = Name,
+               IdCuestionario=cuestionario.Idcuestionario
             };
             _context.SalaParticipante.Add(ParticipanteSala);
             await _context.SaveChangesAsync();

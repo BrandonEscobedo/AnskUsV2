@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace anskus.Domain.Models.Authentication
 {
-    public class ApplicationUser:IdentityUser
+    public class ApplicationUser:IdentityUser<Guid>
     {
         [InverseProperty("IdUsuarioNavigation")]
 

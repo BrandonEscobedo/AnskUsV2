@@ -15,7 +15,7 @@ namespace anskus.Domain.Models
         public EstadoCuestionario Estado { get; set; }
 
         private ICuestionarioState _estadoActual;
-        public string Iduser { get; set; } = "";
+        public Guid Iduser { get; set; } 
         public Cuestionario()
         {
             Estado = EstadoCuestionario.Borrador;

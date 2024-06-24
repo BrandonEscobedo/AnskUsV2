@@ -30,5 +30,18 @@ namespace anskus.Application.Services
             }
             return Guid.Empty;
         }
+        public async Task<bool> VerificarCodigo(int Code)
+        {
+            var response = await (await PrivateClient()).GetAsync($"{Constant.CuestionarioActivoRoute}?Code={Code}");
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+           
+        }
     }
 }

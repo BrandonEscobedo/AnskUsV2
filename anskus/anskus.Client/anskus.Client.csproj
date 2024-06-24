@@ -39,10 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\EnJuego\Jugador\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <UpToDateCheckInput Remove="Components\ListaParticipantesComponent.razor" />
   </ItemGroup>
 

@@ -22,10 +22,11 @@ namespace anskus.Infrestructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -49,7 +50,7 @@ namespace anskus.Infrestructure.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,9 +64,8 @@ namespace anskus.Infrestructure.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -74,7 +74,7 @@ namespace anskus.Infrestructure.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,9 +88,8 @@ namespace anskus.Infrestructure.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -99,7 +98,7 @@ namespace anskus.Infrestructure.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -110,9 +109,8 @@ namespace anskus.Infrestructure.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -121,13 +119,13 @@ namespace anskus.Infrestructure.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -136,10 +134,10 @@ namespace anskus.Infrestructure.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -157,8 +155,9 @@ namespace anskus.Infrestructure.Migrations
 
             modelBuilder.Entity("anskus.Domain.Models.Authentication.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -235,8 +234,8 @@ namespace anskus.Infrestructure.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("id");
 
@@ -245,16 +244,17 @@ namespace anskus.Infrestructure.Migrations
 
             modelBuilder.Entity("anskus.Domain.Models.CuestionarioActivo", b =>
                 {
+                    b.Property<Guid>("Idcuestionario")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Codigo")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdUsuario")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("Idcuestionario")
+                    b.Property<Guid>("IdUsuario")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Codigo", "IdUsuario");
+                    b.HasKey("Idcuestionario");
 
                     b.HasIndex("IdUsuario")
                         .IsUnique();
@@ -262,32 +262,35 @@ namespace anskus.Infrestructure.Migrations
                     b.ToTable("cuestionarioActivo");
                 });
 
-            modelBuilder.Entity("anskus.Domain.Models.Temp__sala_participante_cuestionario", b =>
+            modelBuilder.Entity("anskus.Domain.Models.SalaParticipante", b =>
                 {
                     b.Property<int>("code")
                         .HasColumnType("int");
 
                     b.Property<string>("name_user")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
-                    b.Property<Guid>("IdParticipante")
+                    b.Property<Guid>("IdCuestionario")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("code", "name_user");
 
+                    b.HasIndex("IdCuestionario");
+
                     b.ToTable("SalaParticipante");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("anskus.Domain.Models.Authentication.ApplicationUser", null)
                         .WithMany()
@@ -296,7 +299,7 @@ namespace anskus.Infrestructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("anskus.Domain.Models.Authentication.ApplicationUser", null)
                         .WithMany()
@@ -305,9 +308,9 @@ namespace anskus.Infrestructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -320,7 +323,7 @@ namespace anskus.Infrestructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("anskus.Domain.Models.Authentication.ApplicationUser", null)
                         .WithMany()
@@ -340,9 +343,25 @@ namespace anskus.Infrestructure.Migrations
                     b.Navigation("IdUsuarioNavigation");
                 });
 
+            modelBuilder.Entity("anskus.Domain.Models.SalaParticipante", b =>
+                {
+                    b.HasOne("anskus.Domain.Models.CuestionarioActivo", "IdCuestionrioNavigation")
+                        .WithMany("SalaParticipantes")
+                        .HasForeignKey("IdCuestionario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdCuestionrioNavigation");
+                });
+
             modelBuilder.Entity("anskus.Domain.Models.Authentication.ApplicationUser", b =>
                 {
                     b.Navigation("CuestionarioActivo");
+                });
+
+            modelBuilder.Entity("anskus.Domain.Models.CuestionarioActivo", b =>
+                {
+                    b.Navigation("SalaParticipantes");
                 });
 #pragma warning restore 612, 618
         }

@@ -161,7 +161,7 @@ namespace anskus.Infrestructure.Repositorys
             else
                 return new LoginResponse();
         }
-        public async Task<GeneralResponse> SaveRefreshToken(string userId, string token)
+        public async Task<GeneralResponse> SaveRefreshToken(Guid userId, string token)
         {
             try
             {
