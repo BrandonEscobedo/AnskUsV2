@@ -15,5 +15,5 @@ namespace anskus.Application.HubServices.StateContainers
         public void SetCuestionario(CuestionarioResponse Cuestionario, int Codigo);
         public Pregunta MandarSiguientePregunta();
       
-    }
+    }   
 }

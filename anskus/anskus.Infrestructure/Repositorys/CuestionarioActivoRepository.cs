@@ -32,9 +32,13 @@ namespace anskus.Infrestructure.Repositorys
             }
             return null!;
         }
-        public async Task<Guid> AddParticipanteToRoomAsync(int Code, string Name)
+        public async Task AddParticipanteToRoomAsync(int Code, string Name)
         {
             var cuestionario = await _context.cuestionarioActivo.FirstOrDefaultAsync(x => x.Codigo == Code);
+            if(cuestionario == null)
+            {
+                throw new Exception("Este cuestionario ya no esta disponible");
+            }       
             SalaParticipante ParticipanteSala = new()
             {
                 code = Code,
@@ -43,7 +47,7 @@ namespace anskus.Infrestructure.Repositorys
             };
             _context.SalaParticipante.Add(ParticipanteSala);
             await _context.SaveChangesAsync();
-            return ParticipanteSala.IdParticipante;
+         
         }
         public async Task<bool> IsParticipanteUniqueAsync(int code, string name)
         {

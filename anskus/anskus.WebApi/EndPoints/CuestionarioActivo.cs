@@ -41,15 +41,15 @@ namespace anskus.WebApi.EndPoints
                 }
                 return Results.NotFound();
             });
-            app.MapPost("api/CuestionarioActivo/Codigo", async (int code, string Nombre, IValidator<AddUserToRoomCommand> validator,
+            app.MapPost("api/CuestionarioActivo/Sala", async (int code, string nombre, IValidator<AddUserToRoomCommand> validator,
                ISender sender) =>
             {
-                AddUserToRoomCommand addUserToRoomCommand = new(code, Nombre);
+                AddUserToRoomCommand addUserToRoomCommand = new(code, nombre);
                 var result = await validator.ValidateAsync(addUserToRoomCommand);
                 if (result.IsValid)
                 {
-                    var resultCommand = await sender.Send(addUserToRoomCommand);
-                    return Results.Ok(resultCommand);
+                    await sender.Send(addUserToRoomCommand);
+                    return Results.Ok();
                 }
                 else
                 {

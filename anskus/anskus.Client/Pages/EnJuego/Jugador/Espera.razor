@@ -1,5 +1,36 @@
-﻿<h3>Entrar</h3>
+﻿@page "/Sala"
+@inject IStateJugador _stateJugador
+@layout ComponentBaseLobby
+@inject NavigationManager _navigationManager
+@implements IDisposable
+<div class="lobby">
 
+    <div class="lobby__info">
+        <h2>Codigo de la partida</h2>
+        <p>@_stateJugador.participante.Codigo</p>
+    </div>
+    <h3>Esperando inicio...</h3>
+
+    <div class="SinglePlayer">
+        <div class="activePlayers__grid">
+            <h3 class="jugador">
+                @_stateJugador.participante.Nombre
+            </h3>
+        </div>
+    </div>
+</div>
 @code {
-
+    protected override void OnInitialized()
+    {
+        _stateJugador.OnIniciarCuestionario += OnIniciar;
+        base.OnInitialized();
+    }
+    private void OnIniciar()
+    {
+        _navigationManager.NavigateTo("/IniciandoCuestionario");
+    }
+    public void Dispose()
+    {
+        _stateJugador.OnIniciarCuestionario -= OnIniciar;
+    }
 }

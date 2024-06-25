@@ -7,13 +7,14 @@ namespace anskus.WebApi.Hubs
     public class CuestionarioHub : Hub<InotificationClient>
     {
 
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
+
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
+        }
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+         
         }
         public async Task<bool> CreateRoom(int code, Cuestionario Cuestionario)
         {
@@ -26,8 +27,7 @@ namespace anskus.WebApi.Hubs
             Context.Items["UserData"] = participante;
             await Groups.AddToGroupAsync(Context.ConnectionId, participante.Codigo.ToString());
             await Clients.Clients(participante.Nombre).NewParticipante(participante);
-            await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);
-         
+            await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);        
         }
         public async Task IniciarCuestionario(int Codigo ,string Titulo, Pregunta pregunta)
         {         

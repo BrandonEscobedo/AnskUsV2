@@ -1,0 +1,38 @@
+﻿@layout ComponentBaseLobby
+@inject IStateParticipantes _stateParticipantes
+@implements IDisposable
+<div class="activePlayers">
+    <h1>Jugadores activos</h1>
+    <div class="activePlayers__grid">
+        @if (participantesActivos != null)
+        {
+            @foreach (var participante in participantesActivos)
+            {
+                <h3 class="jugador">
+                    @participante.Nombre
+                </h3>
+            }
+        }
+        else
+        {
+            <h3>Esperando Jugadores..</h3>
+        }
+    </div>
+</div>
+@code {
+    private IReadOnlyList<ParticipanteEnCuestionario>? participantesActivos { get; set; }
+
+    protected override void OnInitialized()
+    {
+        participantesActivos = _stateParticipantes.participantesEnCuestionario;
+        _stateParticipantes.OnParticipante += OnNuevoParticipante;
+    }
+    private void OnNuevoParticipante()
+    {
+        StateHasChanged();
+    }
+    public void Dispose()
+    {
+        _stateParticipantes.OnParticipante -= OnNuevoParticipante;
+    }
+}

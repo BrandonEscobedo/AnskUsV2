@@ -2,6 +2,11 @@
 @inject NavigationManager _navigationManager
 @layout ComponentBaseLobby
 @inject ICuestionarioActivoServices _cuestionarioActivoServices
+@inject SweetAlertService _sweetAlert
+@inject IHubJugadorServices _hubJugadorServices
+
+@using CurrieTechnologies.Razor.SweetAlert2
+@using anskus.Application.DTOs
 <link rel="stylesheet" href="css/codigo.css" />
 <div class="code__body">
     <a href="../#">
@@ -19,11 +24,32 @@
     [Parameter]
     public int Code { get; set; }
 
-    public ParticipanteEnCuestionario participante { get; set; } = new();
+    public ParticipanteEnCuestDTO participante { get; set; } = new();
     private async Task EntrarSesion()
     {
-        // participante.codigo = Code;
-        // await HubService.AddUserToRoom(participante);
+        var response = await _cuestionarioActivoServices.AddUserToRoom(Code, participante.Nombre);
+
+        if (response.success)
+        {
+            participante.IdPeC = Guid.NewGuid();
+            participante.Codigo = Code;
+            bool result = await _hubJugadorServices.AddUserToRoom(participante);
+            if (result)
+            {
+                _navigationManager.NavigateTo("/Sala");
+            }
+        }
+        else
+        {
+            var res = response.errors;
+            if (response.errors != null && response.errors.TryGetValue("Name", out var nameErrors))
+            {
+                var errorMessage = string.Join(", ", nameErrors);
+                await _sweetAlert.FireAsync("Oops...", errorMessage, SweetAlertIcon.Error);
+            }
+
+        }
+
     }
 
 }

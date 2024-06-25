@@ -4,13 +4,13 @@ using MediatR;
 namespace anskus.Application.CuestionarioActivo.Command
 {
     internal sealed class AddUserToRoomCommandHandler(ICuestionarioActivoRepository _cuestionarioActivoRepository)
-        : IRequestHandler<AddUserToRoomCommand,Guid>
+        : IRequestHandler<AddUserToRoomCommand>
     {
-        public async Task<Guid> Handle(AddUserToRoomCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AddUserToRoomCommand request, CancellationToken cancellationToken)
         {
 
-            var response= await _cuestionarioActivoRepository.AddParticipanteToRoomAsync(request.Code, request.Name);
-            return response;
+             await _cuestionarioActivoRepository.AddParticipanteToRoomAsync(request.Code, request.Name);
+           
         }
     }
 }

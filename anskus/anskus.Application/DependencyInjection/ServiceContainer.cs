@@ -32,13 +32,15 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<ICuestionarioService, CuestionarioService>();
             services.AddScoped<HttpClientServices>();
             services.AddScoped<IAccountServices, AccountServices>();
-            services.AddScoped<IStateParticipantes, HubStateCreador>();
+            services.AddScoped<IStateParticipantes, StateParticipantes>();
             services.AddScoped<IHubStateCreador, HubStateCreador>();
+            services.AddScoped<IHubJugadorServices, HubJugadorServices>();
+            services.AddScoped<IStateJugador, StateJugador>();
+            services.AddScoped<IHubStateJugador,  HubStateJugador>();
             services.AddScoped<IHubconnectionService, HubconnectionService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<LocalStorageServices>();
             services.AddTransient<CustomHttpHandler>();
-           
             services.AddScoped<ICuestionarioActivoServices, CuestionarioActivoServices>();
             services.AddCascadingAuthenticationState();
             services.AddHttpClient("TestAnskusClient", client =>

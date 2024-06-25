@@ -1,7 +1,6 @@
 ﻿using anskus.Application.DTOs.Response.Cuestionarios;
 using anskus.Application.HubServices.StateContainers;
 using anskus.Domain.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace anskus.Application.HubServices
@@ -16,7 +15,7 @@ namespace anskus.Application.HubServices
             _hubConnection = hubConnection;
             _hubStateCreador = hubStateCreador;
             _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
-            _hubConnection.On<ParticipanteEnCuestionario>("IniciarCuestionario", OnNewParticipante);
+            _hubConnection.On<ParticipanteEnCuestionario>("NewParticipante", OnNewParticipante);
             _hubConnection.On<ParticipanteEnCuestionario>("IniciarCuestionario", OnRemoveParticipante);
             _stateParticipantes = stateParticipantes;
         }

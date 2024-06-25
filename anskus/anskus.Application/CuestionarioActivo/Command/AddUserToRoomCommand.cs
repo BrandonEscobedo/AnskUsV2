@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.CuestionarioActivo.Command
 {
-    public record AddUserToRoomCommand(int Code, string Name):IRequest<Guid>;
+    public record AddUserToRoomCommand(int Code, string Name):IRequest;
 }
