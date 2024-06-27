@@ -1,0 +1,119 @@
+﻿@page "/preguntas"
+@layout ComponentBaseLobby
+@inject IStateContainerOnPreg _stateContainer
+@implements IDisposable
+
+<h2 class="title">
+    @pregunta.pregunta
+</h2>
+
+<section class="botones">
+    @{
+        int contador = 1;
+    }
+    @foreach (var respuesta in pregunta.Respuesta)
+    {       
+            <button @onclick="()=>ValidarRespuesta(respuesta)" class=" inp b@(contador) @(GetButtonClass(respuesta))">
+            @respuesta.respuesta
+            </button>            
+        contador++;
+    }
+</section>
+
+<h2 class="title">@segundos</h2>
+<style>
+    .btn-normal {
+        background-color: initial; /* O el color original */
+    }
+
+    .btn-correcta {
+        background-color: green;
+    }
+
+    .btn-incorrecta {
+        opacity: 35%;
+    }
+</style>
+@code {
+    @using System.Threading;
+    private Timer? _timer;
+    private int segundos = 10;
+    private Pregunta pregunta { get; set; } = new();
+    public bool PuedeContestar = true;
+    private bool eventCallPreguntaContestada = false;
+    [Parameter]
+    public EventCallback<DatosPregunta> OnPreguntaContestada { get; set; }
+    private DatosPregunta datosPregunta = new();
+    [Parameter]
+    public EventCallback OnSiguiente { get; set; }
+
+    private List<Respuesta> respuestasCorrectas = new();
+    private Respuesta? respuestaSeleccionada = null;
+
+    protected override void OnInitialized()
+    {
+        pregunta = _stateContainer.Pregunta;
+        _timer = new Timer(OnTimerCallback, null, 1000, 1000);
+        respuestasCorrectas = pregunta.Respuesta.Where(x => x.RCorrecta == true).ToList();
+        base.OnInitialized();
+    }
+
+    private async void ValidarRespuesta(Respuesta respuesta)
+    {
+        if (PuedeContestar)
+        {
+            respuestaSeleccionada = respuesta;
+            if (respuestasCorrectas.Contains(respuesta))
+            {
+                datosPregunta.puntos = segundos * 13;
+                datosPregunta.esCorrecto = true;
+            }
+
+            await OnPreguntaContestada.InvokeAsync(datosPregunta);
+            eventCallPreguntaContestada = true;
+        }
+        PuedeContestar = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnTimerCallback(object? state)
+    {
+        segundos -= 1;
+        if (segundos == 0)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            _timer?.Dispose();
+            _timer = null;
+
+            if (!eventCallPreguntaContestada)
+            {
+                await OnPreguntaContestada.InvokeAsync(datosPregunta);
+            }
+            PuedeContestar = false;
+            await OnSiguiente.InvokeAsync();
+
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string GetButtonClass(Respuesta respuesta)
+    {
+        if (respuestaSeleccionada != null)
+        {
+            if (!respuestasCorrectas.Contains(respuesta))
+            {
+                return "btn-incorrecta" ;
+            }
+            if (respuesta == respuestaSeleccionada && !respuestasCorrectas.Contains(respuesta))
+            {
+                return "btn-correcta";
+            }
+        }
+        return "btn-normal";
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}

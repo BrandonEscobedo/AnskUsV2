@@ -1,6 +1,7 @@
 ﻿@page "/Titulo"
 @layout ComponentBaseLobby
 @inject IStateContainerOnPreg _stateContainer
+@inject NavigationManager _navigationManager
 @implements IDisposable 
 <section class="title_boddy">
     <h2 class="title">
@@ -30,7 +31,7 @@
             _timer?.Dispose();
             _timer = null;
             await OnTimerOff.InvokeAsync();
-
+            _navigationManager.NavigateTo("/OnGame/Pregunta");
         }
         await InvokeAsync(StateHasChanged);
     }

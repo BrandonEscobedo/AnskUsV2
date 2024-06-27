@@ -1,0 +1,22 @@
+﻿@page "/OnGame/Pregunta"
+@layout ComponentBaseLobby
+@implements IDisposable
+
+<section class= "preguntas__body">
+    <PreguntaComponent
+                       OnSiguiente="Siguiente">
+
+    </PreguntaComponent>
+
+</section>
+@code{
+    private bool MostrarRespuesta = true;
+
+    private void Siguiente()
+    {
+        MostrarRespuesta = true;
+    }
+    public void Dispose()
+    {
+    }
+}
