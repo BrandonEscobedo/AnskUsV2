@@ -16,6 +16,11 @@ namespace anskus.Client.Pages.EnJuego.Creador
 
             Cuestionario = _hubStateCreador.Cuestionario;
             Codigo = _hubStateCreador.Codigo;
+            _stateContainer.OnIniciarCuestionario += OnIniciar;
+        }
+        private void OnIniciar()
+        {
+            _navigationManager.NavigateTo("/Titulo");
         }
         private  void Salir()
         {

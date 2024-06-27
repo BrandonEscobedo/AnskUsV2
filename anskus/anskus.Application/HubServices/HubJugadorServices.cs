@@ -13,17 +13,25 @@ namespace anskus.Application.HubServices
     public class HubJugadorServices: IHubJugadorServices
     {
         private readonly HubConnection _hubConnection;
+        private readonly IStateContainerOnPreg _stateContainer;
         private readonly IStateJugador _stateJugador;
-        public HubJugadorServices(HubConnection hubConnection, IStateJugador stateJugador)
+        public HubJugadorServices(HubConnection hubConnection, IStateContainerOnPreg StateContainerOnPreg, IStateJugador stateJugador)
         {
             _hubConnection = hubConnection;
+            _stateContainer = StateContainerOnPreg;
             _stateJugador = stateJugador;
-            _hubConnection.On<string, Pregunta>("", OnIniciarCuestionario);
+            _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
+            _hubConnection.On<Pregunta>("SiguientePreguntas", OnSiguientePregunta);
+        }
+
+        private void OnSiguientePregunta(Pregunta pregunta)
+        {
+            _stateContainer.SetPregunta(pregunta);
         }
 
         private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
         {
-            _stateJugador.SetTituloPregunta(Titulo, pregunta);
+            _stateContainer.SetTituloPregunta(Titulo, pregunta);
 
         }
 

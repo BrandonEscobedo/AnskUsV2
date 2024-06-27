@@ -1,6 +1,6 @@
 ﻿namespace anskus.Application.HubServices.StateContainers
 {
-    public interface IStateCreador:IStateBase
+    public interface IStateCreador
     {
     }
 }

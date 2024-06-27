@@ -36,6 +36,7 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<IHubStateCreador, HubStateCreador>();
             services.AddScoped<IHubJugadorServices, HubJugadorServices>();
             services.AddScoped<IStateJugador, StateJugador>();
+            services.AddScoped<IStateContainerOnPreg, StateContainerOnPreg>();
             services.AddScoped<IHubCreadorServices, HubCreadorServices>();
             services.AddScoped<IStateCreador, StateCreador>();
             services.AddScoped<IHubStateJugador,  HubStateJugador>();

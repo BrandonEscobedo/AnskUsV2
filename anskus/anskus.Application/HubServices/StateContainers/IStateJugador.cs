@@ -2,9 +2,9 @@
 
 namespace anskus.Application.HubServices.StateContainers
 {
-    public interface IStateJugador: IStateBase
+    public interface IStateJugador
     {
         public ParticipanteEnCuestDTO participante { get; set; }
-       
+      
     }
 }

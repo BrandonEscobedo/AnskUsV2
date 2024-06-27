@@ -3,25 +3,27 @@
 @inject IHubconnectionService _hubConnectionService
 @inject IHubStateCreador _hubStateCreador
 @inject IHubCreadorServices _HubCreadorServices
+@inject IStateContainerOnPreg _stateContainer
+@inject NavigationManager _navigationManager
 <link rel="stylesheet" href="css/codigo.css" />
 <div class="lobby">
     <div class="lobby__info">
         <h2>Codigo de la partida</h2>
-            <p>@Codigo</p>       
+        <p>@Codigo</p>
     </div>
-<ParticipantesLista>
+    <ParticipantesLista>
 
-</ParticipantesLista>
-        
-        <p>Titulo: @Cuestionario.Titulo</p>
-    
+    </ParticipantesLista>
+
+    <p>Titulo: @Cuestionario.Titulo</p>
+
     <div class="lobby__status">
         <div class="player__counter">
             <img src="./img/user.png" alt="">
         </div>
         <div class="lobby__actions">
-            <button  @onclick="Salir" class="cancelar">Salir</button>
-            <button @onclick="Iniciar"  class="comenzar">Comenzar</button>
+            <button @onclick="Salir" class="cancelar">Salir</button>
+            <button @onclick="Iniciar" class="comenzar">Comenzar</button>
         </div>
     </div>
 </div>

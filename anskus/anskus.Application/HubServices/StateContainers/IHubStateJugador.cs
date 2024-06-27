@@ -15,22 +15,22 @@ namespace anskus.Application.HubServices.StateContainers
     public class HubStateJugador: IHubStateJugador
     {
         private readonly HubConnection _hubConnection;
-        private readonly IStateJugador _stateJugador;
-        public HubStateJugador(HubConnection hubConnection, IStateJugador stateJugador)
+        private readonly IStateContainerOnPreg _stateContainer;
+        public HubStateJugador(HubConnection hubConnection, IStateContainerOnPreg stateContainer)
         {
             _hubConnection = hubConnection;
             _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
             _hubConnection.On<Pregunta>("SiguientePregunta", OnSiguientePregunta);
-            _stateJugador = stateJugador;
+            _stateContainer = stateContainer;
         }
         private void OnSiguientePregunta(Pregunta pregunta)
         {
-            _stateJugador.SetPregunta(pregunta);
+            _stateContainer.SetPregunta(pregunta);
         }
 
         private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
         {
-         _stateJugador.SetTituloPregunta(Titulo, pregunta);
+            _stateContainer.SetTituloPregunta(Titulo, pregunta);
         }
     }
 }

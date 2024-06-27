@@ -1,5 +1,6 @@
 ﻿@page "/Sala"
 @inject IStateJugador _stateJugador
+@inject IStateContainerOnPreg _stateContainer
 @layout ComponentBaseLobby
 @inject NavigationManager _navigationManager
 @implements IDisposable
@@ -22,15 +23,15 @@
 @code {
     protected override void OnInitialized()
     {
-        _stateJugador.OnIniciarCuestionario += OnIniciar;
+        _stateContainer.OnIniciarCuestionario += OnIniciar;
         base.OnInitialized();
     }
     private void OnIniciar()
     {
-        _navigationManager.NavigateTo("/IniciandoCuestionario");
+        _navigationManager.NavigateTo("/Titulo");
     }
     public void Dispose()
     {
-        _stateJugador.OnIniciarCuestionario -= OnIniciar;
+        _stateContainer.OnIniciarCuestionario -= OnIniciar;
     }
 }
