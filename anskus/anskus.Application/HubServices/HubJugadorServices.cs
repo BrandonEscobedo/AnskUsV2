@@ -1,5 +1,6 @@
 ﻿using anskus.Application.DTOs;
 using anskus.Application.HubServices.StateContainers;
+using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,15 @@ namespace anskus.Application.HubServices
         {
             _hubConnection = hubConnection;
             _stateJugador = stateJugador;
+            _hubConnection.On<string, Pregunta>("", OnIniciarCuestionario);
         }
+
+        private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
+        {
+            _stateJugador.SetTituloPregunta(Titulo, pregunta);
+
+        }
+
         public async Task<bool> AddUserToRoom(ParticipanteEnCuestDTO participante)
         {
             await _hubConnection.InvokeAsync("AddUserToRoom", participante);

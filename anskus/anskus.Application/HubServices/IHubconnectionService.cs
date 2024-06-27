@@ -12,7 +12,6 @@ namespace anskus.Application.HubServices
     {
         public  Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo);
         public Task IniciarCuestionario();
-
         public  Task SiguientePregunta();
     }
 }

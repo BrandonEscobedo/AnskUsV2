@@ -11,7 +11,8 @@ namespace anskus.Domain.Models
         [BsonRepresentation(BsonType.String)]
         public Guid? IdCuestionario { get; set; }
         public string? Titulo { get; set; } = "";
-    
+        public string? MensajeCorrecto { get; set; } = "";
+        public string? MensajeIncorrecto { get; set; } = "";
         public EstadoCuestionario Estado { get; set; }
 
         private ICuestionarioState _estadoActual;

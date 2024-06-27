@@ -122,7 +122,14 @@
                                     <label class="form-label" for="typeNumber">Number input</label>
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Mensaje en respuesta correcta:</label>
+                                <input type="text" @bind-value="Cuestionario.MensajeCorrecto" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Mensaje en respuesta incorrecta</label>
+                                <input type="text" @bind-value=" Cuestionario.MensajeIncorrecto" class="form-control" id="recipient-name">
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">

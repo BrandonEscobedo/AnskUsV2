@@ -3,12 +3,10 @@ using anskus.Domain.Models;
 
 namespace anskus.Application.HubServices.StateContainers
 {
-    public class StateJugador : IStateJugador
+    public class StateCreador : IStateCreador
     {
-        public ParticipanteEnCuestDTO participante { get; set; } = new ParticipanteEnCuestDTO();
         public Pregunta Pregunta { get; private set; } = new Pregunta();
-        public List<ParticipanteEnCuestDTO> participantes { get; set; } = new List<ParticipanteEnCuestDTO>();
-        public string Titulo { get; private set; } = "";
+        public string Titulo { get; set; } = "";
         public event Action? OnIniciarCuestionario;
         public event Action? OnSiguientePregunta;
 
