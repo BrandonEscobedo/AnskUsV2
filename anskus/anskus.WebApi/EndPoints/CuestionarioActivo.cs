@@ -48,14 +48,13 @@ namespace anskus.WebApi.EndPoints
                 var result = await validator.ValidateAsync(addUserToRoomCommand);
                 if (result.IsValid)
                 {
-                    await sender.Send(addUserToRoomCommand);
-                    return Results.Ok();
+                   var response= await sender.Send(addUserToRoomCommand);
+                    return Results.Ok(response);
                 }
                 else
                 {
                     return Results.ValidationProblem(result.ToDictionary());
                 }
-
             });
         }
     }

@@ -195,6 +195,7 @@ namespace anskus.Infrestructure.Migrations
                 {
                     code = table.Column<int>(type: "int", nullable: false),
                     name_user = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    IdParticipante = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdCuestionario = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

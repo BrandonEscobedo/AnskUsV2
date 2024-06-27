@@ -10,7 +10,7 @@ namespace anskus.Domain.Models
 {
     public class SalaParticipante
     {
-        [NotMapped]
+      
         public Guid IdParticipante { get; set; }
      
         public int code { get; set; }

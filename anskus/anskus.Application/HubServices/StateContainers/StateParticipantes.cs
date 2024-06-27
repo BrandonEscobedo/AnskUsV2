@@ -13,7 +13,6 @@ namespace anskus.Application.HubServices.StateContainers
             participantesEnCuestionario.Add(participante);
             OnParticipante?.Invoke();
         }
-
         public void RemoveParticipanteToList(ParticipanteEnCuestionario participante)
         {
             participantesEnCuestionario.Remove(participante);

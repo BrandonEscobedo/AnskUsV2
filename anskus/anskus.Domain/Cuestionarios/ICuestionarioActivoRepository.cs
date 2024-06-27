@@ -9,9 +9,12 @@ namespace anskus.Domain.Cuestionarios
 {
     public interface ICuestionarioActivoRepository
     {
+        public Task RemoveParticipanteFromRoom(Guid IdParticipante, int Codigo);
+
+        public Task RemoveCuestionarioActivo(Guid IdCuestionario );
         Task<bool> IsParticipanteUniqueAsync(int code, string name);
         Task<CuestionarioActivo>     ActivarCuestionarioAsync(Guid idcuestionario, string email);
-        Task AddParticipanteToRoomAsync(int Code, string Name);
+        Task<Guid> AddParticipanteToRoomAsync(int Code, string Name);
         public  Task<bool> IsCuestionarioActivoUnique(string Email);
     }
 }

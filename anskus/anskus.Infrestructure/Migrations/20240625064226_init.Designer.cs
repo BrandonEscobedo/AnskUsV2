@@ -12,7 +12,7 @@ using anskus.Infrestructure.Persistence.Context;
 namespace anskus.Infrestructure.Migrations
 {
     [DbContext(typeof(AnskusDbContext))]
-    [Migration("20240624224834_init")]
+    [Migration("20240625064226_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -275,6 +275,9 @@ namespace anskus.Infrestructure.Migrations
                         .HasColumnType("nvarchar(60)");
 
                     b.Property<Guid>("IdCuestionario")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdParticipante")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("code", "name_user");

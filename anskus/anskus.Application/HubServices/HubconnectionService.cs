@@ -31,7 +31,7 @@ namespace anskus.Application.HubServices
 
         public async Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo)
         {
-            bool result = await _hubConnection.InvokeAsync<bool>("CreateRoom", cuestionarioActivo.Codigo, cuestionarioActivo);      
+            bool result = await _hubConnection.InvokeAsync<bool>("CreateRoom", cuestionarioActivo.Codigo,cuestionarioActivo.IdcuestionarioActivo);      
             if (result)
                 _hubStateCreador.SetCuestionario(cuestionarioActivo.Cuestionario, cuestionarioActivo.Codigo);
         }

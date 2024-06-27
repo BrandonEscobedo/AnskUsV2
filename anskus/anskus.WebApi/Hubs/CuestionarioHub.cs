@@ -1,12 +1,13 @@
 ﻿using anskus.Application.DTOs;
 using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR;
-
+using MediatR;
+using anskus.Application.CuestionarioActivo.Command;
 namespace anskus.WebApi.Hubs
 {
-    public class CuestionarioHub : Hub<InotificationClient>
+    public class CuestionarioHub(IMediator sender) : Hub<InotificationClient>
     {
-
+      
 
         public override async Task OnConnectedAsync()
         {
@@ -14,17 +15,38 @@ namespace anskus.WebApi.Hubs
         }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-         
+           
+            if (Context.Items.TryGetValue("IdCuestionario", out var idCuestionarioObj) &&
+       idCuestionarioObj is Guid idCuestionario &&
+       idCuestionario != Guid.Empty)
+            {
+                await sender.Send(new RemoveCuestionarioActivoCommand(idCuestionario));
+                Context.Items.Clear();
+            }
+            else if (Context.Items.TryGetValue("Codigo", out var codigoObj) &&
+                  codigoObj is int codigo &&
+                  codigo != 0)
+            {
+                if (Context.Items.TryGetValue("IdParticipante", out var idParticipanteObj) &&
+                    idParticipanteObj is Guid idParticipante &&
+                    idParticipante != Guid.Empty)
+                {
+                    await sender.Send(new RemoveParticipanteCommand(idParticipante, codigo));
+                    Context.Items.Clear();
+                }
+            }
         }
-        public async Task<bool> CreateRoom(int code, Cuestionario Cuestionario)
+        public async Task<bool> CreateRoom(int code,Guid Idcuestionario )
         {
             Context.Items["Codigo"] = code;
+            Context.Items["IdCuestionario"] = Idcuestionario;
             await Groups.AddToGroupAsync(Context.ConnectionId, code.ToString());
             return true;
         }
         public async Task AddUserToRoom(ParticipanteEnCuestDTO participante)
         {
-            Context.Items["UserData"] = participante;
+            Context.Items["Codigo"] = participante.Codigo;
+            Context.Items["IdParticipante"] = participante.IdPeC;
             await Groups.AddToGroupAsync(Context.ConnectionId, participante.Codigo.ToString());
             await Clients.Clients(participante.Nombre).NewParticipante(participante);
             await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);        

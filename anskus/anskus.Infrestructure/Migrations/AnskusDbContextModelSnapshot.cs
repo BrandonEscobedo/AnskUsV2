@@ -274,6 +274,9 @@ namespace anskus.Infrestructure.Migrations
                     b.Property<Guid>("IdCuestionario")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("IdParticipante")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("code", "name_user");
 
                     b.HasIndex("IdCuestionario");

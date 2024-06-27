@@ -29,9 +29,9 @@
     {
         var response = await _cuestionarioActivoServices.AddUserToRoom(Code, participante.Nombre);
 
-        if (response.success)
+        if (response.IdCuestionario!=Guid.Empty)
         {
-            participante.IdPeC = Guid.NewGuid();
+            participante.IdPeC = response.IdCuestionario;
             participante.Codigo = Code;
             bool result = await _hubJugadorServices.AddUserToRoom(participante);
             if (result)

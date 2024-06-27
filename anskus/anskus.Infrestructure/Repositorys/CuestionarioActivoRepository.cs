@@ -9,8 +9,8 @@ namespace anskus.Infrestructure.Repositorys
     internal sealed class CuestionarioActivoRepository(AnskusDbContext _context,
         IRandomCodeFactory randomCode) : ICuestionarioActivoRepository
     {
-       
-        public async Task<CuestionarioActivo> ActivarCuestionarioAsync(Guid idcuestionario,string email)
+
+        public async Task<CuestionarioActivo> ActivarCuestionarioAsync(Guid idcuestionario, string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email) ?? throw new Exception("No se encontro el usuario");
             if (!await _context.cuestionarioActivo.Where(x => x.IdUsuario == user.Id).AnyAsync())
@@ -32,27 +32,56 @@ namespace anskus.Infrestructure.Repositorys
             }
             return null!;
         }
-        public async Task AddParticipanteToRoomAsync(int Code, string Name)
+        public async Task<Guid> AddParticipanteToRoomAsync(int Code, string Name)
         {
             var cuestionario = await _context.cuestionarioActivo.FirstOrDefaultAsync(x => x.Codigo == Code);
-            if(cuestionario == null)
+            if (cuestionario == null)
             {
                 throw new Exception("Este cuestionario ya no esta disponible");
-            }       
+            }
             SalaParticipante ParticipanteSala = new()
             {
                 code = Code,
                 name_user = Name,
-               IdCuestionario=cuestionario.Idcuestionario
+                IdCuestionario = cuestionario.Idcuestionario,
+                IdParticipante = Guid.NewGuid()
             };
             _context.SalaParticipante.Add(ParticipanteSala);
             await _context.SaveChangesAsync();
+            return ParticipanteSala.IdParticipante;
+        }
+        public async Task RemoveCuestionarioActivo(Guid IdCuestionario )
+        {
+            var cuestionaro = await _context.cuestionarioActivo.FirstOrDefaultAsync(x => x.Idcuestionario == IdCuestionario);
+            if (cuestionaro != null)
+            {
+                _context.cuestionarioActivo.Remove(cuestionaro);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Ocurrio un error inesperado");
+                //Implementar logs
+            }
+        }
+        public async Task RemoveParticipanteFromRoom(Guid IdParticipante, int Codigo)
+        {
          
+            var participante= await _context.SalaParticipante.FirstOrDefaultAsync(x=>x.IdParticipante == IdParticipante && x.code==Codigo) ;
+            if (participante != null)
+            {
+                _context.SalaParticipante.Remove(participante);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Ocurrio un error inesperado al eliminar el participante");
+            }
         }
         public async Task<bool> IsParticipanteUniqueAsync(int code, string name)
         {
             return !await _context.SalaParticipante.AnyAsync(p => p.code == code && p.name_user == name);
-           
+
         }
         public async Task<bool> IsCuestionarioActivoUnique(string Email)
         {
