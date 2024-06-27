@@ -20,19 +20,19 @@
     </div>
 </div>
 @code {
-    private IReadOnlyList<ParticipanteEnCuestionario>? participantesActivos { get; set; }
+    private IReadOnlyList<ParticipanteEnCuestDTO>? participantesActivos { get; set; }
 
     protected override void OnInitialized()
     {
         participantesActivos = _stateParticipantes.participantesEnCuestionario;
-        _stateParticipantes.OnParticipante += OnNuevoParticipante;
+        _stateParticipantes.OnParticipante += OnParticipante;
     }
-    private void OnNuevoParticipante()
+    private void OnParticipante()
     {
         StateHasChanged();
     }
     public void Dispose()
     {
-        _stateParticipantes.OnParticipante -= OnNuevoParticipante;
+        _stateParticipantes.OnParticipante -= OnParticipante;
     }
 }

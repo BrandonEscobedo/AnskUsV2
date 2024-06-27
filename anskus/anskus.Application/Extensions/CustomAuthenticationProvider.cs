@@ -18,6 +18,13 @@ namespace anskus.Application.Extensions
             var tokenModel = await localStorageServices.GetModelFromToken();
             if (string.IsNullOrEmpty(tokenModel.Token))
                 return await Task.FromResult(new AuthenticationState(claims));
+            var handler= new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(tokenModel.Token);
+            if (jwtToken.ValidTo < DateTime.UtcNow)
+            {
+                await UpdateAthenticationState(new LocalStorageDTO());
+                return new AuthenticationState(claims);
+            }
             var getUserClaims = DecryptToken(tokenModel.Token!);
             if (getUserClaims == null) return await Task.FromResult(new AuthenticationState(claims));
             var claimsPrincipal = SetClaims(getUserClaims);

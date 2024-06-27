@@ -7,7 +7,7 @@ namespace anskus.WebApi.Hubs
 {
     public class CuestionarioHub(IMediator sender) : Hub<InotificationClient>
     {
-      
+
 
         public override async Task OnConnectedAsync()
         {
@@ -15,7 +15,7 @@ namespace anskus.WebApi.Hubs
         }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-           
+
             if (Context.Items.TryGetValue("IdCuestionario", out var idCuestionarioObj) &&
        idCuestionarioObj is Guid idCuestionario &&
        idCuestionario != Guid.Empty)
@@ -27,16 +27,17 @@ namespace anskus.WebApi.Hubs
                   codigoObj is int codigo &&
                   codigo != 0)
             {
-                if (Context.Items.TryGetValue("IdParticipante", out var idParticipanteObj) &&
-                    idParticipanteObj is Guid idParticipante &&
-                    idParticipante != Guid.Empty)
+                if (Context.Items.TryGetValue("participante", out var idParticipanteObj) &&
+                    idParticipanteObj is ParticipanteEnCuestDTO Participante &&
+                    Participante != null)
                 {
-                    await sender.Send(new RemoveParticipanteCommand(idParticipante, codigo));
+                    await sender.Send(new RemoveParticipanteCommand(Participante.IdPeC, codigo));
+                    await Clients.Groups(codigo.ToString()).LeftParticipante(Participante);
                     Context.Items.Clear();
                 }
             }
         }
-        public async Task<bool> CreateRoom(int code,Guid Idcuestionario )
+        public async Task<bool> CreateRoom(int code, Guid Idcuestionario)
         {
             Context.Items["Codigo"] = code;
             Context.Items["IdCuestionario"] = Idcuestionario;
@@ -46,14 +47,14 @@ namespace anskus.WebApi.Hubs
         public async Task AddUserToRoom(ParticipanteEnCuestDTO participante)
         {
             Context.Items["Codigo"] = participante.Codigo;
-            Context.Items["IdParticipante"] = participante.IdPeC;
+            Context.Items["participante"] = participante;
             await Groups.AddToGroupAsync(Context.ConnectionId, participante.Codigo.ToString());
             await Clients.Clients(participante.Nombre).NewParticipante(participante);
-            await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);        
+            await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);
         }
-        public async Task IniciarCuestionario(int Codigo ,string Titulo, Pregunta pregunta)
-        {         
-            await Clients.Group(Codigo.ToString()).IniciarCuestionario(Titulo,pregunta);       
+        public async Task IniciarCuestionario(int Codigo, string Titulo, Pregunta pregunta)
+        {
+            await Clients.Group(Codigo.ToString()).IniciarCuestionario(Titulo, pregunta);
         }
         public async Task SiguientePregunta(int Codigo, Pregunta pregunta)
         {
@@ -65,10 +66,10 @@ namespace anskus.WebApi.Hubs
 
         Task ListaRanking(List<ParticipanteEnCuestDTO> participantes);
         Task PreguntaContestada(ParticipanteEnCuestDTO participante);
-        Task IniciarCuestionario(string Titulo,  Pregunta pregunta);
+        Task IniciarCuestionario(string Titulo, Pregunta pregunta);
         Task SiguientePregunta(Pregunta pregunta);
         Task MensajePrueba(string mensaje);
-        Task RemoveUser(ParticipanteEnCuestDTO participante);
+        Task LeftParticipante(ParticipanteEnCuestDTO participante);
         Task NewParticipante(ParticipanteEnCuestDTO participante);
         Task UsuariosEnLaSala(List<string> usuarios);
         Task getUsers(int code);

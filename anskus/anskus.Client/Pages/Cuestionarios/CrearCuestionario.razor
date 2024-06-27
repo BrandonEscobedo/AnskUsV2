@@ -2,7 +2,9 @@
 @inject ICuestionarioService CuestionarioService
 @inject IJSRuntime JS
 @attribute [Authorize]
-<link rel="stylesheet" href="/css/EstilosCrearCuestionario.css" />
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/css/EstilosCrearCuestionario.css" />
+<noscript><link rel="stylesheet" href="/css/EstilosCrearCuestionario.css"></noscript>
+
 <div>
     <div class="container custom-container">
         <div class="row mt-3">

@@ -52,7 +52,7 @@ namespace anskus.Infrestructure.Repositorys
                     new Claim(ClaimTypes.NameIdentifier,user.Email),
 
                 };
-                var expiry = DateTime.Now.AddDays(1);
+                var expiry = DateTime.UtcNow.AddDays(2);
                 var token = new JwtSecurityToken
                     (
                     issuer: configuration["JwtIssuer"],

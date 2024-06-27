@@ -1,22 +1,28 @@
-﻿using anskus.Domain.Models;
+﻿using anskus.Application.DTOs;
+using anskus.Domain.Models;
 
 namespace anskus.Application.HubServices.StateContainers
 {
     public class StateParticipantes : IStateParticipantes
     {
-        public List<ParticipanteEnCuestionario> participantesEnCuestionario { get; set; } = new();
+        public List<ParticipanteEnCuestDTO> participantesEnCuestionario { get; set; } = new();
 
         public event Action? OnParticipante;
 
-        public void AddParticipanteToList(ParticipanteEnCuestionario participante)
+        public void AddParticipanteToList(ParticipanteEnCuestDTO participante)
         {
             participantesEnCuestionario.Add(participante);
             OnParticipante?.Invoke();
         }
-        public void RemoveParticipanteToList(ParticipanteEnCuestionario participante)
+        public void RemoveParticipanteToList(ParticipanteEnCuestDTO participante)
         {
-            participantesEnCuestionario.Remove(participante);
-            OnParticipante?.Invoke();
+            var user= participantesEnCuestionario.FirstOrDefault(x=>x.IdPeC== participante.IdPeC);  
+            if (user!=null)
+            {
+                participantesEnCuestionario.Remove(user);
+                OnParticipante?.Invoke();
+            }
+         
         }
     }
 
