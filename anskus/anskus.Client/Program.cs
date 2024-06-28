@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using anskus.Application.DependencyInjection;
 using Microsoft.AspNetCore.SignalR.Client;
 using CurrieTechnologies.Razor.SweetAlert2;
+using MudBlazor.Services;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.ApplicationClientService();
+builder.Services.AddMudServices();
 builder.Services.AddScoped(sp =>
 {
     return new HubConnectionBuilder()

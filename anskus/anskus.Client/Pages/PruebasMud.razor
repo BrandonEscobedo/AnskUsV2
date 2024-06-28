@@ -1,0 +1,74 @@
+﻿@page "/MudPruebas"
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+<link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/css/EstilosCrearCuestionario.css" />
+<noscript><link rel="stylesheet" href="/css/EstilosCrearCuestionario.css"></noscript>
+<div>
+    <div class="container custom-container">
+        <div class=" row mt-3">
+            <div class="col-md-2 bg-white custom-left-section p-3">
+
+                <MudDropContainer T="Pregunta" Items="Cuestionario.Pregunta" ItemsSelector="ItemSelector" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                    <ChildContent>
+                        @foreach (var dropzone in Cuestionario.Pregunta.Select(p => p.IdPregunta.ToString()))
+                        {
+                            <MudPaper Class="ma-2 flex-grow-1">
+                                <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                                    <MudDropZone T="Pregunta" Identifier="@dropzone" Class="flex-grow-1" AllowReorder="true" />
+                                </MudList>
+                            </MudPaper>
+                        }
+                    </ChildContent>
+                    <ItemRenderer>
+                        <MudListItem>
+                            <ul id="questionList" class="list-group">
+                                <input type="button" class="form-control" value="@context.pregunta" />
+                                <button type="button" class="btn btn-danger mt-2">Eliminar</button>
+                            </ul>
+                        </MudListItem>
+                    </ItemRenderer>
+                </MudDropContainer>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="_content/MudBlazor/MudBlazor.min.js"></script>
+<button @onclick="Add"> ag</button>
+@code {
+    private void Add()
+    {
+        Pregunta preg = new Pregunta() { pregunta = "Pregunta 1" };
+        Cuestionario.Pregunta.Add(preg);
+        StateHasChanged();
+    }
+    private Cuestionario Cuestionario = new()
+        {
+            Pregunta = new()
+        {
+            new Pregunta() { pregunta = "Pregunta 1", IdPregunta= Guid.NewGuid()},
+            new Pregunta() { pregunta = "Pregunta 2", IdPregunta= Guid.NewGuid()},
+            new Pregunta() { pregunta = "Pregunta 3", IdPregunta= Guid.NewGuid()},
+            new Pregunta() { pregunta = "Pregunta 4", IdPregunta= Guid.NewGuid()},
+            new Pregunta() { pregunta = "Pregunta 5", IdPregunta= Guid.NewGuid()}
+        }
+        };
+    private bool ItemSelector(Pregunta item, string dropzone)
+    {
+        return item.IdPregunta.ToString() == dropzone;
+    }
+
+    private void ItemUpdated(MudItemDropInfo<Pregunta> dropItem)
+    {
+        // Reorder the list based on the new position
+        var item = dropItem.Item;
+        var oldIndex = Cuestionario.Pregunta.IndexOf(item);
+        Cuestionario.Pregunta.RemoveAt(oldIndex);
+        Cuestionario.Pregunta.Insert(dropItem.IndexInZone, item);
+
+        // Trigger UI update
+        StateHasChanged();
+    }
+}

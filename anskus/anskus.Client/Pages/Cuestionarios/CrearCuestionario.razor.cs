@@ -1,6 +1,7 @@
 ﻿using anskus.Domain.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 namespace anskus.Client.Pages.Cuestionarios
 {
     public partial class CrearCuestionario
@@ -8,18 +9,18 @@ namespace anskus.Client.Pages.Cuestionarios
 
         [Parameter]
         public Cuestionario Cuestionario { get; set; } = new Cuestionario();
-       
+
         private Pregunta Pregunta = new();
 
 
-        protected override  void OnInitialized()
+        protected override void OnInitialized()
         {
-           
+
             if (Cuestionario.Pregunta.Count == 0)
             {
                 Cuestionario.Pregunta.Add(Pregunta);
-             
-                Pregunta = Cuestionario.Pregunta.First();  
+
+                Pregunta = Cuestionario.Pregunta.First();
             }
             else
             {
@@ -30,23 +31,24 @@ namespace anskus.Client.Pages.Cuestionarios
         private void IniciarRespuestasObligatorias()
         {
             while (Pregunta.Respuesta.Count < 4)
-                Pregunta.Respuesta.Add(new Respuesta());            
+                Pregunta.Respuesta.Add(new Respuesta());
         }
-        private async void AgregarPregunta()
+        private async Task AgregarPregunta()
         {
             await GuardarCuestionario(Pregunta);
             Pregunta = new Pregunta();
             Cuestionario.Pregunta.Add(Pregunta);
             IniciarRespuestasObligatorias();
             await GuardarCuestionario(Pregunta);
+            StateHasChanged();
         }
-        private async void ActualizarPregunta(Pregunta pregunta)
+        private async Task ActualizarPregunta(Pregunta pregunta)
         {
             await GuardarCuestionario(Pregunta);
             Pregunta = pregunta;
             StateHasChanged();
         }
-        private async void MandarCambios( )
+        private async void MandarCambios()
         {
             await GuardarCuestionario(Pregunta);
         }
@@ -61,7 +63,7 @@ namespace anskus.Client.Pages.Cuestionarios
             }
         }
 
-        private async void EliminarRespuesta( )
+        private async void EliminarRespuesta()
         {
             if (Pregunta.Respuesta.Count > 4)
             {
@@ -69,7 +71,7 @@ namespace anskus.Client.Pages.Cuestionarios
 
                 await GuardarCuestionario(Pregunta);
             }
-         
+
         }
 
         private async void EliminarPregunta(Pregunta pregunta)
@@ -77,10 +79,23 @@ namespace anskus.Client.Pages.Cuestionarios
             Cuestionario.Pregunta.Remove(pregunta);
             await GuardarCuestionario();
         }
-
-        private async Task GuardarCuestionario(Pregunta? pregunta=null)
+        private bool ItemSelector(Pregunta item, string dropzone)
         {
-            if (!Cuestionario.Pregunta.Where(x=>x.IdPregunta==Pregunta.IdPregunta).Any())
+            return item.IdPregunta.ToString() == dropzone;
+
+        }
+
+        private async void ItemUpdated(MudItemDropInfo<Pregunta> dropItem)
+        {
+            var item = dropItem.Item;
+            var oldIndex = Cuestionario.Pregunta.IndexOf(item);
+            Cuestionario.Pregunta.RemoveAt(oldIndex);
+            Cuestionario.Pregunta.Insert(dropItem.IndexInZone, item);
+            await GuardarCuestionario(Pregunta);
+        }
+        private async Task GuardarCuestionario(Pregunta? pregunta = null)
+        {
+            if (!Cuestionario.Pregunta.Where(x => x.IdPregunta == Pregunta.IdPregunta).Any())
             {
                 Cuestionario.Pregunta.Add(Pregunta);
             }
@@ -100,9 +115,10 @@ namespace anskus.Client.Pages.Cuestionarios
                 {
                     Cuestionario.Pregunta[0] = Pregunta;
                 }
-            
+
                 var cuestionarioActualizado = await CuestionarioService.ActualizarCuestionario(Cuestionario);
                 Cuestionario = cuestionarioActualizado;
+                await InvokeAsync(StateHasChanged);
             }
             StateHasChanged();
         }
@@ -111,9 +127,10 @@ namespace anskus.Client.Pages.Cuestionarios
             await GuardarCuestionario();
             CloseModal();
         }
-private void CloseModal()
+        private void CloseModal()
         {
             JS.InvokeVoidAsync("closeModal");
         }
     }
+
 }

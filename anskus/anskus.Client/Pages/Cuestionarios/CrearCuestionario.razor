@@ -2,6 +2,8 @@
 @inject ICuestionarioService CuestionarioService
 @inject IJSRuntime JS
 @attribute [Authorize]
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+<link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/css/EstilosCrearCuestionario.css" />
 <noscript><link rel="stylesheet" href="/css/EstilosCrearCuestionario.css"></noscript>
 
@@ -10,11 +12,28 @@
         <div class="row mt-3">
             <div class="col-md-2 bg-white custom-left-section p-3">
                 <ul id="questionList" class="list-group">
-                    @foreach (var pregunta in Cuestionario.Pregunta)
-                    {
-                        <input type="button" class="form-control" @onclick="()=> ActualizarPregunta(pregunta)" @bind-value="pregunta.pregunta" />
-                        <button type="button" class="btn btn-danger btngei1" @onclick="() => EliminarPregunta(pregunta)">Eliminar</button>
-                    }
+                    <MudDropContainer T="Pregunta" Items="Cuestionario.Pregunta" ItemsSelector="ItemSelector" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                        <ChildContent>
+                            @foreach (var dropzone in Cuestionario.Pregunta.Select(p => p.IdPregunta.ToString()))
+                            {
+                                <MudPaper Class="ma-2 flex-grow-1">
+                                    <MudList Clickable="true" Class="d-flex flex-column mud-height-full">
+                                        <MudDropZone T="Pregunta" Identifier="@dropzone" Class="flex-grow-1" AllowReorder="true" />
+                                    </MudList>
+                                </MudPaper>
+                            }
+                        </ChildContent>
+                        <ItemRenderer>
+                            <MudListItem>
+                                <ul id="questionList" class="list-group">
+
+                                    <input type="button" class="form-control" @onclick="()=>ActualizarPregunta(context)" value="@context.pregunta"/>
+                                    <button type="button" class="btn btn-danger mt-2" @onclick="() => EliminarPregunta(context)">Eliminar</button>
+                                </ul>
+                            </MudListItem>
+                        </ItemRenderer>
+                    </MudDropContainer>
+                  
                 </ul>
                 <div class="mt-3">
                     <button id="addFunctionButton" @onclick="AgregarPregunta" class="btn btn-primary mt-2">Agregar Pregunta</button>
@@ -142,15 +161,7 @@
     </div>
 </div>
 
-
+<script src="_content/MudBlazor/MudBlazor.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script>
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-    })
-    function closeModal() {
-        $('#exampleModal').modal('hide');
-    }
-</script>
