@@ -39,8 +39,8 @@ namespace anskus.Client.Pages.Cuestionarios
             Pregunta = new Pregunta();
             Cuestionario.Pregunta.Add(Pregunta);
             IniciarRespuestasObligatorias();
-            await GuardarCuestionario(Pregunta);
-            StateHasChanged();
+            await GuardarCuestionario();
+
         }
         private async Task ActualizarPregunta(Pregunta pregunta)
         {
@@ -48,11 +48,24 @@ namespace anskus.Client.Pages.Cuestionarios
             Pregunta = pregunta;
             StateHasChanged();
         }
-        private async void MandarCambios()
+        private async Task MandarCambios()
         {
-            await GuardarCuestionario(Pregunta);
-        }
+            if (CancellationTokenSource != null)
+            {
+                CancellationTokenSource.Cancel();
+                CancellationTokenSource.Dispose();
+            }
+            CancellationTokenSource = new CancellationTokenSource();
+            var token = CancellationTokenSource.Token;
+            try
+            {
+                await Task.Delay(300, token);
+                await GuardarCuestionario(Pregunta);
 
+            }
+            catch (TaskCanceledException) { }
+        }
+        private CancellationTokenSource CancellationTokenSource;
         private async void AgregarRespuesta()
         {
             if (Pregunta.Respuesta.Count < 6)
@@ -76,8 +89,14 @@ namespace anskus.Client.Pages.Cuestionarios
 
         private async void EliminarPregunta(Pregunta pregunta)
         {
-            Cuestionario.Pregunta.Remove(pregunta);
-            await GuardarCuestionario();
+
+            var preg = Cuestionario.Pregunta.FirstOrDefault(x => x.IdPregunta == pregunta.IdPregunta);
+            if (preg != null)
+            {
+                Cuestionario.Pregunta.Remove(preg);
+                await GuardarCuestionario();
+            }
+
         }
         private bool ItemSelector(Pregunta item, string dropzone)
         {
@@ -117,8 +136,7 @@ namespace anskus.Client.Pages.Cuestionarios
                 }
 
                 var cuestionarioActualizado = await CuestionarioService.ActualizarCuestionario(Cuestionario);
-                Cuestionario = cuestionarioActualizado;
-                await InvokeAsync(StateHasChanged);
+                Cuestionario.Estado = cuestionarioActualizado.Estado;
             }
             StateHasChanged();
         }

@@ -30,6 +30,7 @@ namespace anskus.Domain.Models
         }
         public bool Completo()
         {
+            int total = 0;
             if(string.IsNullOrWhiteSpace(Titulo))
             {
                 return false;
@@ -38,6 +39,18 @@ namespace anskus.Domain.Models
             {
                 if (string.IsNullOrWhiteSpace(pregunta.pregunta))
                     return false;
+                foreach(var respuesta in pregunta.Respuesta)
+                {
+                    if (string.IsNullOrWhiteSpace(respuesta.respuesta))
+                    {
+                        total++;
+                        if (total > 2)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                    
             }
             return true;
         }

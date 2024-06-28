@@ -27,7 +27,7 @@
                             <MudListItem>
                                 <ul id="questionList" class="list-group">
 
-                                    <input type="button" class="form-control" @onclick="()=>ActualizarPregunta(context)" value="@context.pregunta"/>
+                                    <input type="button" class="form-control" @onclick="()=>ActualizarPregunta(context)" @bind-value="context.pregunta" />
                                     <button type="button" class="btn btn-danger mt-2" @onclick="() => EliminarPregunta(context)">Eliminar</button>
                                 </ul>
                             </MudListItem>
@@ -62,14 +62,13 @@
                             <div class="inp b@(contador)">
                                 @if (contador == 1 || contador == 2)
                                 {
-                                    <textarea class="inpCont textarea-inp" @onclick="MandarCambios" @bind="respuesta.respuesta" placeholder="Agrega tu respuesta"></textarea>
-
+                                    <textarea class="inpCont textarea-inp" @onclick="MandarCambios"  @bind="respuesta.respuesta" placeholder="Agrega tu respuesta(obligatorio)"></textarea>
                                 }
                                 else
                                 {
-                                    <textarea class="inpCont textarea-inp" @onclick="MandarCambios" @bind="respuesta.respuesta" placeholder="(Opcional)"></textarea>
-
+                                    <textarea class="inpCont textarea-inp" @onclick="MandarCambios" @bind="respuesta.respuesta" placeholder="(opcional)"></textarea>
                                 }
+
                                 <div class="tooltipRC">
                                     <div class="checkbox-wrapper-26">
 
