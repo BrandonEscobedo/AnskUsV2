@@ -1,1 +1,65 @@
-﻿
+﻿@page "/Lobby/OnGame/Pregunta"
+@inject IStateJugador _stateJugador
+@layout ComponentBaseLobby
+@inject IHubJugadorServices _hubJugadorService
+<section class="preguntas__body">
+
+        <PreguntaComponent OnSiguiente="Siguiente" mostrar="Mostrar"
+            OnPreguntaContestada="PreguntaContestada">
+        </PreguntaComponent>
+    
+    @if (MostrarValidar)
+    {
+        <h2 class="title"> Revisando tu respuesta...</h2>
+    }
+
+</section>
+@segundos;
+@code {
+    @using System.Threading;
+    private Timer? _timer;
+    private int segundos = 10;
+    private bool MostrarValidar = false;
+    DatosPregunta DatosPregunta =new();
+    public bool Mostrar = true;
+    private   void Siguiente()
+    {
+        Mostrar = true;
+        MostrarValidar = false;
+        _timer = new Timer(OnTimerCallback, null, 1000, 1000);
+
+    }
+
+    private  async void PreguntaContestada(DatosPregunta DatosPreg)
+    {
+
+        _stateJugador.participante.PuntosAnteriores += _stateJugador.participante.PuntosActuales;
+        _stateJugador.participante.PuntosActuales += DatosPreg.puntos;
+        if (DatosPreg.esCorrecto)
+        {
+            _stateJugador.participante.CantidadPacertadas += 1;
+        }
+        await _hubJugadorService.MandarPreguntaContestada();
+        DatosPregunta = DatosPreg;
+        Mostrar = false;
+        MostrarValidar = true;
+        //Crear funcion para mostrar los nuevos puntos y si escorrecto
+    }
+
+    private async void OnTimerCallback(object? state)
+    {
+        segundos -= 1;
+        if (segundos == 0)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            _timer?.Dispose();
+            _timer = null;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+    public void Dispose()
+    {
+
+    }
+
+}

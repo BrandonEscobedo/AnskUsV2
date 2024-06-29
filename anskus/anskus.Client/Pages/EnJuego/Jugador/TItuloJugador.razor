@@ -1,10 +1,10 @@
-﻿@page "/Titulo?jugador"
+﻿@page "/Titulo/Jugador"
 @inject NavigationManager _navigationManager
 @layout ComponentBaseLobby
 <MostrarTitulo OnTimerOff="OnTimerOff">
 
 </MostrarTitulo>
 @code {
-    public async Task OnTimerOff() => _navigationManager.NavigateTo("/PreguntaActual");
+    public async Task OnTimerOff() => _navigationManager.NavigateTo("/Lobby/OnGame/Pregunta");
 
 }

@@ -2,24 +2,24 @@
 @layout ComponentBaseLobby
 @inject IStateContainerOnPreg _stateContainer
 @implements IDisposable
-
 <h2 class="title">
     @pregunta.pregunta
 </h2>
-
-<section class="botones">
-    @{
-        int contador = 1;
-    }
-    @foreach (var respuesta in pregunta.Respuesta)
-    {       
+@{
+    int contador = 1;
+}
+@if (mostrar)
+{
+    <section class="botones">
+        @foreach (var respuesta in pregunta.Respuesta)
+        {
             <button @onclick="()=>ValidarRespuesta(respuesta)" class=" inp b@(contador) @(GetButtonClass(respuesta))">
-            @respuesta.respuesta
-            </button>            
-        contador++;
-    }
-</section>
-
+                @respuesta.respuesta
+            </button>
+            contador++;
+        }
+    </section>
+}
 <h2 class="title">@segundos</h2>
 <style>
     .btn-normal {
@@ -38,6 +38,8 @@
     @using System.Threading;
     private Timer? _timer;
     private int segundos = 10;
+    [Parameter]
+    public bool mostrar { get; set; } = true;
     private Pregunta pregunta { get; set; } = new();
     public bool PuedeContestar = true;
     private bool eventCallPreguntaContestada = false;
@@ -46,7 +48,7 @@
     private DatosPregunta datosPregunta = new();
     [Parameter]
     public EventCallback OnSiguiente { get; set; }
-
+    private bool tiempoExpirado = false;
     private List<Respuesta> respuestasCorrectas = new();
     private Respuesta? respuestaSeleccionada = null;
 
@@ -81,6 +83,7 @@
         segundos -= 1;
         if (segundos == 0)
         {
+            tiempoExpirado = true;
             _timer?.Change(Timeout.Infinite, 0);
             _timer?.Dispose();
             _timer = null;
@@ -98,11 +101,22 @@
 
     private string GetButtonClass(Respuesta respuesta)
     {
+        if (tiempoExpirado)
+        {
+            if (!respuestasCorrectas.Contains(respuesta))
+            {
+                return "btn-incorrecta";
+            }
+            if (respuesta == respuestaSeleccionada && !respuestasCorrectas.Contains(respuesta))
+            {
+                return "btn-correcta";
+            }
+        }
         if (respuestaSeleccionada != null)
         {
             if (!respuestasCorrectas.Contains(respuesta))
             {
-                return "btn-incorrecta" ;
+                return "btn-incorrecta";
             }
             if (respuesta == respuestaSeleccionada && !respuestasCorrectas.Contains(respuesta))
             {

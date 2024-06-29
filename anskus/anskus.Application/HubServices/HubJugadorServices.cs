@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.HubServices
 {
-    public class HubJugadorServices: IHubJugadorServices
+    public class HubJugadorServices : IHubJugadorServices
     {
         private readonly HubConnection _hubConnection;
         private readonly IStateContainerOnPreg _stateContainer;
@@ -29,16 +29,19 @@ namespace anskus.Application.HubServices
             _stateContainer.SetPregunta(pregunta);
         }
 
-        private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
+        private  void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
         {
             _stateContainer.SetTituloPregunta(Titulo, pregunta);
-
         }
-
+        public async Task MandarPreguntaContestada()
+        {
+            await _hubConnection.InvokeAsync("ContestarPregunta", _stateJugador.participante);
+        }
+        
         public async Task<bool> AddUserToRoom(ParticipanteEnCuestDTO participante)
         {
             await _hubConnection.InvokeAsync("AddUserToRoom", participante);
-            _stateJugador.participante=participante;
+            _stateJugador.participante = participante;
             return true;
         }
     }

@@ -1,21 +1,34 @@
 ﻿@page "/OnGame/Pregunta"
 @layout ComponentBaseLobby
 @implements IDisposable
-
-<section class= "preguntas__body">
-    <PreguntaComponent
-                       OnSiguiente="Siguiente">
-    </PreguntaComponent>
-
+<section class="preguntas__body">
+        <PreguntaComponent OnSiguiente="Siguiente" >
+        </PreguntaComponent>  
 </section>
-@code{
-    private bool MostrarRespuesta = true;
-
+@segundos;
+@code {
+    @using System.Threading;
+    private Timer? _timer;
+    private int segundos = 10;
     private void Siguiente()
     {
-        MostrarRespuesta = true;
+        _timer = new Timer(OnTimerCallback, null, 1000, 1000);
+    }
+    private async void OnTimerCallback(object? state)
+    {
+        segundos -= 1;
+        if (segundos == 0)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            _timer?.Dispose();
+            _timer = null;
+
+        }
+        await InvokeAsync(StateHasChanged);
     }
     public void Dispose()
     {
+
     }
+
 }
