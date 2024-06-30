@@ -15,15 +15,23 @@ namespace anskus.Application.HubServices
         private readonly HubConnection _hubConnection;
         private readonly IStateParticipantes _stateParticipantes;
         private readonly IStateContainerOnPreg _stateContainer;
-        public HubCreadorServices(HubConnection hubConnection, IStateParticipantes stateParticipantes, IStateContainerOnPreg stateCreador)
+        private readonly IStateCreador _stateCreador;
+        public HubCreadorServices(HubConnection hubConnection, IStateParticipantes stateParticipantes, IStateContainerOnPreg stateContainer, IStateCreador stateCreador)
         {
             _hubConnection = hubConnection;
             _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
             _hubConnection.On<ParticipanteEnCuestDTO>("NewParticipante", OnNewParticipante);
             _hubConnection.On<ParticipanteEnCuestDTO>("LeftParticipante", OnRemoveParticipante);
             _hubConnection.On<Pregunta>("SiguientePregunta", OnSiguientePregunta);
+            _hubConnection.On<ParticipanteEnCuestDTO>("PreguntaContestada", OnPreguntaContestada);
             _stateParticipantes = stateParticipantes;
-            _stateContainer = stateCreador;
+            _stateContainer = stateContainer;
+            _stateCreador = stateCreador;
+        }
+
+        private void OnPreguntaContestada(ParticipanteEnCuestDTO participante)
+        {
+            _stateCreador.OnParticipantesContestado(participante);
         }
         private void OnRemoveParticipante(ParticipanteEnCuestDTO participante) => _stateParticipantes.RemoveParticipanteToList(participante);
 

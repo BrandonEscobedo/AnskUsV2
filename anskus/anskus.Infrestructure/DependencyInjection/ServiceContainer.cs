@@ -16,6 +16,7 @@ using anskus.Domain.Account;
 using anskus.Infrestructure.Factory;
 using anskus.Application.Services;
 using anskus.Infrestructure.Services;
+using Azure.Storage.Blobs;
 
 namespace anskus.Infrestructure.DependencyInjection
 {
@@ -60,7 +61,8 @@ namespace anskus.Infrestructure.DependencyInjection
                             });
             services.AddAuthentication();
             services.AddAuthorization();
-
+            services.AddSingleton<IBlobService, BlobService>();
+            services.AddSingleton(_ => new BlobServiceClient(configuration.GetConnectionString("BlobStorage")));
             services.AddScoped<ICuestionarioRepository, CuestionarioRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICuestionarioActivoRepository, CuestionarioActivoRepository>();

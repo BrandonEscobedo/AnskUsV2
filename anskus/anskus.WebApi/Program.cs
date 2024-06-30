@@ -36,6 +36,7 @@ app.UseCors("AllowAll");
 app.MapHub<CuestionarioHub>("ChatCuest");
 app.MapCuestionariosEndPoints();
 app.MapAccountEndPoints();
+app.MapMediaCuestionariosEndPoints();
 app.MapCuestionarioActivoEndPoints();
 app.UseHttpsRedirection();
 app.Run();

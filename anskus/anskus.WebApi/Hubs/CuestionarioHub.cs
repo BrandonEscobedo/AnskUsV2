@@ -7,8 +7,6 @@ namespace anskus.WebApi.Hubs
 {
     public class CuestionarioHub(IMediator sender) : Hub<InotificationClient>
     {
-
-
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();

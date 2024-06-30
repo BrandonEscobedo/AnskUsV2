@@ -1,14 +1,9 @@
 ﻿using anskus.Domain.Cuestionarios;
 using anskus.Domain.Models;
 using anskus.Infrestructure.Persistence.Context;
+using anskus.Infrestructure.Services;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace anskus.Infrestructure.Repositorys
 {
@@ -16,6 +11,7 @@ namespace anskus.Infrestructure.Repositorys
     {
         private readonly IMongoCollection<Cuestionario> _cuestionarios;
         private readonly AnskusDbContext _context;
+        private readonly IBlobService _blobService;
         //ver tecnologias segundo plano, eliminar cuestionarios vacios 
         public CuestionarioRepository(IMongoDatabase database, AnskusDbContext context)
         {
@@ -23,6 +19,7 @@ namespace anskus.Infrestructure.Repositorys
             var indexDefinition = Builders<Cuestionario>.IndexKeys.Ascending(x => x.IdCuestionario);
             _cuestionarios.Indexes.CreateOne(new CreateIndexModel<Cuestionario>(indexDefinition));
             _context = context;
+         
         }
         public async Task<Cuestionario> Add(Cuestionario cuestionario, string email)
         {

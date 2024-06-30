@@ -14,6 +14,7 @@ namespace anskus.Domain.Models
         public string? MensajeCorrecto { get; set; } = "";
         public string? MensajeIncorrecto { get; set; } = "";
         public EstadoCuestionario Estado { get; set; }
+        
 
         private ICuestionarioState _estadoActual;
         public Guid Iduser { get; set; } 

@@ -17,7 +17,8 @@ namespace anskus.Domain.Models
             IdPregunta = Guid.NewGuid();
         }
         public string pregunta { get; set; } = "";
-
+        public string Imagen { get; set; } = "";
+       
         public  List<Respuesta> Respuesta { get; set; } = new List<Respuesta>();
 
         public static implicit operator string(Pregunta v)

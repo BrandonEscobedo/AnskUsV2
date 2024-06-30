@@ -19,7 +19,7 @@
 }
 
     .title.pregunta {
-        width: 25em;
+        width: 60%;
     }
 
 .bodyContainer {
@@ -37,6 +37,14 @@
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+.imgWrapper {
+    width: 400px;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .preguntas__body {
     width: 70dvw;
     display: flex;
@@ -46,23 +54,12 @@
     gap: 20px;
 }
 
-.botones {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    padding: 40px;
-    width: 80%;
-    height: 100%; 
-    background-color: rgba(245, 245, 220, 0.777);
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
 .ContainerEstadoGuardar {
     display: grid;
     grid-template-columns: repeat(2,1fr);
     padding: 5px;
     width: 80%;
-    background-color: #F6F6F6;
+    background-color: #F3F3F3;
     border-radius: 5px;
 }
 
@@ -78,8 +75,21 @@
     font-size: 18px;
 }
 
+.trashContainer {
+    margin-top: 20px;
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+}
+
+.imgTrash {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
 .btnAgregar {
-    width: 80%; 
+    width: 80%; /* Igual ancho que .botones */
     display: flex;
     justify-content: right;
     align-items: center;
@@ -111,11 +121,27 @@
     text-align: center;
     display: flex;
     opacity: 80%;
+    width: auto;
     border-radius: 10px;
-    padding: 10px;
     background-color: #D492E7;
     color: black;
     font-weight: bold;
+}
+
+.btnAgregarImagen {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    color: black;
+    opacity: 95%;
+    font-size: 18px;
+    width: 100%;
+    height: 100%;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 2px solid black;
+    align-items: center;
 }
 
 .inp {
@@ -127,11 +153,69 @@
     opacity: 90%;
     padding: 10px;
     font-size: 18px;
+    width: 97%;
+    height: 92%;
     font-weight: 600;
     flex-grow: 1;
     border-radius: 10px;
     transition: all .1s ease-in;
     border: 2px solid black;
+}
+
+.ContainerBtnAgregarImg {
+    height: 20%;
+    text-align: center;
+    transition: all .1s ease-in;
+    width: 50%;
+    align-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    transform: translate(-50%, -50%);
+}
+
+.contImgCorrecto {
+    display: flex;
+    height: 100%;
+    margin-right: auto;
+    width: 100%;
+    background-color: #F3F3F3;
+    background-image: url("C:/Users/jesus/Downloads/imagen.png");
+}
+
+.botones {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    padding: 40px;
+    width: 100%;
+    height: 20%;
+    background-color: rgba(245, 245, 220, 0.777);
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.imgContentPregt {
+    max-width: 95%;
+    max-height: 80%;
+}
+
+.imgContainer {
+    display: flex;
+    justify-content: center;
+    grid-column: 1 / span 2;
+    align-items: center;
+    position: relative; /* Añadido */
+}
+
+.sectionImagen {
+    display: flex;
+    border: 2px;
+    border-radius: 10px;
+    opacity: 85%;
+    border: 2px solid black;
+    background-color: #F6F6F6;
+    position: relative; /* Añadido */
 }
 
 .inpCont {
@@ -192,6 +276,19 @@
 
 .inp.b6 {
     background-color: #ffeea3;
+}
+
+.btn-normal {
+    background-color: initial; /* O el color original */
+}
+
+.btn-correcta {
+    opacity: 35%;
+    background-color: #ffeea3;
+}
+
+.btn-incorrecta {
+    background-color: red;
 }
 
 .checkbox-wrapper-26 * {

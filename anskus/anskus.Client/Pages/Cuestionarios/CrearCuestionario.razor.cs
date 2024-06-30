@@ -1,7 +1,12 @@
-﻿using anskus.Domain.Models;
+﻿using anskus.Application.Extensions;
+using anskus.Domain.Models;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using MudBlazor;
+using System.IO;
+using static System.Net.WebRequestMethods;
 namespace anskus.Client.Pages.Cuestionarios
 {
     public partial class CrearCuestionario
@@ -11,8 +16,53 @@ namespace anskus.Client.Pages.Cuestionarios
         public Cuestionario Cuestionario { get; set; } = new Cuestionario();
 
         private Pregunta Pregunta = new();
+        public string FileType { get; set; } = "";
+        private const long MaxFileSize = 5 * 1024 * 1024; // Tamaño máximo permitido en bytes (5 MB)
+        private async Task AgregarImagenPregunta(InputFileChangeEventArgs e)
+        {
+            var allowedFileTypes = new[] { "image/jpeg", "image/png", "image/gif", "video/mp4", "video/x-msvideo", "video/quicktime" };
+            var browserFile = e.File;
+            if (browserFile != null)
+            {
+                if (browserFile.Size > MaxFileSize)
+                {
+                    await _sweetAlert.FireAsync("Oops...", "El tamaño del archio es demaciado grande, ingresa otro documento", SweetAlertIcon.Warning);
+                    return;
+                }
 
+                if (allowedFileTypes.Contains(browserFile.ContentType))
+                {
+                    FileType = browserFile.ContentType;
 
+                    using var stream = browserFile.OpenReadStream(MaxFileSize);
+                    using var memoryStream = new MemoryStream();
+                    await stream.CopyToAsync(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+
+                    await UploadFileToServer(fileBytes, Guid.NewGuid(), browserFile.ContentType);
+
+                }
+                else
+                {
+                    await _sweetAlert.FireAsync("Oops...", "Este formato no esta permitido", SweetAlertIcon.Warning);
+
+                }
+            }
+        }
+        private async Task UploadFileToServer(byte[] fileBytes, Guid fileName, string contentType)
+        {
+            using var content = new MultipartFormDataContent();
+            var fileContent = new ByteArrayContent(fileBytes);
+            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
+            content.Add(fileContent, "file", fileName.ToString());
+            var result = await _contentMediaService.UploadContent(content);
+            if (result != Guid.Empty)
+            {
+                
+                Pregunta.Imagen = $"{Constant.URLServerImagen}/{result.ToString()}";
+                await GuardarCuestionario(Pregunta);
+            }
+        }
         protected override void OnInitialized()
         {
 
@@ -41,6 +91,12 @@ namespace anskus.Client.Pages.Cuestionarios
             IniciarRespuestasObligatorias();
             await GuardarCuestionario();
 
+        }
+        private void EliminarImagenPregunta()
+        {
+            var IdString = Pregunta.Imagen;
+
+            
         }
         private async Task ActualizarPregunta(Pregunta pregunta)
         {

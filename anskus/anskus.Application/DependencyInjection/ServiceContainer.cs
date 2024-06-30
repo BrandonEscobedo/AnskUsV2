@@ -40,6 +40,7 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<IHubCreadorServices, HubCreadorServices>();
             services.AddScoped<IStateCreador, StateCreador>();
             services.AddScoped<IHubStateJugador,  HubStateJugador>();
+            services.AddScoped<IContentMediaServices, ContentMediaServices>();
             services.AddScoped<IHubconnectionService, HubconnectionService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<LocalStorageServices>();

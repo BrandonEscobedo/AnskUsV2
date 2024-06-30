@@ -8,7 +8,9 @@ namespace anskus.Application.Extensions
 {
     public class Constant
     {
+        public const string URLServerImagen = "https://localhost:7229/api/MediaCuestionarios";
         public const string BrowserStorageKey = "x=key";
+        public const string ContentMedia = "api/MediaCuestionarios";
         public const string HttpClientName = "TestAnskusClient";
         public const string HttpClientHadersSchame = "Bearer";
         public const string CuestionarioRoute = "api/Cuestionarios";

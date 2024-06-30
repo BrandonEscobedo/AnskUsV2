@@ -1,15 +1,27 @@
 ﻿@page "/OnGame/Pregunta"
+@inject IStateCreador _stateCreador
 @layout ComponentBaseLobby
 @implements IDisposable
+
 <section class="preguntas__body">
         <PreguntaComponent OnSiguiente="Siguiente" >
         </PreguntaComponent>  
 </section>
 @segundos;
+<p>usuarios que contestaron:@UsuariosContestado</p>
 @code {
     @using System.Threading;
     private Timer? _timer;
+    private int UsuariosContestado = 0;
     private int segundos = 10;
+    protected override void OnInitialized()
+    {
+        _stateCreador.OnUsuarioContesto += OnUsuarioContesto;
+    }
+    private void OnUsuarioContesto()
+    {
+        UsuariosContestado++;
+    }
     private void Siguiente()
     {
         _timer = new Timer(OnTimerCallback, null, 1000, 1000);
