@@ -56,10 +56,11 @@ namespace anskus.Client.Pages.Cuestionarios
             fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
             content.Add(fileContent, "file", fileName.ToString());
             var result = await _contentMediaService.UploadContent(content);
-            if (result != Guid.Empty)
+            if (result != null)
             {
-                
-                Pregunta.Imagen = $"{Constant.URLServerImagen}/{result.ToString()}";
+
+                Pregunta.Imagen = $"{Constant.URLServerImagen}/{result.IdImagen}";
+                Pregunta.DatosMedia = result;
                 await GuardarCuestionario(Pregunta);
             }
         }
@@ -76,6 +77,7 @@ namespace anskus.Client.Pages.Cuestionarios
             {
                 Pregunta = Cuestionario.Pregunta.First();
             }
+            StateHasChanged();
             IniciarRespuestasObligatorias();
         }
         private void IniciarRespuestasObligatorias()
@@ -92,11 +94,20 @@ namespace anskus.Client.Pages.Cuestionarios
             await GuardarCuestionario();
 
         }
-        private void EliminarImagenPregunta()
+        private async void EliminarImagenPregunta()
         {
-            var IdString = Pregunta.Imagen;
+            Guid IdString = Pregunta.DatosMedia.IdImagen;
+            if (IdString!=Guid.Empty)
+            {
+              bool result=  await _contentMediaService.EliminarImagenAsync(IdString);
+                if (result)
+                {
+                    Pregunta.Imagen = "";
+                    Pregunta.DatosMedia = new();
+                    await GuardarCuestionario(Pregunta);
+                }
+            }
 
-            
         }
         private async Task ActualizarPregunta(Pregunta pregunta)
         {

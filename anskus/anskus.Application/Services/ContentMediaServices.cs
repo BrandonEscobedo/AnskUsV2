@@ -1,4 +1,5 @@
 ﻿using anskus.Application.Extensions;
+using anskus.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,8 @@ namespace anskus.Application.Services
 {
     public interface IContentMediaServices
     {
-        public Task<Guid> UploadContent(MultipartFormDataContent file);
-        public Task EliminarPreguntaAsync(Guid idPregunta);
-
+        public Task<DatosMedia> UploadContent(MultipartFormDataContent file);
+        public Task<bool> EliminarImagenAsync(Guid idFile);
     }
     public class ContentMediaServices : IContentMediaServices
     {
@@ -23,15 +23,24 @@ namespace anskus.Application.Services
         {
             _httpClientServices = httpClientServices;
         }
-        public async Task EliminarPreguntaAsync(Guid idPregunta)
+        public async Task<bool> EliminarImagenAsync(Guid idFile)
         {
-            await (await PrivateClient()).DeleteAsync($"{Constant.ContentMedia}/{idPregunta}");
+          var result=  await (await PrivateClient()).DeleteAsync($"{Constant.ContentMedia}/{idFile}");
+           if(result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
-        public async Task<Guid> UploadContent(MultipartFormDataContent file)
+        public async Task<DatosMedia> UploadContent(MultipartFormDataContent file)
         {
             var response = await (await PrivateClient()).PostAsync(Constant.ContentMedia, file);
-            var result =await response.Content.ReadFromJsonAsync<Guid>();
-            return result;
+            var result =await response.Content.ReadFromJsonAsync<DatosMedia>();
+            if (result != null)
+            {
+                return result;
+            }
+            else return null!;
         }
     }
 }

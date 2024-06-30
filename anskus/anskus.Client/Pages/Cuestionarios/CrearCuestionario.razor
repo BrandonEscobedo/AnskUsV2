@@ -59,17 +59,24 @@
                         <div class="imgContainer">
                             <div class="sectionImagen">
                                 <div class="ContainerBtnAgregarImg">
-                                    
-                                    <button class="btnAgregarImagen" onclick="document.getElementById('filePicker').click()">
-                                        Agregar imagen
-                                    </button>
-                                    <InputFile id="filePicker"  OnChange="@AgregarImagenPregunta" hidden multiple accept=".jpg,.jpeg,.png,.gif,.mp4,.avi,.mov"></InputFile>
+                                    @if (string.IsNullOrWhiteSpace(Pregunta.Imagen))
+                                    {
+                                        <button class="btnAgregarImagen" onclick="document.getElementById('filePicker').click()">
+                                            Agregar imagen
+                                        </button>
+                                    }
+
+                                    <InputFile id="filePicker" OnChange="@AgregarImagenPregunta" hidden multiple accept=".jpg,.jpeg,.png,.gif,.mp4,.avi,.mov"></InputFile>
                                 </div>
                                 <div class="imgWrapper">
                                     <img class="imgContentPregt" src="@Pregunta.Imagen" />
                                 </div>
                                 <div class="trashContainer">
-                                    <img class="imgTrash" @onclick="@EliminarImagenPregunta" src="/img/trash.png">
+                                    @if (!string.IsNullOrWhiteSpace(Pregunta.Imagen))
+                                    {
+                                        <img class="imgTrash" @onclick="@EliminarImagenPregunta" src="/img/trash.png">
+                                    }
+
                                 </div>
                             </div>
 

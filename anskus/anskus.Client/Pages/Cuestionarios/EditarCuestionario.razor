@@ -1,6 +1,6 @@
 ﻿@page "/Cuestionario/{Id:guid}"
 @inject ICuestionarioService CuestionarioService
-<CrearCuestionario Cuestionario="cuestionario"></CrearCuestionario>
+<CrearCuestionario Cuestionario="@cuestionario"></CrearCuestionario>
 @code {
     [Parameter]
     public Guid? Id { get; set; }
