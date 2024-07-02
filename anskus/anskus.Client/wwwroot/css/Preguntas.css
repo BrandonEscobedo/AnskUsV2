@@ -130,6 +130,9 @@
 
 
 .inp.b1 {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
     background-color: #efa3ff;
 }
 
@@ -218,7 +221,6 @@
 
 .btnImage {
     margin: 10px;
-    position: relative;
     justify-content: left;
     border: 2px;
     opacity: 90%;

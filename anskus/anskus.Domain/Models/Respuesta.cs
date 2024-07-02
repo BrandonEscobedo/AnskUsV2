@@ -13,7 +13,7 @@ namespace anskus.Domain.Models
  
      public string respuesta { get; set; } = null!;
 
-      public bool RCorrecta { get; set; }
+      public bool RCorrecta { get; set; }=false;
 
     }
 }

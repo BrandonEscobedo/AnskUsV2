@@ -1,5 +1,5 @@
 ﻿@page "/preguntas"
-@layout ComponentBaseLobby
+@layout ComponentBaseHub
 @inject IStateContainerOnPreg _stateContainer
 @implements IDisposable
 @inject IJSRuntime JS
@@ -8,12 +8,10 @@
         @pregunta.pregunta
     </h2>
     <div class="ContainerTiempo">
-       @segundos
+        @segundos
     </div>
 </div>
-@{
-    int contador = 1;
-}
+
 
 @if (MostrarBotones)
 {
@@ -36,20 +34,24 @@
             <div class="sectionImagen">
 
                 <div class="imgWrapper">
-                    <img class="imgContentPregt"  src="@pregunta.Imagen"/>
+                    <img class="imgContentPregt" src="@pregunta.Imagen" />
                 </div>
                 <div class="trashContainer">
                 </div>
             </div>
         </div>
-}
+    }
     <section class="botones">
+        @{
+            int contador = 1;
+        }
         @foreach (var respuesta in pregunta.Respuesta)
         {
-            <div class="inp b@(contador)" @onclick="()=>ValidarRespuesta(respuesta)">     
-                <button class="inpCont ContainerBtnWithImg" >
+            <div class="inp b@(contador)" id="b@(contador)" @onclick="()=>ValidarRespuesta(respuesta)">
+                <button class="inpCont ContainerBtnWithImg">
                     @respuesta.respuesta
                 </button>
+              
             </div>
             contador++;
         }
@@ -58,11 +60,13 @@
 else
 {
     <section>
-
     </section>
 }
 <h2 class="title">@segundos</h2>
 
+<script type="text/javascript" src="/js/Preguntas.js">
+   
+</script>
 @code {
     @using System.Threading;
     private Timer? _timer;
@@ -79,7 +83,7 @@ else
     public EventCallback OnSiguiente { get; set; }
     private bool tiempoExpirado = false;
     private List<Respuesta> respuestasCorrectas = new();
-  
+
 
     protected override void OnInitialized()
     {
@@ -105,7 +109,22 @@ else
         PuedeContestar = false;
         await InvokeAsync(StateHasChanged);
     }
-    //Usar Index de respuesta
+    public async Task MostrarRespuestas()
+    {
+        int total = pregunta.Respuesta.Count;
+        for(int i = 0; i <= total; i++)
+        {
+            if (pregunta.Respuesta[i].RCorrecta == true)
+            {
+                await JS.InvokeVoidAsync("addImageCorrect",i+1);
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("addImageInCorrect", i + 1);
+
+            }
+        }
+    }
     private async void OnTimerCallback(object? state)
     {
         segundos -= 1;
@@ -121,8 +140,9 @@ else
                 await OnPreguntaContestada.InvokeAsync(datosPregunta);
             }
             PuedeContestar = false;
+
             await OnSiguiente.InvokeAsync();
-          
+            await MostrarRespuestas();
         }
         await InvokeAsync(StateHasChanged);
     }

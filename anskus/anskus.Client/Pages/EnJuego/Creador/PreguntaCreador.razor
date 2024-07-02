@@ -4,13 +4,20 @@
 @implements IDisposable
 <link rel="stylesheet" href="/css/Preguntas.css" />
 <section class="preguntas__body">
+    <div class="ContainerTotalUsuarios">
+        @UsuariosContestado
+    </div>
         <PreguntaComponent OnSiguiente="Siguiente" >
-        </PreguntaComponent>  
+        </PreguntaComponent>
+    <div class="ContainerFooter" id="footerDiv">
+        <div class="ContainerFooterSection">
+            <div class="TotalPreguntas">
+                3/10
+            </div>
+        </div>
+    </div>
 </section>
-<div class="ContainerTotalUsuarios">
-    @UsuariosContestado
-</div>
-<p>usuarios que contestaron:</p>
+
 @code {
     @using System.Threading;
     private Timer? _timer;
