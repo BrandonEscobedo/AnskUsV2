@@ -2,44 +2,73 @@
 @layout ComponentBaseLobby
 @inject IStateContainerOnPreg _stateContainer
 @implements IDisposable
-<h2 class="title">
-    @pregunta.pregunta
-</h2>
+@inject IJSRuntime JS
+<div class="ContainerTitulo">
+    <h2 class="title">
+        @pregunta.pregunta
+    </h2>
+    <div class="ContainerTiempo">
+       @segundos
+    </div>
+</div>
 @{
     int contador = 1;
 }
-@if (mostrar)
+
+@if (MostrarBotones)
 {
+    if (string.IsNullOrWhiteSpace(pregunta.Imagen))
+    {
+        <div class="imgContainerSinImagen">
+            <div class="sectionImagen">
+
+                <div class="imgWrapper">
+                    <img class="imgContainerSinImagen" />
+                </div>
+                <div class="trashContainer">
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="imgContainer">
+            <div class="sectionImagen">
+
+                <div class="imgWrapper">
+                    <img class="imgContentPregt"  src="@pregunta.Imagen"/>
+                </div>
+                <div class="trashContainer">
+                </div>
+            </div>
+        </div>
+}
     <section class="botones">
         @foreach (var respuesta in pregunta.Respuesta)
         {
-            <button @onclick="()=>ValidarRespuesta(respuesta)" class=" inp b@(contador) @(GetButtonClass(respuesta))">
-                @respuesta.respuesta
-            </button>
+            <div class="inp b@(contador)" @onclick="()=>ValidarRespuesta(respuesta)">     
+                <button class="inpCont ContainerBtnWithImg" >
+                    @respuesta.respuesta
+                </button>
+            </div>
             contador++;
         }
     </section>
 }
+else
+{
+    <section>
+
+    </section>
+}
 <h2 class="title">@segundos</h2>
-<style>
-    .btn-normal {
-        background-color: initial; /* O el color original */
-    }
 
-    .btn-correcta {
-        background-color: green;
-    }
-
-    .btn-incorrecta {
-        opacity: 35%;
-    }
-</style>
 @code {
     @using System.Threading;
     private Timer? _timer;
     private int segundos = 10;
     [Parameter]
-    public bool mostrar { get; set; } = true;
+    public bool MostrarBotones { get; set; } = true;
     private Pregunta pregunta { get; set; } = new();
     public bool PuedeContestar = true;
     private bool eventCallPreguntaContestada = false;
@@ -50,7 +79,7 @@
     public EventCallback OnSiguiente { get; set; }
     private bool tiempoExpirado = false;
     private List<Respuesta> respuestasCorrectas = new();
-    private Respuesta? respuestaSeleccionada = null;
+  
 
     protected override void OnInitialized()
     {
@@ -64,7 +93,6 @@
     {
         if (PuedeContestar)
         {
-            respuestaSeleccionada = respuesta;
             if (respuestasCorrectas.Contains(respuesta))
             {
                 datosPregunta.puntos = segundos * 13;
@@ -77,7 +105,7 @@
         PuedeContestar = false;
         await InvokeAsync(StateHasChanged);
     }
-
+    //Usar Index de respuesta
     private async void OnTimerCallback(object? state)
     {
         segundos -= 1;
@@ -94,38 +122,10 @@
             }
             PuedeContestar = false;
             await OnSiguiente.InvokeAsync();
-
+          
         }
         await InvokeAsync(StateHasChanged);
     }
-
-    private string GetButtonClass(Respuesta respuesta)
-    {
-        if (tiempoExpirado)
-        {
-            if (!respuestasCorrectas.Contains(respuesta))
-            {
-                return "btn-incorrecta";
-            }
-            if (respuesta == respuestaSeleccionada && !respuestasCorrectas.Contains(respuesta))
-            {
-                return "btn-correcta";
-            }
-        }
-        if (respuestaSeleccionada != null)
-        {
-            if (!respuestasCorrectas.Contains(respuesta))
-            {
-                return "btn-incorrecta";
-            }
-            if (respuesta == respuestaSeleccionada && !respuestasCorrectas.Contains(respuesta))
-            {
-                return "btn-correcta";
-            }
-        }
-        return "btn-normal";
-    }
-
     public void Dispose()
     {
         _timer?.Dispose();

@@ -1,14 +1,16 @@
 ﻿@page "/OnGame/Pregunta"
 @inject IStateCreador _stateCreador
-@layout ComponentBaseLobby
+@layout ComponentBaseHub
 @implements IDisposable
-
+<link rel="stylesheet" href="/css/Preguntas.css" />
 <section class="preguntas__body">
         <PreguntaComponent OnSiguiente="Siguiente" >
         </PreguntaComponent>  
 </section>
-@segundos;
-<p>usuarios que contestaron:@UsuariosContestado</p>
+<div class="ContainerTotalUsuarios">
+    @UsuariosContestado
+</div>
+<p>usuarios que contestaron:</p>
 @code {
     @using System.Threading;
     private Timer? _timer;

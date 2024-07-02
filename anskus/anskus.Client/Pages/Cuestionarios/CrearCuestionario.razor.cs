@@ -17,7 +17,7 @@ namespace anskus.Client.Pages.Cuestionarios
 
         private Pregunta Pregunta = new();
         public string FileType { get; set; } = "";
-        private const long MaxFileSize = 5 * 1024 * 1024; // Tamaño máximo permitido en bytes (5 MB)
+        private const long MaxFileSize = 20 * 1024 * 1024; // Tamaño máximo permitido en bytes (5 MB)
         private async Task AgregarImagenPregunta(InputFileChangeEventArgs e)
         {
             var allowedFileTypes = new[] { "image/jpeg", "image/png", "image/gif", "video/mp4", "video/x-msvideo", "video/quicktime" };
@@ -66,7 +66,7 @@ namespace anskus.Client.Pages.Cuestionarios
         }
         protected override void OnInitialized()
         {
-
+            
             if (Cuestionario.Pregunta.Count == 0)
             {
                 Cuestionario.Pregunta.Add(Pregunta);
@@ -94,9 +94,10 @@ namespace anskus.Client.Pages.Cuestionarios
             await GuardarCuestionario();
 
         }
-        private async void EliminarImagenPregunta()
+        private async Task EliminarImagenPregunta(Pregunta pregunta)
         {
-            Guid IdString = Pregunta.DatosMedia.IdImagen;
+
+            Guid IdString = pregunta.DatosMedia.IdImagen;
             if (IdString!=Guid.Empty)
             {
               bool result=  await _contentMediaService.EliminarImagenAsync(IdString);
@@ -160,6 +161,7 @@ namespace anskus.Client.Pages.Cuestionarios
             var preg = Cuestionario.Pregunta.FirstOrDefault(x => x.IdPregunta == pregunta.IdPregunta);
             if (preg != null)
             {
+                await EliminarImagenPregunta(pregunta);
                 Cuestionario.Pregunta.Remove(preg);
                 await GuardarCuestionario();
             }
