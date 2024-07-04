@@ -1,4 +1,4 @@
-﻿namespace anskus.Client.DTOs
+﻿namespace anskus.Application.DTOs
 {
     public class DatosPregunta
     {

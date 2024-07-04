@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Application.HubServices.StateContainers
+namespace anskus.Application.HubServices.StateContainers.Creador
 {
     public interface IHubStateCreador
     {
@@ -14,6 +14,6 @@ namespace anskus.Application.HubServices.StateContainers
         public int Codigo { get; set; }
         public void SetCuestionario(CuestionarioResponse Cuestionario, int Codigo);
         public Pregunta MandarSiguientePregunta();
-      
-    }   
+
+    }
 }

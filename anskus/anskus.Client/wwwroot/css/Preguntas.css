@@ -74,6 +74,7 @@
     gap: 20px;
     background: #2889ff;
     opacity: 20%;
+    z-index: 0;
     background: radial-gradient(circle at 60% 40%, #efa3ff 25%, transparent 26%),radial-gradient(circle at 40% 60%, #efa3ff80 25%, transparent 26%);
     background-size: 12em 12em;
     background-color: #f0ffa4;
@@ -102,24 +103,6 @@
 .btn-incorrecta {
     background-color: red;
 }
-
-
-.botones {
-    display: grid;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    height: 20%;
-    padding: 20px;
-    width: 97%;
-    grid-template-columns: repeat(2,1fr);
-    background-color: rgba(245, 245, 220, 0.777);
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-
-
 
 .inp::before {
 }
@@ -264,7 +247,20 @@
     border-radius: 6px;
     border: 2px solid black;
     z-index: 0;
-    position: relative;
+    margin: 10px;
+    bottom: 0;
+    position: absolute;
+}
+
+.preguntas__body::before {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .ContainerFooterMostrar::before {
@@ -317,5 +313,28 @@
     border: 2px solid black;
 }
 
-.ContainerBtn {
+.botones {
+    display: grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    height: 20%;
+    padding: 20px;
+    width: 97%;
+    grid-template-columns: repeat(2,1fr);
+    background-color: rgba(245, 245, 220, 0.777);
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.ContainerResultado {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    height: 20%;
+    padding: 20px;
+    width: 97%;
+    background-color: rgba(245, 245, 220, 0.777);
+    border: 1px solid black;
+    border-radius: 5px;
 }

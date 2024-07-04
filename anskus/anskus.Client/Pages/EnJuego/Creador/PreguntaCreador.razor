@@ -19,10 +19,11 @@
 </section>
 
 @code {
-    @using System.Threading;
+    @using System.Threading
     private Timer? _timer;
     private int UsuariosContestado = 0;
     private int segundos = 10;
+    //Ver Estadisticas de Participantes
     protected override void OnInitialized()
     {
         _stateCreador.OnUsuarioContesto += OnUsuarioContesto;

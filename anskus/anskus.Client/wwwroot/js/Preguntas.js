@@ -7,8 +7,7 @@
     img.src = '/img/Correct.png';
     console.log(idRespuesta)
     inpDiv.insertBefore(img, btn);
-        ChangeBackground();
-   
+    ChangeBackground();
 }
 function addImageInCorrect(idRespuesta) {
     const inpDiv = document.querySelector(`#b${idRespuesta}`);

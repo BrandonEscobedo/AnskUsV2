@@ -2,6 +2,7 @@
 @inject IStateJugador _stateJugador
 @layout ComponentBaseHub
 @inject IHubJugadorServices _hubJugadorService
+@inject NavigationManager _navigationManager
 <section class="preguntas__body">
 
     <PreguntaComponent OnSiguiente="Siguiente" MostrarBotones="@mostrar"
@@ -29,14 +30,11 @@
     private Timer? _timer;
     private int segundos = 10;
     private bool MostrarValidar = false;
-    DatosPregunta DatosPregunta = new();
     private bool mostrar = true;
     private void Siguiente()
     {
-        mostrar = true;
-        MostrarValidar = false;
-        _timer = new Timer(OnTimerCallback, null, 1000, 1000);
-
+        _stateJugador.GenerarPuestoRanking();
+        _navigationManager.NavigateTo("/Pregunta/Resultado");
     }
 
     private async void PreguntaContestada(DatosPregunta DatosPreg)
@@ -44,6 +42,7 @@
 
         _stateJugador.participante.PuntosAnteriores += _stateJugador.participante.PuntosActuales;
         _stateJugador.participante.PuntosActuales += DatosPreg.puntos;
+        _stateJugador.DatosPregunta = DatosPreg;
         if (DatosPreg.esCorrecto)
         {
             _stateJugador.participante.CantidadPacertadas += 1;
@@ -51,24 +50,13 @@
         mostrar = false;
         MostrarValidar = true;
         await _hubJugadorService.MandarPreguntaContestada();
-        DatosPregunta = DatosPreg;
-       
+    
         //Crear funcion para mostrar los nuevos puntos y si escorrecto
     }
 
-    private async void OnTimerCallback(object? state)
-    {
-        segundos -= 1;
-        if (segundos == 0)
-        {
-            _timer?.Change(Timeout.Infinite, 0);
-            _timer?.Dispose();
-            _timer = null;
-        }
-        await InvokeAsync(StateHasChanged);
-    }
     public void Dispose()
     {
+       
 
     }
 

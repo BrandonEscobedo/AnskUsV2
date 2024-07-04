@@ -1,6 +1,6 @@
 ﻿using anskus.Application.DTOs;
 using anskus.Application.DTOs.Response.Cuestionarios;
-using anskus.Application.HubServices.StateContainers;
+using anskus.Application.HubServices.StateContainers.Creador;
 using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -15,10 +15,7 @@ namespace anskus.Application.HubServices
         {
             _hubConnection = hubConnection;
             _hubStateCreador = hubStateCreador;
-        }
-
-
-
+        }        
         public async Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo)
         {
             bool result = await _hubConnection.InvokeAsync<bool>("CreateRoom", cuestionarioActivo.Codigo, cuestionarioActivo.IdcuestionarioActivo);
@@ -34,5 +31,6 @@ namespace anskus.Application.HubServices
         {
             await _hubConnection.InvokeAsync("SiguientePregunta", _hubStateCreador.Codigo, _hubStateCreador.MandarSiguientePregunta());
         }
+       
     }
 }

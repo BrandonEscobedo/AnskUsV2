@@ -5,8 +5,6 @@ namespace anskus.Application.HubServices
     public interface IHubJugadorServices
     {
         Task<bool> AddUserToRoom(ParticipanteEnCuestDTO participante);
-         Task MandarPreguntaContestada();
-
-
+        Task MandarPreguntaContestada();
     }
 }

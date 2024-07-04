@@ -9,6 +9,8 @@ using anskus.Application.Codigo;
 using anskus.Domain.Cuestionarios;
 using anskus.Application.HubServices.StateContainers;
 using anskus.Application.HubServices;
+using anskus.Application.HubServices.StateContainers.Creador;
+using anskus.Application.HubServices.StateContainers.Jugador;
 namespace anskus.Application.DependencyInjection
 {
     public static class ServiceContainer

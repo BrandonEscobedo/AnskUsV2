@@ -1,7 +1,7 @@
 ﻿using anskus.Application.DTOs.Response.Cuestionarios;
 using anskus.Domain.Models;
 
-namespace anskus.Application.HubServices.StateContainers
+namespace anskus.Application.HubServices.StateContainers.Creador
 {
     public class HubStateCreador : IHubStateCreador
     {

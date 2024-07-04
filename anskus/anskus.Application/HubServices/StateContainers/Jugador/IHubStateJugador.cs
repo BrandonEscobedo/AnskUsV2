@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace anskus.Application.HubServices.StateContainers
+namespace anskus.Application.HubServices.StateContainers.Jugador
 {
     public interface IHubStateJugador
     {
-        
+
     }
-    public class HubStateJugador: IHubStateJugador
+    public class HubStateJugador : IHubStateJugador
     {
         private readonly HubConnection _hubConnection;
         private readonly IStateContainerOnPreg _stateContainer;

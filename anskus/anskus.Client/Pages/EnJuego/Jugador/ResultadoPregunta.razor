@@ -1,0 +1,60 @@
+﻿@page "/Pregunta/Resultado"
+@inject IStateJugador _stateJugador
+@layout ComponentBaseResultado
+@if (!_stateJugador.DatosPregunta.esCorrecto)
+{
+    <div class="ContainerResultadoIncorrecto">
+    <div class="ContainerTexto-img">
+        <div class="ContainerTexto">
+            Incorrecto
+        </div>
+
+        <div class="ContainerImg">
+            <img src="/img//Incorrecto.png" />
+        </div>
+        <div class="RankingJugador">
+            <div class="RankingTexto">
+                Estas en el podio
+            </div>
+            <div class="RankingContainerPuesto">
+                <div class="RankingPuesto">
+                    3
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+}
+else
+{
+    <div class="ContainerResultado">
+        <div class="ContainerTexto-img">
+            <div class="ContainerTexto">
+                Correcto
+            </div>
+
+            <div class="ContainerImg">
+                <img src="/img/Correcto.png" />
+            </div>
+            <div class="RankingJugador">
+                <div class="RankingTexto">
+                    Estas en el podio
+                </div>
+                <div class="RankingContainerPuesto">
+                    <div class="RankingPuesto">
+                        3
+                    </div>
+                </div>
+            </div>
+            <div class="ContainerPuntos">
+             +@(_stateJugador.DatosPregunta.puntos)
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+}

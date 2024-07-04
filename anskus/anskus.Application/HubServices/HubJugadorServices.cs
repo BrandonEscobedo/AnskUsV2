@@ -1,5 +1,6 @@
 ﻿using anskus.Application.DTOs;
 using anskus.Application.HubServices.StateContainers;
+using anskus.Application.HubServices.StateContainers.Jugador;
 using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
@@ -22,6 +23,12 @@ namespace anskus.Application.HubServices
             _stateJugador = stateJugador;
             _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
             _hubConnection.On<Pregunta>("SiguientePreguntas", OnSiguientePregunta);
+            _hubConnection.On<ParticipanteEnCuestDTO>("PreguntaContestada", OnPreguntaContestada);
+        }
+
+        private void OnPreguntaContestada(ParticipanteEnCuestDTO participante)
+        {
+            _stateJugador.AddParticipanteRanking(participante);
         }
 
         private void OnSiguientePregunta(Pregunta pregunta)

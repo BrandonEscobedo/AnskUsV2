@@ -60,7 +60,7 @@ namespace anskus.WebApi.Hubs
         }
         public async Task ContestarPregunta(ParticipanteEnCuestDTO participante)
         {
-            await Clients.Group(participante.Codigo.ToString()).PreguntaContestada(participante);
+            await Clients.Groups(participante.Codigo.ToString(),Context.ConnectionId).PreguntaContestada(participante);
         }
     }
     public interface InotificationClient
