@@ -25,14 +25,20 @@ namespace anskus.Application.HubServices
             _hubConnection.On<ParticipanteEnCuestDTO>("LeftParticipante", OnRemoveParticipante);
             _hubConnection.On<Pregunta>("SiguientePregunta", OnSiguientePregunta);
             _hubConnection.On<ParticipanteEnCuestDTO>("PreguntaContestada", OnPreguntaContestada);
+            _hubConnection.On("NavegarARanking", OnNavegarARanking);
             _stateParticipantes = stateParticipantes;
             _stateContainer = stateContainer;
             _stateCreador = stateCreador;
         }
 
-        private void OnPreguntaContestada(ParticipanteEnCuestDTO participante)
+        private void OnNavegarARanking()
         {
-            _stateCreador.OnParticipantesContestado(participante);
+            _stateContainer.NavegarARanking();
+        }
+
+        private async Task OnPreguntaContestada(ParticipanteEnCuestDTO participante)
+        {
+         await   _stateCreador.OnParticipantesContestado(participante);
         }
         private void OnRemoveParticipante(ParticipanteEnCuestDTO participante) => _stateParticipantes.RemoveParticipanteToList(participante);
 
@@ -45,6 +51,7 @@ namespace anskus.Application.HubServices
         private void OnSiguientePregunta(Pregunta pregunta)
         {
             _stateContainer.SetPregunta(pregunta);
+            _stateCreador.participantes = new();
         }
     }
 }

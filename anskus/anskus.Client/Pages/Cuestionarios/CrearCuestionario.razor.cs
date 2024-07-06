@@ -161,7 +161,7 @@ namespace anskus.Client.Pages.Cuestionarios
             var preg = Cuestionario.Pregunta.FirstOrDefault(x => x.IdPregunta == pregunta.IdPregunta);
             if (preg != null)
             {
-                await EliminarImagenPregunta(pregunta);
+                await EliminarImagenPregunta(preg);
                 Cuestionario.Pregunta.Remove(preg);
                 await GuardarCuestionario();
             }

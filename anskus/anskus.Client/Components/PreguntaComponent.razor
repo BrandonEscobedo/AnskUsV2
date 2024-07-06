@@ -62,7 +62,6 @@ else
     <section>
     </section>
 }
-<h2 class="title">@segundos</h2>
 
 <script type="text/javascript" src="/js/Preguntas.js">
    
@@ -83,7 +82,7 @@ else
     public EventCallback OnSiguiente { get; set; }
     private bool tiempoExpirado = false;
     private List<Respuesta> respuestasCorrectas = new();
-
+   
 
     protected override void OnInitialized()
     {
@@ -124,25 +123,26 @@ else
 
             }
         }
+        await JS.InvokeVoidAsync("ChangeBackground");
     }
     private async void OnTimerCallback(object? state)
     {
         segundos -= 1;
         if (segundos == 0)
         {
-            tiempoExpirado = true;
+           
             _timer?.Change(Timeout.Infinite, 0);
             _timer?.Dispose();
             _timer = null;
-
+          
+            await OnSiguiente.InvokeAsync();
             if (!eventCallPreguntaContestada)
             {
                 await OnPreguntaContestada.InvokeAsync(datosPregunta);
             }
             PuedeContestar = false;
-
-            await OnSiguiente.InvokeAsync();
-            await MostrarRespuestas();
+            
+             MostrarRespuestas();
         }
         await InvokeAsync(StateHasChanged);
     }

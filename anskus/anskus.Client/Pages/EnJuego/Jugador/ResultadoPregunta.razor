@@ -1,6 +1,9 @@
 ﻿@page "/Pregunta/Resultado"
 @inject IStateJugador _stateJugador
+@inject IStateContainerOnPreg _stateContainer
+@inject NavigationManager _navigationManager
 @layout ComponentBaseResultado
+@implements IDisposable
 @if (!_stateJugador.DatosPregunta.esCorrecto)
 {
     <div class="ContainerResultadoIncorrecto">
@@ -14,11 +17,11 @@
         </div>
         <div class="RankingJugador">
             <div class="RankingTexto">
-                Estas en el podio
+               @TextoAyuda
             </div>
             <div class="RankingContainerPuesto">
                 <div class="RankingPuesto">
-                    3
+                    @_stateJugador.Posicion
                 </div>
             </div>
         </div>
@@ -39,11 +42,11 @@ else
             </div>
             <div class="RankingJugador">
                 <div class="RankingTexto">
-                    Estas en el podio
+                    @TextoAyuda
                 </div>
                 <div class="RankingContainerPuesto">
                     <div class="RankingPuesto">
-                        3
+                        @_stateJugador.Posicion
                     </div>
                 </div>
             </div>
@@ -56,5 +59,26 @@ else
 
 
 @code {
-
+    private string TextoAyuda = "";
+    protected override void OnInitialized()
+    {
+        _stateContainer.OnNavegarARanking += OnNavegarARanking;
+        if(_stateJugador.Posicion==1 || _stateJugador.Posicion==2 || _stateJugador.Posicion == 3)
+        {
+            TextoAyuda = "Estas en el podio";
+        }
+        else
+        {
+            TextoAyuda = "Estas en la posición";
+        }
+        base.OnInitialized();
+    }
+    private void OnNavegarARanking()
+    {
+        _navigationManager.NavigateTo("/Jugador/Ranking");
+    }
+    public void Dispose()
+    {
+        _stateContainer.OnNavegarARanking -= OnNavegarARanking;
+    }
 }

@@ -1,0 +1,38 @@
+﻿@page "/Sala/Ranking"
+@inject IHubconnectionService _hubConnectionService
+@inject IStateContainerOnPreg _stateContainer
+@inject NavigationManager _navigationManager
+@inject IStateCreador _stateCreador
+@layout ComponentBaseEmpty
+@implements IDisposable
+<section class="preguntas__body">
+    <div class="ContainerButtonSiguiente" @onclick="EnviarSiguientePregunta">
+        <div class="ButtonSiguiente">
+            <div>
+                Siguiente
+            </div>
+        </div>
+    </div>
+    <Ranking participantes="_stateCreador.participantes">
+
+  </Ranking>
+</section>
+
+@code {
+    protected override void OnInitialized()
+    {
+        _stateContainer.OnSiguientePregunta += OnSiguientePregunta;
+    }
+    private void OnSiguientePregunta()
+    {
+        _navigationManager.NavigateTo("/OnGame/Pregunta");
+   }
+    private async Task EnviarSiguientePregunta()
+    {
+        await _hubConnectionService.SiguientePregunta();
+    }
+    public void Dispose()
+    {      
+       _stateContainer.OnSiguientePregunta -= OnSiguientePregunta;        
+    }
+}

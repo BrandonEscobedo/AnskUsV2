@@ -1,0 +1,24 @@
+﻿@page "/Jugador/Ranking"
+@layout ComponentBaseEmpty
+@inject IStateJugador _stateJugador
+@inject IStateContainerOnPreg _stateContainer
+@inject NavigationManager _navigationManager
+@implements IDisposable
+<section class="preguntas__body">
+    <Ranking participantes="_stateJugador.participantes">
+
+    </Ranking>
+</section>
+@code{
+    protected override void OnInitialized()
+    {
+        _stateContainer.OnSiguientePregunta += OnSiguientePregunta;
+    }
+    private void OnSiguientePregunta()
+    {
+        _navigationManager.NavigateTo("/Lobby/OnGame/Pregunta");
+    }
+   public void Dispose(){
+        _stateContainer.OnSiguientePregunta -= OnSiguientePregunta;
+   }
+}

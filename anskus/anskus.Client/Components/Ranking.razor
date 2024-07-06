@@ -1,0 +1,89 @@
+﻿@layout ComponentBaseEmpty
+@implements IDisposable
+<link rel="stylesheet" href="/css/Ranking.css" />
+<h2 class="title">
+    Ranking de jugadores
+</h2>
+<div class="tablero">
+    <div class="content__tablero" data-ida="w12">
+        <h3>
+            Posicion
+        </h3>
+        <h3>
+            Jugador
+        </h3>
+        <h3>
+            Puntuacion
+        </h3>
+    </div>
+    @foreach (var jugador in participantes.OrderByDescending(j => j.PuntosAnteriores))
+    {
+        <div class="content__tablero">
+            <h3>
+                No.
+            </h3>
+            <h3>
+                @jugador.Nombre
+            </h3>
+            <h3>
+                @jugador.PuntosAnteriores
+            </h3>
+        </div>
+    }
+</div>
+<ul>
+</ul>
+@code {
+    [Parameter]
+    public List<ParticipanteEnCuestDTO> participantes { get; set; } = new List<ParticipanteEnCuestDTO>();
+    private CancellationTokenSource? _cts;
+    protected override async Task OnInitializedAsync()
+    {
+
+        _cts = new CancellationTokenSource();
+        await ActualizarPuntajes(_cts.Token);
+
+    }
+    private async Task ActualizarPuntajes(CancellationToken  token)
+    {
+        while (!TodosAlcanzaronPuntosActuales() && !token.IsCancellationRequested)
+        {
+            try
+            {
+                await Task.Delay(30, token);
+
+                foreach (var participante in participantes)
+                {
+                    if (participante.PuntosAnteriores < participante.PuntosActuales)
+                    {
+                        participante.PuntosAnteriores += 1;
+                    }
+                }
+
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    private bool TodosAlcanzaronPuntosActuales()
+    {
+        foreach (var participante in participantes)
+        {
+            if (participante.PuntosAnteriores < participante.PuntosActuales)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public void Dispose()
+    {
+        participantes.Clear();
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
+}

@@ -1,14 +1,25 @@
 ﻿@page "/OnGame/Pregunta"
 @inject IStateCreador _stateCreador
+@inject NavigationManager _navigationManager
+@inject IStateContainerOnPreg _stateContainer
+@inject IHubconnectionService _hubConnectionService
 @layout ComponentBaseHub
 @implements IDisposable
 <link rel="stylesheet" href="/css/Preguntas.css" />
 <section class="preguntas__body">
+    <div class="ContainerButtonSiguiente" @onclick="Avanzar">
+        <div class="ButtonSiguiente">
+            <div>
+                Siguiente
+            </div>
+        </div>
+    </div>
     <div class="ContainerTotalUsuarios">
         @UsuariosContestado
     </div>
-        <PreguntaComponent OnSiguiente="Siguiente" >
-        </PreguntaComponent>
+    <PreguntaComponent OnSiguiente="Siguiente">
+
+    </PreguntaComponent>
     <div class="ContainerFooter" id="footerDiv">
         <div class="ContainerFooterSection">
             <div class="TotalPreguntas">
@@ -16,35 +27,46 @@
             </div>
         </div>
     </div>
+<h2>@segundos</h2>
 </section>
 
 @code {
     @using System.Threading
     private Timer? _timer;
     private int UsuariosContestado = 0;
-    private int segundos = 10;
-    //Ver Estadisticas de Participantes
+    private int segundos = 6;
     protected override void OnInitialized()
     {
+        _stateContainer.OnNavegarARanking += OnNavegarARanking;
         _stateCreador.OnUsuarioContesto += OnUsuarioContesto;
+    }
+    private void OnNavegarARanking()
+    {
+        _navigationManager.NavigateTo("/Sala/Ranking");
     }
     private void OnUsuarioContesto()
     {
-        UsuariosContestado++;
+        UsuariosContestado=UsuariosContestado+1;
+        StateHasChanged();
     }
-    private void Siguiente()
+    private async void Avanzar()
     {
-        _timer = new Timer(OnTimerCallback, null, 1000, 1000);
+        await _hubConnectionService.NavegarARanking();
+    }
+    public void  Siguiente()
+    {
+        
+
     }
     private async void OnTimerCallback(object? state)
     {
         segundos -= 1;
-        if (segundos == 0)
-        {
+        if (segundos <= 0)
+    {
             _timer?.Change(Timeout.Infinite, 0);
             _timer?.Dispose();
             _timer = null;
-
+            await _hubConnectionService.NavegarARanking();
         }
         await InvokeAsync(StateHasChanged);
     }

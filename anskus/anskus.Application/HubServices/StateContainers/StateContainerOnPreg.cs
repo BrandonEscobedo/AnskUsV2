@@ -8,13 +8,17 @@ namespace anskus.Application.HubServices.StateContainers
         public string Titulo { get; set; } = "";
         public event Action? OnIniciarCuestionario;
         public event Action? OnSiguientePregunta;
+        public event Action? OnNavegarARanking;
 
         public void SetPregunta(Pregunta pregunta)
         {
             Pregunta = pregunta;
             OnSiguientePregunta?.Invoke();
         }
-
+        public void NavegarARanking()
+        {
+            OnNavegarARanking?.Invoke();
+        }
         public void SetTituloPregunta(string Titulo, Pregunta pregunta)
         {
             Pregunta = pregunta;

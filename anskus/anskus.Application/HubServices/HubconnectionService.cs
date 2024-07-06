@@ -27,6 +27,10 @@ namespace anskus.Application.HubServices
             await _hubConnection.InvokeAsync("IniciarCuestionario", _hubStateCreador.Codigo, _hubStateCreador.Cuestionario.Titulo ,_hubStateCreador.MandarSiguientePregunta()
                );
         }
+        public async Task NavegarARanking()
+        {
+            await _hubConnection.InvokeAsync("NavegarARanking", _hubStateCreador.Codigo);
+        }
         public async Task SiguientePregunta()
         {
             await _hubConnection.InvokeAsync("SiguientePregunta", _hubStateCreador.Codigo, _hubStateCreador.MandarSiguientePregunta());
