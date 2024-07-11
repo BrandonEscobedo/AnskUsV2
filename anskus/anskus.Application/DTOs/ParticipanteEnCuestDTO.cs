@@ -14,5 +14,6 @@ namespace anskus.Application.DTOs
         public int? PuntosAnteriores { get; set; } = 0;
         public int Codigo { get; set; }
         public int? CantidadPacertadas { get; set; } = 0;
+        public int Posicion { get; set; } = 0;
     }
 }

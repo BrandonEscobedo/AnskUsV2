@@ -11,8 +11,6 @@
         @segundos
     </div>
 </div>
-
-
 @if (MostrarBotones)
 {
     if (string.IsNullOrWhiteSpace(pregunta.Imagen))
@@ -43,11 +41,11 @@
     }
     <section class="botones">
         @{
-            int contador = 1;
+            int contador =1 ;
         }
         @foreach (var respuesta in pregunta.Respuesta)
         {
-            <div class="inp b@(contador)" id="b@(contador)" @onclick="()=>ValidarRespuesta(respuesta)">
+            <div class="inp b@(contador)" id="b@(contador-1)" @onclick="()=>ValidarRespuesta(respuesta)">
                 <button class="inpCont ContainerBtnWithImg">
                     @respuesta.respuesta
                 </button>
@@ -80,18 +78,20 @@ else
     private DatosPregunta datosPregunta = new();
     [Parameter]
     public EventCallback OnSiguiente { get; set; }
-    private bool tiempoExpirado = false;
     private List<Respuesta> respuestasCorrectas = new();
-   
-
     protected override void OnInitialized()
     {
+        _stateContainer.OnTiempoTermino += OnTiempoTermino;
         pregunta = _stateContainer.Pregunta;
         _timer = new Timer(OnTimerCallback, null, 1000, 1000);
         respuestasCorrectas = pregunta.Respuesta.Where(x => x.RCorrecta == true).ToList();
         base.OnInitialized();
     }
-
+    private async void OnTiempoTermino()
+    {
+        segundos = 0;    
+        await Avanzar();
+    }
     private async void ValidarRespuesta(Respuesta respuesta)
     {
         if (PuedeContestar)
@@ -101,7 +101,6 @@ else
                 datosPregunta.puntos = segundos * 13;
                 datosPregunta.esCorrecto = true;
             }
-
             await OnPreguntaContestada.InvokeAsync(datosPregunta);
             eventCallPreguntaContestada = true;
         }
@@ -111,38 +110,40 @@ else
     public async Task MostrarRespuestas()
     {
         int total = pregunta.Respuesta.Count;
-        for(int i = 0; i <= total; i++)
+        for(int i = 0; i < total; i++)
         {
             if (pregunta.Respuesta[i].RCorrecta == true)
             {
-                await JS.InvokeVoidAsync("addImageCorrect",i+1);
+                await JS.InvokeVoidAsync("addImageCorrect",i);
             }
             else
             {
-                await JS.InvokeVoidAsync("addImageInCorrect", i + 1);
+                await JS.InvokeVoidAsync("addImageInCorrect", i);
 
             }
         }
         await JS.InvokeVoidAsync("ChangeBackground");
     }
+    private async Task Avanzar()
+    {
+        _timer?.Change(Timeout.Infinite, 0);
+        _timer?.Dispose();
+        _timer = null;
+        await OnSiguiente.InvokeAsync();
+        if (!eventCallPreguntaContestada)
+        {
+            await OnPreguntaContestada.InvokeAsync(datosPregunta);
+            eventCallPreguntaContestada = true;
+        }
+        PuedeContestar = false;
+        await MostrarRespuestas();
+    }
     private async void OnTimerCallback(object? state)
     {
         segundos -= 1;
         if (segundos == 0)
-        {
-           
-            _timer?.Change(Timeout.Infinite, 0);
-            _timer?.Dispose();
-            _timer = null;
-          
-            await OnSiguiente.InvokeAsync();
-            if (!eventCallPreguntaContestada)
-            {
-                await OnPreguntaContestada.InvokeAsync(datosPregunta);
-            }
-            PuedeContestar = false;
-            
-             MostrarRespuestas();
+        {          
+            await Avanzar();
         }
         await InvokeAsync(StateHasChanged);
     }

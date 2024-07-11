@@ -10,9 +10,10 @@ namespace anskus.Application.HubServices
 {
     public interface IHubconnectionService
     {
-        public  Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo);
+        public Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo);
         public Task IniciarCuestionario();
-        public  Task SiguientePregunta();
-        public  Task NavegarARanking();
+        public Task SiguientePregunta();
+        public Task NavegarARanking();
+        public Task TiempoTermino();
     }
 }

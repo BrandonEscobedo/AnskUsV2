@@ -1,0 +1,116 @@
+﻿.ClasificacionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    width: 100dvw;
+    flex-direction: column;
+    position: relative;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.titleGanadores {
+    font-size: 40px;
+    background-color: #f0ffa4;
+    border-radius: 10px;
+    width: 50dvh;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.tituloGanadores {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+}
+
+.SegundoLugarContainer {
+    display: flex;
+    width: 20dvh;
+    height: 100%;
+    margin: 5px;
+    align-items: center;
+    justify-content: end;
+    flex-direction: column;
+}
+
+.BloqueContainer {
+    display: flex;
+    height: 45dvh;
+    width: 18dvh;
+    z-index: 1;
+    background-color: blueviolet;
+}
+
+.BloqueContainerPrimerLugar {
+    display: flex;
+    height: 53dvh;
+    width: 20dvh;
+    z-index: 1;
+    background-color: blueviolet;
+}
+
+.ContainerPuestos::before {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.imgContainer {
+    display: flex;
+    width: 120px;
+    margin: 10px;
+    height: 110px;
+}
+
+img {
+    width: 120px;
+    height: 110px;
+}
+
+.ContainerPuestos {
+    display: flex;
+    width: 32dvw;
+    align-items: center;
+    justify-content: center;
+    height: 65dvh;
+    flex-direction: row;
+}
+
+.TextLugarContainer {
+    width: 100%;
+    height: 30%;
+    margin: 10px;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
+
+.TextLugar {
+    display: flex;
+    width: 90%;
+    height: 50%;
+    color: #ffff;
+    font-weight: bold;
+    font-size: 19px;
+    position: relative;
+    border-radius: 25px;
+    align-items: center;
+    justify-content: center;
+    background-color: #3AC22C;
+}

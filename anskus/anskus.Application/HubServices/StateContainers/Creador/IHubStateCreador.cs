@@ -12,6 +12,7 @@ namespace anskus.Application.HubServices.StateContainers.Creador
     {
         public CuestionarioResponse Cuestionario { get; set; }
         public int Codigo { get; set; }
+        public event Action? CuestionarioFinalizo;
         public void SetCuestionario(CuestionarioResponse Cuestionario, int Codigo);
         public Pregunta MandarSiguientePregunta();
 

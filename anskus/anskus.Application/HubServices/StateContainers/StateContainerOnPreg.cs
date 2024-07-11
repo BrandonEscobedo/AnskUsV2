@@ -9,7 +9,12 @@ namespace anskus.Application.HubServices.StateContainers
         public event Action? OnIniciarCuestionario;
         public event Action? OnSiguientePregunta;
         public event Action? OnNavegarARanking;
-
+        public event Action? OnNavegarAClasificacion;
+        public event Action? OnTiempoTermino;
+        public void TiempoTermino()
+        {
+            OnTiempoTermino?.Invoke();
+        }
         public void SetPregunta(Pregunta pregunta)
         {
             Pregunta = pregunta;
@@ -18,6 +23,10 @@ namespace anskus.Application.HubServices.StateContainers
         public void NavegarARanking()
         {
             OnNavegarARanking?.Invoke();
+        }
+        public void NavegarAClasificacion()
+        {
+            OnNavegarAClasificacion?.Invoke();
         }
         public void SetTituloPregunta(string Titulo, Pregunta pregunta)
         {

@@ -7,6 +7,7 @@ namespace anskus.Application.HubServices.StateContainers.Jugador
     {
         public ParticipanteEnCuestDTO participante { get; set; } = new ParticipanteEnCuestDTO();
         public DatosPregunta DatosPregunta { get; set; } = new();
+        //Reiniciar DatosPregunta
         public List<ParticipanteEnCuestDTO> participantes { get; set; } = new List<ParticipanteEnCuestDTO>();
        public int Posicion { get; set; }
         public void AddParticipanteRanking(ParticipanteEnCuestDTO participante)

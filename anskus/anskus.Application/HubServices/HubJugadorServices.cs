@@ -3,11 +3,6 @@ using anskus.Application.HubServices.StateContainers;
 using anskus.Application.HubServices.StateContainers.Jugador;
 using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace anskus.Application.HubServices
 {
@@ -25,13 +20,23 @@ namespace anskus.Application.HubServices
             _hubConnection.On<Pregunta>("SiguientePregunta", OnSiguientePregunta);
             _hubConnection.On<ParticipanteEnCuestDTO>("PreguntaContestada", OnPreguntaContestada);
             _hubConnection.On("NavegarARanking", OnNavegarARanking);
+            _hubConnection.On("NavegarAClasificacion", OnNavegarClasificacion);
+            _hubConnection.On("TerminoTiempo", OnTerminoTiempo);
+
+        }
+        private void OnTerminoTiempo()
+        {
+            _stateContainer.TiempoTermino();
         }
 
         private void OnNavegarARanking()
         {
             _stateContainer.NavegarARanking();
         }
-
+        private void OnNavegarClasificacion()
+        {
+            _stateContainer.NavegarAClasificacion();
+        }
         private void OnPreguntaContestada(ParticipanteEnCuestDTO participante)
         {
             _stateJugador.AddParticipanteRanking(participante);
@@ -39,8 +44,10 @@ namespace anskus.Application.HubServices
 
         private void OnSiguientePregunta(Pregunta pregunta)
         {
+            _stateJugador.participantes=new();
+            _stateJugador.DatosPregunta = new();
             _stateContainer.SetPregunta(pregunta);
-            _stateJugador.participantes.Clear();
+           
         }
        
         private  void OnIniciarCuestionario(string Titulo, Pregunta pregunta)

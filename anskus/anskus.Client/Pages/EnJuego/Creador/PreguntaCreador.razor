@@ -7,12 +7,23 @@
 @implements IDisposable
 <link rel="stylesheet" href="/css/Preguntas.css" />
 <section class="preguntas__body">
-    <div class="ContainerButtonSiguiente" @onclick="Avanzar">
-        <div class="ButtonSiguiente">
-            <div>
-                Siguiente
+    <div class="ContainerButtonSiguiente">
+        @if (TerminoTiempo)
+        {
+            <div class="ButtonSiguiente" @onclick="Avanzar">
+                <div>
+                    Avanzar
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="ButtonSiguiente" @onclick="Terminar">
+                <div>
+                    Terminar
+                </div>
+            </div>
+        }
     </div>
     <div class="ContainerTotalUsuarios">
         @UsuariosContestado
@@ -27,42 +38,53 @@
             </div>
         </div>
     </div>
-<h2>@segundos</h2>
+    <h2>@segundos</h2>
 </section>
-
+x
 @code {
     @using System.Threading
     private Timer? _timer;
     private int UsuariosContestado = 0;
     private int segundos = 6;
+    public bool TerminoTiempo = false;
+    private string textoBoton = "Terminar";
     protected override void OnInitialized()
     {
         _stateContainer.OnNavegarARanking += OnNavegarARanking;
         _stateCreador.OnUsuarioContesto += OnUsuarioContesto;
+        _stateContainer.OnNavegarAClasificacion += OnNavegarAClasificacion;
     }
     private void OnNavegarARanking()
     {
         _navigationManager.NavigateTo("/Sala/Ranking");
     }
+    private void OnNavegarAClasificacion()
+    {
+        _navigationManager.NavigateTo("/Clasificacion");
+    }
     private void OnUsuarioContesto()
     {
-        UsuariosContestado=UsuariosContestado+1;
+        UsuariosContestado = UsuariosContestado + 1;
         StateHasChanged();
+    }
+    private  void Siguiente()
+    {
+        TerminoTiempo = true;
+
+    }
+    private async Task Terminar()
+    {
+        await _hubConnectionService.TiempoTermino();
     }
     private async void Avanzar()
     {
         await _hubConnectionService.NavegarARanking();
     }
-    public void  Siguiente()
-    {
-        
-
-    }
     private async void OnTimerCallback(object? state)
     {
         segundos -= 1;
         if (segundos <= 0)
-    {
+        {
             _timer?.Change(Timeout.Infinite, 0);
             _timer?.Dispose();
             _timer = null;

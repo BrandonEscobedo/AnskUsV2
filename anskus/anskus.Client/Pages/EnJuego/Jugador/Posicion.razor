@@ -1,0 +1,60 @@
+﻿@page "/Resultado"
+@layout ComponentBaseEmpty
+@inject IStateJugador _stateJugador
+<link rel="stylesheet" href="/css/Posicion.css" />
+<section class="preguntas__body js-container ">
+    <div class="results-summary-container">
+        <div class="confetti">
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+        </div>
+        <div class="results-summary-container__result">
+            <div class="heading-tertiary">Posición</div>
+            <div class="result-box">
+                <div class="heading-primary">@posicion</div>
+                <p class="result">@ultimoIndice </p>
+            </div>
+            <div class="result-text-box">
+                <div class="heading-secondary"> @_stateJugador.participante.PuntosActuales puntos</div>
+                <p class="paragraph">
+                    @_stateJugador.participante.CantidadPacertadas Preguntas contestadas Correctamente
+                </p>
+            </div>
+            <div class="summary__cta">
+                <button class="btnSalir btn__continue">
+                    Salir
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+@code {
+    int ultimoIndice = 0;
+    int posicion = 0;
+    protected override void OnInitialized()
+    {
+        if (_stateJugador.participantes.Count > 0)
+        {
+            ultimoIndice = _stateJugador.participantes.Count - +1;
+            var parOrdenados= _stateJugador.participantes.OrderByDescending(x => x.PuntosActuales).ToList();
+            posicion = parOrdenados.FindIndex(x => x.IdPeC == _stateJugador.participante.IdPeC)+1;
+        }
+    }
+}

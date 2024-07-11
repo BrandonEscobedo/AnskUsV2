@@ -7,26 +7,26 @@
 @if (!_stateJugador.DatosPregunta.esCorrecto)
 {
     <div class="ContainerResultadoIncorrecto">
-    <div class="ContainerTexto-img">
-        <div class="ContainerTexto">
-            Incorrecto
-        </div>
-
-        <div class="ContainerImg">
-            <img src="/img//Incorrecto.png" />
-        </div>
-        <div class="RankingJugador">
-            <div class="RankingTexto">
-               @TextoAyuda
+        <div class="ContainerTexto-img">
+            <div class="ContainerTexto">
+                Incorrecto
             </div>
-            <div class="RankingContainerPuesto">
-                <div class="RankingPuesto">
-                    @_stateJugador.Posicion
+
+            <div class="ContainerImg">
+                <img src="/img//Incorrecto.png" />
+            </div>
+            <div class="RankingJugador">
+                <div class="RankingTexto">
+                    @TextoAyuda
+                </div>
+                <div class="RankingContainerPuesto">
+                    <div class="RankingPuesto">
+                        @_stateJugador.Posicion
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     </div>
 }
 else
@@ -51,7 +51,7 @@ else
                 </div>
             </div>
             <div class="ContainerPuntos">
-             +@(_stateJugador.DatosPregunta.puntos)
+                +@(_stateJugador.DatosPregunta.puntos)
             </div>
         </div>
     </div>
@@ -63,7 +63,8 @@ else
     protected override void OnInitialized()
     {
         _stateContainer.OnNavegarARanking += OnNavegarARanking;
-        if(_stateJugador.Posicion==1 || _stateJugador.Posicion==2 || _stateJugador.Posicion == 3)
+        _stateContainer.OnNavegarAClasificacion += OnNavegarAClasificacion;
+        if (_stateJugador.Posicion == 1 || _stateJugador.Posicion == 2 || _stateJugador.Posicion == 3)
         {
             TextoAyuda = "Estas en el podio";
         }
@@ -71,7 +72,20 @@ else
         {
             TextoAyuda = "Estas en la posición";
         }
-        base.OnInitialized();
+      
+    }
+    private void OnNavegarAClasificacion()
+    {
+        var ListOrder = _stateJugador.participantes.OrderByDescending(x => x.PuntosActuales).Take(3).ToList();
+        if (ListOrder.FirstOrDefault(x => x.IdPeC == _stateJugador.participante.IdPeC) != null)
+        {
+            _navigationManager.NavigateTo("/Game/Clasificacion");
+        }
+        else
+        {
+            _navigationManager.NavigateTo("/Resultado");
+
+        }
     }
     private void OnNavegarARanking()
     {

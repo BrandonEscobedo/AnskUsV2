@@ -18,10 +18,8 @@
     </div>
     @foreach (var jugador in participantes.OrderByDescending(j => j.PuntosAnteriores))
     {
+        //poner clase para cmabiar color
         <div class="content__tablero">
-            <h3>
-                No.
-            </h3>
             <h3>
                 @jugador.Nombre
             </h3>
@@ -39,10 +37,8 @@
     private CancellationTokenSource? _cts;
     protected override async Task OnInitializedAsync()
     {
-
         _cts = new CancellationTokenSource();
         await ActualizarPuntajes(_cts.Token);
-
     }
     private async Task ActualizarPuntajes(CancellationToken  token)
     {

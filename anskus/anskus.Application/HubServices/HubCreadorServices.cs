@@ -26,16 +26,26 @@ namespace anskus.Application.HubServices
             _hubConnection.On<Pregunta>("SiguientePregunta", OnSiguientePregunta);
             _hubConnection.On<ParticipanteEnCuestDTO>("PreguntaContestada", OnPreguntaContestada);
             _hubConnection.On("NavegarARanking", OnNavegarARanking);
+            _hubConnection.On("NavegarAClasificacion", OnNavegarClasificacion);
+            _hubConnection.On("TerminoTiempo", OnTerminoTiempo);
             _stateParticipantes = stateParticipantes;
             _stateContainer = stateContainer;
             _stateCreador = stateCreador;
+        }
+        private void OnTerminoTiempo()
+        {
+            _stateContainer.TiempoTermino();
+        }
+
+        private void OnNavegarClasificacion()
+        {
+            _stateContainer.NavegarAClasificacion();
         }
 
         private void OnNavegarARanking()
         {
             _stateContainer.NavegarARanking();
         }
-
         private async Task OnPreguntaContestada(ParticipanteEnCuestDTO participante)
         {
          await   _stateCreador.OnParticipantesContestado(participante);
@@ -50,8 +60,9 @@ namespace anskus.Application.HubServices
         }
         private void OnSiguientePregunta(Pregunta pregunta)
         {
-            _stateContainer.SetPregunta(pregunta);
             _stateCreador.participantes = new();
+            _stateContainer.SetPregunta(pregunta);
+           
         }
     }
 }

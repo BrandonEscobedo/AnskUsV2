@@ -14,8 +14,7 @@ namespace anskus.Application.HubServices.StateContainers.Creador
         public async Task OnParticipantesContestado(ParticipanteEnCuestDTO participante)
         {
             participantes.Add(participante);
-            OnUsuarioContesto?.Invoke();
-          
+            OnUsuarioContesto?.Invoke();  
         }
     }
 }

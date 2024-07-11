@@ -60,11 +60,20 @@ namespace anskus.WebApi.Hubs
         }
         public async Task ContestarPregunta(ParticipanteEnCuestDTO participante)
         {
-            await Clients.Groups(participante.Codigo.ToString(),Context.ConnectionId).PreguntaContestada(participante);
+            await Clients.Groups(participante.Codigo.ToString(), Context.ConnectionId).PreguntaContestada(participante);
         }
         public async Task NavegarARanking(int codigo)
         {
             await Clients.Group(codigo.ToString()).NavegarARanking();
+        }
+        public async Task NavegarAClasificacion(int codigo)
+        {
+            await Clients.Group(codigo.ToString()).NavegarAClasificacion();
+        }
+
+        public async Task TerminoTiempo(int codigo)
+        {
+            await Clients.Group(codigo.ToString()).TerminoTiempo();
         }
     }
     public interface InotificationClient
@@ -76,6 +85,8 @@ namespace anskus.WebApi.Hubs
         Task SiguientePregunta(Pregunta pregunta);
         Task MensajePrueba(string mensaje);
         Task NavegarARanking();
+        Task NavegarAClasificacion();
+        Task TerminoTiempo();
         Task LeftParticipante(ParticipanteEnCuestDTO participante);
         Task NewParticipante(ParticipanteEnCuestDTO participante);
         Task UsuariosEnLaSala(List<string> usuarios);

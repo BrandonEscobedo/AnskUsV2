@@ -1,0 +1,100 @@
+﻿@layout ComponentBaseEmpty
+<link rel="stylesheet" href="/css/Clasificacion.css" />
+<link rel="stylesheet" href="/css/Confetti.css" />
+<link rel="stylesheet" href="/css/Preguntas.css" />
+<section class="preguntas__body js-container ">
+
+    <div class="titleGanadores">
+        <div class="tituloGanadores">
+            Ganadores
+        </div>
+    </div>
+
+
+    <div class="ContainerPuestos">
+        <div class="SegundoLugarContainer">
+            <div class="imgContainer ">
+                <img src="/img/SegundoLugar.png" />
+            </div>
+            <div class="BloqueContainer ">
+                <div class="TextLugarContainer">
+                    <div class="TextLugar">
+                        @if (segundoLugar != null)
+                        {
+                            <div>
+                                @segundoLugar.Nombre
+                                <br>
+                                @segundoLugar.PuntosActuales
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="SegundoLugarContainer">
+            <div class="imgContainer ">
+                <img src="/img/PrimerLugar.png" />
+            </div>
+            <div class="BloqueContainerPrimerLugar">
+                <div class="TextLugarContainer">
+                    <div class="TextLugar">
+                        @if (primerLugar != null)
+                        {
+                            <div>
+                                @primerLugar.Nombre
+                                <br>
+                                @primerLugar.PuntosActuales
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="SegundoLugarContainer">
+            <div class="imgContainer ">
+                <img src="/img/TercerLugar.png/" >
+            </div>
+            <div class="BloqueContainer ">
+                <div class="TextLugarContainer">
+                    <div class="TextLugar">
+                        @if (tercerLugar != null)
+                        {
+                            <div>
+                                @tercerLugar.Nombre
+                                <br>
+                                @tercerLugar.PuntosActuales
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<script type="text/javascript" src="/js/Confetti.js"></script>
+
+@code {
+    [Parameter]
+    public List<ParticipanteEnCuestDTO> participantes { get; set; } = new();
+    private ParticipanteEnCuestDTO? primerLugar;
+    private ParticipanteEnCuestDTO? segundoLugar;
+    private ParticipanteEnCuestDTO? tercerLugar;
+    protected override void OnParametersSet()
+    {
+
+    }
+    protected override void OnInitialized()
+    {
+        if (participantes != null)
+        {
+            var ParticipantesOrdenado = participantes.OrderByDescending(x => x.PuntosActuales).ToList();
+            primerLugar = ParticipantesOrdenado.ElementAtOrDefault(0);
+            segundoLugar = ParticipantesOrdenado.ElementAtOrDefault(1);
+            tercerLugar = ParticipantesOrdenado.ElementAtOrDefault(2);
+        }
+      
+    }
+}
