@@ -2,49 +2,79 @@
 @inject ICuestionarioService _cuestionarioService
 @inject ICuestionarioActivoServices _cuestionarioActivoServices
 @inject NavigationManager _navigationManager
-@if (Cuestionarios == null)
-{
-    <h1> Cargando Cuestionarios...</h1>
-}
-else if (Cuestionarios.Any())
-{
-    @foreach (var cuestionario in Cuestionarios)
-    {
-        <div class="container d-flex justify-content-center">
-            <div class="card mx-auto" style="width: 30rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Titulo del cuestionario: @cuestionario.Titulo</h5>
-                    <p class="card-text">Cantidad de preguntas: 10</p>
-                    <a href="#" class="card-link"><i class="fas fa-pencil-alt"></i></a>
-                    <a href="#" class="card-link"><i class="fas fa-trash-alt"></i></a>
-                    <a href="#" @onclick="()=>IniciarCuestionario(cuestionario.IdCuestionario)" class="btn btn-success">Comenzar</a>
-                    <a @onclick="()=>EditarCuestionario(cuestionario)" class="btn btn-secondary">Editar</a>
-                    <a class="btn btn-secondary">@cuestionario.Estado</a>
-                </div>
-            </div>
-        </div>
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
+<MudContainer>
+    @if (isLoading)
+    {
+        @if (isAuthenticated == false)
+        {
+            <MudText Typo="Typo.h6" Color="Color.Error">Debes iniciar sesión para ver tus cuestionarios.</MudText>
+        }
+        else if (Cuestionarios != null && Cuestionarios.Any())
+        {
+            @foreach (var cuestionario in Cuestionarios)
+            {
+                <div class="container d-flex justify-content-center">
+                    <div class="card mx-auto" style="width: 30rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Titulo del cuestionario: @cuestionario.Titulo</h5>
+                            <p class="card-text">Cantidad de preguntas: 10</p>
+                            <a href="#" class="card-link"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="#" class="card-link"><i class="fas fa-trash-alt"></i></a>
+                            <a href="#" @onclick="()=>IniciarCuestionario(cuestionario.IdCuestionario)" class="btn btn-success">Comenzar</a>
+                            <a @onclick="()=>EditarCuestionario(cuestionario)" class="btn btn-secondary">Editar</a>
+                            <a class="btn btn-secondary">@cuestionario.Estado</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h1>Aun no tienes cuestionarios</h1>
+            <a href="CrearCuestionario">Crear cuestionarios</a>
+        }
     }
-}
-else
-{
-    <h1>Aun no tienes cuestionarios</h1>
-    <a href="CrearCuestionario">Crear cuestionarios</a>
-}
+   
+</MudContainer>
+
 @code {
-    private List<Cuestionario> Cuestionarios=new();
+    private List<Cuestionario> Cuestionarios;
+    private bool isLoading = false;
+    private bool isAuthenticated = false;
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1000);
+            isLoading = true;
+            StateHasChanged();
+        }
+    
+    }
     protected override async Task OnInitializedAsync()
     {
-        Cuestionarios = await _cuestionarioService.GetCuestionariobyUserAsync();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+        if (isAuthenticated)
+        {
+            Cuestionarios = await _cuestionarioService.GetCuestionariobyUserAsync();
+        }
     }
+
     private void EditarCuestionario(Cuestionario cuestionario)
     {
         _navigationManager.NavigateTo($"/Cuestionario/{cuestionario.IdCuestionario}");
     }
+
     private async void IniciarCuestionario(Guid? IdCuestionario)
     {
-        var result =await _cuestionarioActivoServices.ActivarCuestionario(IdCuestionario);
+        var result = await _cuestionarioActivoServices.ActivarCuestionario(IdCuestionario);
         if (result != Guid.Empty)
         {
             _navigationManager.NavigateTo($"/Lobby");

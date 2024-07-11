@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject ICuestionarioActivoServices _cuestionarioActivoServices
 @layout ComponentBaseLobby
+@inject SweetAlertService _sweetAlert
 <link rel="stylesheet" href="css/codigo.css" />
 <div class="code__body">
     <img src="./img/Logo.png" alt="">
@@ -9,7 +10,7 @@
         Inserta un codigo
     </h3>
     <div class="FormConteiner">
-        <input type="text" @bind-value="code" placeholder="Codigo">
+        <input type="number" @bind-value="code" placeholder="Codigo">
         <input type="submit" @onclick="IsCodeValid" value="Aceptar">
     </div>
     <a href="#">¿No sabes tu codigo?</a>
@@ -28,7 +29,7 @@
         }
         else
         {
-           
+            await _sweetAlert.FireAsync("Oops...","Sala no disponible", SweetAlertIcon.Info);
         }
     }
 }
