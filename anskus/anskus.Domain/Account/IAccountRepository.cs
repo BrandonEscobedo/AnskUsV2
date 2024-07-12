@@ -13,5 +13,6 @@ namespace anskus.Domain.Account
         Task<LoginResponse> RefreshTokenAsync(RefreshTokenDTO model);
         Task<LoginResponse> LoginAccountAsync(LoginDTO model);
         public  Task<bool> isEmailUniqueAsync(string email);
+        public  Task<Guid> GetUserAsync(string email);
     }
 }

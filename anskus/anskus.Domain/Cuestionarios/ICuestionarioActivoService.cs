@@ -9,6 +9,6 @@ namespace anskus.Domain.Cuestionarios
 {
     public interface ICuestionarioActivoService
     {
-        Task<CuestionarioActivo> ActivarCuestionario(Guid Idcuestionario, string email);
+        Task<CuestionarioActivo> ActivarCuestionario(Guid Idcuestionario, Guid email);
     }
 }

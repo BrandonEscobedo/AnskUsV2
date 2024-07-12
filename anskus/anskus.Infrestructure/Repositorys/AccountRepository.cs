@@ -69,6 +69,15 @@ namespace anskus.Infrestructure.Repositorys
         {
           return !await context.Users.AnyAsync(x=>x.Email == email);
         }
+        public async Task<Guid> GetUserAsync(string email)
+        {
+            var User= await context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (User != null)
+            {
+                return User.Id;
+            }
+            return Guid.Empty;
+        }
         public async Task<GeneralResponse> CreateAccountAsync(CreateAccountDTO model)
         {
             try

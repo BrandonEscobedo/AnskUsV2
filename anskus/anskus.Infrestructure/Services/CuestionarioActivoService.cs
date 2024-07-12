@@ -12,13 +12,13 @@ namespace anskus.Infrestructure.Services
     internal sealed class CuestionarioActivoService(ICuestionarioActivoRepository cuestionarioActivoRepository,
         ICuestionarioRepository cuestionarioRepository) : ICuestionarioActivoService
     {
-        public async Task<CuestionarioActivo> ActivarCuestionario(Guid Idcuestionario, string email)
+        public async Task<CuestionarioActivo> ActivarCuestionario(Guid Idcuestionario, Guid IdUser)
         {
-            var Cuestionario = await cuestionarioRepository.GetbyId(Idcuestionario, email);
-            var CuestionarioActivo = await cuestionarioActivoRepository.ActivarCuestionarioAsync(Idcuestionario, email);
+            var Cuestionario = await cuestionarioRepository.GetbyId(Idcuestionario, IdUser);
+            var CuestionarioActivo = await cuestionarioActivoRepository.ActivarCuestionarioAsync(Idcuestionario, IdUser);
             CuestionarioActivo.Cuestionario = Cuestionario;
             return CuestionarioActivo;
         }
-        
+ 
     }
 }

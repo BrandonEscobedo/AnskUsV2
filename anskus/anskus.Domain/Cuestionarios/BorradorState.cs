@@ -13,7 +13,6 @@ namespace anskus.Domain.Cuestionarios
         {
             throw new NotImplementedException();
         }
-
         public void Borrador(Cuestionario cuestionario)
         {
             Console.WriteLine("Editando");

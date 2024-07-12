@@ -1,17 +1,14 @@
 ﻿using anskus.Domain.Cuestionarios;
 using anskus.Domain.Models;
 using anskus.Infrestructure.Persistence.Context;
-using anskus.Infrestructure.Services;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-
 namespace anskus.Infrestructure.Repositorys
 {
     internal sealed class CuestionarioRepository : ICuestionarioRepository
     {
         private readonly IMongoCollection<Cuestionario> _cuestionarios;
         private readonly AnskusDbContext _context;
-        private readonly IBlobService _blobService;
         //ver tecnologias segundo plano, eliminar cuestionarios vacios 
         public CuestionarioRepository(IMongoDatabase database, AnskusDbContext context)
         {
@@ -33,10 +30,9 @@ namespace anskus.Infrestructure.Repositorys
             await _cuestionarios.InsertOneAsync(cuestionario);
             return cuestionario;
         }
-        public async Task<Cuestionario> GetbyId(Guid id, string email)
+        public async Task<Cuestionario> GetbyId(Guid id, Guid IdUser)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-            var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id && c.Iduser==user!.Id);
+            var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id && c.Iduser==IdUser);
             return await _cuestionarios.Find(filter).FirstOrDefaultAsync();
         }
         public async Task<List<Cuestionario>> GetbyUser(string email)

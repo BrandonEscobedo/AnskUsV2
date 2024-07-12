@@ -13,7 +13,7 @@ namespace anskus.Domain.Cuestionarios
 
         public Task RemoveCuestionarioActivo(Guid IdCuestionario );
         Task<bool> IsParticipanteUniqueAsync(int code, string name);
-        Task<CuestionarioActivo>     ActivarCuestionarioAsync(Guid idcuestionario, string email);
+        Task<CuestionarioActivo>     ActivarCuestionarioAsync(Guid idcuestionario, Guid Id);
         Task<Guid> AddParticipanteToRoomAsync(int Code, string Name);
         public  Task<bool> IsCuestionarioActivoUnique(string Email);
     }

@@ -10,10 +10,10 @@ namespace anskus.Infrestructure.Repositorys
         IRandomCodeFactory randomCode) : ICuestionarioActivoRepository
     {
 
-        public async Task<CuestionarioActivo> ActivarCuestionarioAsync(Guid idcuestionario, string email)
+        public async Task<CuestionarioActivo> ActivarCuestionarioAsync(Guid idcuestionario, Guid Id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email) ?? throw new Exception("No se encontro el usuario");
-            if (!await _context.cuestionarioActivo.Where(x => x.IdUsuario == user.Id).AnyAsync())
+         
+            if (!await _context.cuestionarioActivo.Where(x => x.IdUsuario == Id).AnyAsync())
             {
                 int code = await randomCode.GenerarCodigo();
                 if (code != 0)
@@ -22,7 +22,7 @@ namespace anskus.Infrestructure.Repositorys
                     {
                         Idcuestionario = idcuestionario,
                         Codigo = code,
-                        IdUsuario = user.Id
+                        IdUsuario = Id
                     };
                     _context.cuestionarioActivo.Add(cuestionarioActivo);
                     await _context.SaveChangesAsync();

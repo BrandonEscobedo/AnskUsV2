@@ -1,7 +1,6 @@
 ﻿using anskus.Domain.Cuestionarios;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-
 namespace anskus.Domain.Models
 {
     public class Cuestionario
@@ -14,16 +13,12 @@ namespace anskus.Domain.Models
         public string? MensajeCorrecto { get; set; } = "";
         public string? MensajeIncorrecto { get; set; } = "";
         public EstadoCuestionario Estado { get; set; }
-        
-
         private ICuestionarioState _estadoActual;
         public Guid Iduser { get; set; } 
         public Cuestionario()
         {
             Estado = EstadoCuestionario.Borrador;
             _estadoActual = new BorradorState();
-
-
         }
         public void SetEstado(ICuestionarioState NuevoEstado)
         {
@@ -50,8 +45,7 @@ namespace anskus.Domain.Models
                             return false;
                         }
                     }
-                }
-                    
+                }                  
             }
             return true;
         }
