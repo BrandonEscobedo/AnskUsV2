@@ -8,9 +8,7 @@ namespace anskus.Application.CuestionarioActivo.Command
     {
         public async Task<Guid> Handle(AddUserToRoomCommand request, CancellationToken cancellationToken)
         {
-
-            return await _cuestionarioActivoRepository.AddParticipanteToRoomAsync(request.Code, request.Name);
-            
+            return await _cuestionarioActivoRepository.AddParticipanteToRoomAsync(request.Code, request.Name);           
         }
     }
 }

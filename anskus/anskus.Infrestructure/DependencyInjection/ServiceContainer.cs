@@ -14,7 +14,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using anskus.Domain.Account;
 using anskus.Infrestructure.Factory;
-using anskus.Application.Services;
 using anskus.Infrestructure.Services;
 using Azure.Storage.Blobs;
 
@@ -40,8 +39,8 @@ namespace anskus.Infrestructure.DependencyInjection
             services.AddDbContext<AnskusDbContext>(x => x.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<AnskusDbContext>()
-                .AddSignInManager()
-                .Services.AddAuthentication(sp =>
+                .AddSignInManager();
+            services.AddAuthentication(sp =>
                 {
                     sp.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
                     sp.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,8 +57,25 @@ namespace anskus.Infrestructure.DependencyInjection
                                     ValidAudience = configuration["JwtAudience"],
                                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]!))
                                 };
+                                options.Events = new JwtBearerEvents
+                                {
+                                    OnMessageReceived = context =>
+                                    {
+                                        var path = context.HttpContext.Request.Path;
+                                       
+                                        if (path.StartsWithSegments("/ChatCuest"))
+                                        {   
+                                            if (context.Request.Headers.ContainsKey("Authorization"))
+                                            {
+                                                Microsoft.Extensions.Primitives.StringValues accessTokens = context.Request.Headers["Authorization"];
+                                                var token = accessTokens;
+                                                context.Token = accessTokens.First()?.Replace("Bearer ", "");
+                                            }                                            
+                                        }
+                                        return Task.CompletedTask;
+                                    }
+                                };
                             });
-            services.AddAuthentication();
             services.AddAuthorization();
             services.AddSingleton<IBlobService, BlobService>();
             services.AddSingleton(_ => new BlobServiceClient(configuration.GetConnectionString("BlobStorage")));

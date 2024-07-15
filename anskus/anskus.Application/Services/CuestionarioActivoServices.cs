@@ -16,8 +16,7 @@ namespace anskus.Application.Services
         {
             _httpClientServices = httpClientServices;
             _hubconnectionService = hubconnectionService;
-        }
-        
+        } 
         public async Task<Guid> ActivarCuestionario(Guid? IdCuestionario)
         {
             var response = await (await PrivateClient()).PostAsync($"{Constant.CuestionarioActivoRoute}?idcuestionario={IdCuestionario}", null);

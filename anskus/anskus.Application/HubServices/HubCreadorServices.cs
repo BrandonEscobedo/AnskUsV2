@@ -3,22 +3,20 @@ using anskus.Application.HubServices.StateContainers;
 using anskus.Application.HubServices.StateContainers.Creador;
 using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace anskus.Application.HubServices
 {
-    public class HubCreadorServices:IHubCreadorServices
+    public class HubCreadorServices : IHubCreadorServices
     {
-        private readonly HubConnection _hubConnection;
         private readonly IStateParticipantes _stateParticipantes;
         private readonly IStateContainerOnPreg _stateContainer;
         private readonly IStateCreador _stateCreador;
-        public HubCreadorServices(HubConnection hubConnection, IStateParticipantes stateParticipantes, IStateContainerOnPreg stateContainer, IStateCreador stateCreador)
+        private readonly HubConnection _hubConnection;
+        public HubCreadorServices(IStateParticipantes stateParticipantes, IStateContainerOnPreg stateContainer, IStateCreador stateCreador, HubConnection hubConnection)
         {
+          
+            _stateParticipantes = stateParticipantes;
+            _stateContainer = stateContainer;
+            _stateCreador = stateCreador;
             _hubConnection = hubConnection;
             _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
             _hubConnection.On<ParticipanteEnCuestDTO>("NewParticipante", OnNewParticipante);
@@ -28,10 +26,26 @@ namespace anskus.Application.HubServices
             _hubConnection.On("NavegarARanking", OnNavegarARanking);
             _hubConnection.On("NavegarAClasificacion", OnNavegarClasificacion);
             _hubConnection.On("TerminoTiempo", OnTerminoTiempo);
-            _stateParticipantes = stateParticipantes;
-            _stateContainer = stateContainer;
-            _stateCreador = stateCreador;
         }
+        private async Task OnPreguntaContestada(ParticipanteEnCuestDTO participante)
+        {
+            await _stateCreador.OnParticipantesContestado(participante);
+        }
+        private void OnRemoveParticipante(ParticipanteEnCuestDTO participante) => _stateParticipantes.RemoveParticipanteToList(participante);
+
+        private void OnNewParticipante(ParticipanteEnCuestDTO participante) => _stateParticipantes.AddParticipanteToList(participante);
+
+        private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
+        {
+            _stateContainer.SetTituloPregunta(Titulo, pregunta);
+        }
+
+        private void OnSiguientePregunta(Pregunta pregunta)
+        {
+            _stateCreador.participantes = new();
+            _stateContainer.SetPregunta(pregunta);
+        }
+
         private void OnTerminoTiempo()
         {
             _stateContainer.TiempoTermino();
@@ -45,24 +59,6 @@ namespace anskus.Application.HubServices
         private void OnNavegarARanking()
         {
             _stateContainer.NavegarARanking();
-        }
-        private async Task OnPreguntaContestada(ParticipanteEnCuestDTO participante)
-        {
-         await   _stateCreador.OnParticipantesContestado(participante);
-        }
-        private void OnRemoveParticipante(ParticipanteEnCuestDTO participante) => _stateParticipantes.RemoveParticipanteToList(participante);
-
-        private void OnNewParticipante(ParticipanteEnCuestDTO participante) => _stateParticipantes.AddParticipanteToList(participante);
-
-        private void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
-        {
-            _stateContainer.SetTituloPregunta(Titulo, pregunta);
-        }
-        private void OnSiguientePregunta(Pregunta pregunta)
-        {
-            _stateCreador.participantes = new();
-            _stateContainer.SetPregunta(pregunta);
-           
         }
     }
 }

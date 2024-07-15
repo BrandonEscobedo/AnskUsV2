@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.InfrestructureService(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.ApplicationServices();
@@ -19,10 +20,10 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyOrigin()
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .SetIsOriginAllowed((host)=>true);
     });
 });
-builder.Services.InfrestructureService(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,11 +34,13 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigration();
 }
 app.UseCors("AllowAll");
-app.MapHub<CuestionarioHub>("ChatCuest");
 app.MapCuestionariosEndPoints();
 app.MapAccountEndPoints();
 app.MapMediaCuestionariosEndPoints();
 app.MapCuestionarioActivoEndPoints();
 app.UseHttpsRedirection();
+
+    app.MapHub<CuestionarioHub>("/ChatCuest");
+
 app.Run();
 

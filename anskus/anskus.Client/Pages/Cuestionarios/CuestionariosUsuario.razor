@@ -42,7 +42,7 @@
     private List<Cuestionario> Cuestionarios;
     private bool isLoading = false;
     private bool isAuthenticated = false;
-
+ 
     protected override async void OnAfterRender(bool firstRender)
     {
         if (firstRender)
@@ -55,6 +55,7 @@
     }
     protected override async Task OnInitializedAsync()
     {
+       
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
 

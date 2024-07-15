@@ -8,17 +8,3 @@
 
     </NotFound>
 </Router>
-@code {
-    [Inject]
-    HubConnection hubConnection { get; set; }
-    protected override async Task OnInitializedAsync() => await IniciarHub();
-
-    async Task IniciarHub()
-    {
-        if (hubConnection == null || hubConnection.State == HubConnectionState.Disconnected)
-        {
-            await hubConnection.StartAsync();
-            Console.WriteLine(" Id de la conexion"+ hubConnection.ConnectionId);
-    }
-    }
-  }

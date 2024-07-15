@@ -11,6 +11,7 @@ using anskus.Application.HubServices.StateContainers;
 using anskus.Application.HubServices;
 using anskus.Application.HubServices.StateContainers.Creador;
 using anskus.Application.HubServices.StateContainers.Jugador;
+using anskus.Application.Account;
 namespace anskus.Application.DependencyInjection
 {
     public static class ServiceContainer
@@ -38,6 +39,7 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<IHubStateCreador, HubStateCreador>();
             services.AddScoped<IHubJugadorServices, HubJugadorServices>();
             services.AddScoped<IStateJugador, StateJugador>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IStateContainerOnPreg, StateContainerOnPreg>();
             services.AddScoped<IHubCreadorServices, HubCreadorServices>();
             services.AddScoped<IStateCreador, StateCreador>();
@@ -46,6 +48,7 @@ namespace anskus.Application.DependencyInjection
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationProvider>();
             services.AddScoped<LocalStorageServices>();
             services.AddTransient<CustomHttpHandler>();
+            services.AddScoped<IHubConnectionManager, HubConnectionManager>();  
             services.AddScoped<ICuestionarioActivoServices, CuestionarioActivoServices>();
             services.AddCascadingAuthenticationState();
             services.AddHttpClient("TestAnskusClient", client =>

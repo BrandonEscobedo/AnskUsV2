@@ -12,7 +12,7 @@ namespace anskus.Application.DTOs.Response.Cuestionarios
         public Guid IdcuestionarioActivo { get; set; }
         public int Codigo { get; set; }
         public CuestionarioResponse Cuestionario { get; set; } = new CuestionarioResponse();
-
+        public Guid IdUsuario { get; set; }
 
     }
 }

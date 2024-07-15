@@ -3,13 +3,11 @@ using anskus.Domain.Models;
 using anskus.Infrestructure.Factory;
 using anskus.Infrestructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-
 namespace anskus.Infrestructure.Repositorys
 {
     internal sealed class CuestionarioActivoRepository(AnskusDbContext _context,
         IRandomCodeFactory randomCode) : ICuestionarioActivoRepository
     {
-
         public async Task<CuestionarioActivo> ActivarCuestionarioAsync(Guid idcuestionario, Guid Id)
         {
          

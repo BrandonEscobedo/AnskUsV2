@@ -9,14 +9,12 @@ namespace anskus.Infrestructure.Repositorys
     {
         private readonly IMongoCollection<Cuestionario> _cuestionarios;
         private readonly AnskusDbContext _context;
-        //ver tecnologias segundo plano, eliminar cuestionarios vacios 
         public CuestionarioRepository(IMongoDatabase database, AnskusDbContext context)
         {
             _cuestionarios = database.GetCollection<Cuestionario>("Cuestionario");
             var indexDefinition = Builders<Cuestionario>.IndexKeys.Ascending(x => x.IdCuestionario);
             _cuestionarios.Indexes.CreateOne(new CreateIndexModel<Cuestionario>(indexDefinition));
-            _context = context;
-         
+            _context = context;       
         }
         public async Task<Cuestionario> Add(Cuestionario cuestionario, string email)
         {
@@ -30,6 +28,7 @@ namespace anskus.Infrestructure.Repositorys
             await _cuestionarios.InsertOneAsync(cuestionario);
             return cuestionario;
         }
+       
         public async Task<Cuestionario> GetbyId(Guid id, Guid IdUser)
         {
             var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id && c.Iduser==IdUser);

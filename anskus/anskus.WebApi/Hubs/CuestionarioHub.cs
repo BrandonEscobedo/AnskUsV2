@@ -3,22 +3,24 @@ using anskus.Domain.Models;
 using Microsoft.AspNetCore.SignalR;
 using MediatR;
 using anskus.Application.CuestionarioActivo.Command;
+
 namespace anskus.WebApi.Hubs
 {
     public class CuestionarioHub(IMediator sender) : Hub<InotificationClient>
     {
-        public override async Task OnConnectedAsync()
-        {
-            await base.OnConnectedAsync();
-        }
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
 
             if (Context.Items.TryGetValue("IdCuestionario", out var idCuestionarioObj) &&
-       idCuestionarioObj is Guid idCuestionario &&
-       idCuestionario != Guid.Empty)
+             idCuestionarioObj is Guid idCuestionario &&
+             idCuestionario != Guid.Empty)
             {
-                await sender.Send(new RemoveCuestionarioActivoCommand(idCuestionario));
+                if (Context.Items.TryGetValue("IdUsuario", out var idUsuarioOBj) &&
+                    idUsuarioOBj is Guid idUsuario && idUsuario != Guid.Empty)
+                {
+                    await sender.Send(new RemoveCuestionarioActivoCommand(idCuestionario, idUsuario));
+                }
                 Context.Items.Clear();
             }
             else if (Context.Items.TryGetValue("Codigo", out var codigoObj) &&
@@ -35,10 +37,13 @@ namespace anskus.WebApi.Hubs
                 }
             }
         }
-        public async Task<bool> CreateRoom(int code, Guid Idcuestionario)
+
+        public async Task<bool> CreateRoom(int code, Guid Idcuestionario, Guid IdUsuario)
         {
+
             Context.Items["Codigo"] = code;
             Context.Items["IdCuestionario"] = Idcuestionario;
+            Context.Items["IdUsuario"] = IdUsuario;
             await Groups.AddToGroupAsync(Context.ConnectionId, code.ToString());
             return true;
         }

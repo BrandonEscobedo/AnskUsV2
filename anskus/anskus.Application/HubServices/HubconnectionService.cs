@@ -10,10 +10,14 @@ namespace anskus.Application.HubServices
     {
         private readonly HubConnection _hubConnection;
         private readonly IHubStateCreador _hubStateCreador;
-        public HubconnectionService(HubConnection hubConnection, IHubStateCreador hubStateCreador)
+        public HubconnectionService( IHubStateCreador hubStateCreador, HubConnection hubConnection )
         {
             _hubConnection = hubConnection;
             _hubStateCreador = hubStateCreador;
+            if (_hubConnection.State == HubConnectionState.Disconnected)
+            {
+                _hubConnection.StartAsync();
+            }
         }
         public async Task NavegarARanking()
         {
@@ -35,7 +39,8 @@ namespace anskus.Application.HubServices
         }
         public async Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo)
         {
-            bool result = await _hubConnection.InvokeAsync<bool>("CreateRoom", cuestionarioActivo.Codigo, cuestionarioActivo.IdcuestionarioActivo);
+            bool result = await _hubConnection.InvokeAsync<bool>("CreateRoom", cuestionarioActivo.Codigo, cuestionarioActivo.IdcuestionarioActivo,
+                cuestionarioActivo.IdUsuario);
             if (result)
                 _hubStateCreador.SetCuestionario(cuestionarioActivo.Cuestionario, cuestionarioActivo.Codigo);
         }
@@ -43,7 +48,7 @@ namespace anskus.Application.HubServices
         {
             await _hubConnection.InvokeAsync("IniciarCuestionario", _hubStateCreador.Codigo, _hubStateCreador.Cuestionario.Titulo, _hubStateCreador.MandarSiguientePregunta());
         }
-    
+
         public async Task TiempoTermino()
         {
             try

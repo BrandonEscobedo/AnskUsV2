@@ -1,5 +1,4 @@
 ﻿using anskus.Domain.Models;
-
 namespace anskus.Domain.Cuestionarios
 {
     public interface ICuestionarioState
