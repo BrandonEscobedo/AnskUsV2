@@ -13,7 +13,7 @@ namespace anskus.Client.Pages.Cuestionarios
         public Cuestionario Cuestionario { get; set; } = new Cuestionario();
         private Pregunta Pregunta = new();
         public string FileType { get; set; } = "";
-        private const long MaxFileSize = 20 * 1024 * 1024; //(20 MB)
+        private const long MaxFileSize = 20 * 1024 * 1024; 
         private async Task AgregarImagenPregunta(InputFileChangeEventArgs e)
         {
             var allowedFileTypes = new[] { "image/jpeg", "image/png", "image/gif", "video/mp4", "video/x-msvideo", "video/quicktime" };
@@ -58,7 +58,7 @@ namespace anskus.Client.Pages.Cuestionarios
         }
         public async ValueTask DisposeAsync()
         {
-            if (Cuestionario != null)
+            if (  Cuestionario.IdCuestionario != Guid.Empty ||  Cuestionario.IdCuestionario != null || Cuestionario != null)
             {
                 await GuardarCuestionario(Pregunta);
             }

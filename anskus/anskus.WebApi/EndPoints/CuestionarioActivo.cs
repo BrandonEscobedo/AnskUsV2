@@ -41,6 +41,11 @@ namespace anskus.WebApi.EndPoints
                 }
                 return Results.NotFound();
             });
+            app.MapDelete("api/CuestionarioActivo/{idcuestionario}", async (Guid idcuestionario,ClaimsPrincipal User, IMediator sender)=>{
+                var email = User.FindFirst(ClaimTypes.Email)!.Value;
+                await sender.Send(new RemoveCuesActFromUserCommand(idcuestionario, email));
+                return Results.Ok();
+            }).RequireAuthorization();
             app.MapPost("api/CuestionarioActivo/Sala", async (int code, string nombre, IValidator<AddUserToRoomCommand> validator,
                ISender sender) =>
             {

@@ -7,7 +7,7 @@ namespace anskus.Application.CuestionarioActivo.Command
         public async Task Handle(RemoveCuestionarioActivoCommand request, CancellationToken cancellationToken)
         {
             await _cuestionarioActivoRepository.RemoveCuestionarioActivo(request.IdCuestionario);
-            var cuestionario = await _cuestionarioRepository.GetbyId(request.IdCuestionario, request.idUsuario);
+            var cuestionario = await _cuestionarioRepository.GetbyId(request.IdCuestionario, request.IdUsuario);
             cuestionario.Estado = Domain.Models.EstadoCuestionario.Guardado;
             await _cuestionarioRepository.Update(cuestionario);
         }

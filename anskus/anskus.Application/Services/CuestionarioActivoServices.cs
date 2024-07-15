@@ -57,6 +57,15 @@ namespace anskus.Application.Services
                 throw new Exception("Ocurrio un  error inesperado");
             }
         }
+        public async Task EliminarCuestionarioActivoAsync(Guid? idcuestionario)
+        {
+          var response=  await (await PrivateClient()).DeleteAsync($"{Constant.CuestionarioActivoRoute}/{idcuestionario}");
+            if (response.IsSuccessStatusCode)
+            {
+               
+            }
+           
+        }
         public async Task<bool> VerificarCodigo(int Code)
         {
             var response = await (await PrivateClient()).GetAsync($"{Constant.CuestionarioActivoRoute}?Code={Code}");

@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 
 namespace anskus.Application.CuestionarioActivo.Command
 {
-    public record RemoveCuestionarioActivoCommand(Guid IdCuestionario, Guid IdUsuario) : IRequest;
+    public record RemoveCuesActFromUserCommand(Guid Idcuestionario, string email):IRequest;
+
 }

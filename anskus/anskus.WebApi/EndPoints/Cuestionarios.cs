@@ -43,26 +43,26 @@ namespace anskus.WebApi.EndPoints
                 var response = await sender.Send(new UpdateCuestionarioCommand(cuestionario));
                 return Results.Ok(response);
             });
-            app.MapPost("files", async (IFormFile file, IBlobService blobService) =>
-            {
-                using Stream stream = file.OpenReadStream();
-                Guid FileId = await blobService.UpdloadAync(stream, file.ContentType);
-                return Results.Ok(FileId);
-            }).WithTags("Files")
-            .DisableAntiforgery();
-            app.MapGet("files/{fileId}", async (Guid fileId, IBlobService blobService) =>
-            {
-                FileResponse fileResponse = await blobService.DownloadAsync(fileId);
-                return Results.File(fileResponse.stream, fileResponse.contentType);
-            }).WithTags("Files")
-          .DisableAntiforgery();
+          //  app.MapPost("files", async (IFormFile file, IBlobService blobService) =>
+          //  {
+          //      using Stream stream = file.OpenReadStream();
+          //      Guid FileId = await blobService.UpdloadAync(stream, file.ContentType);
+          //      return Results.Ok(FileId);
+          //  }).WithTags("Files")
+          //  .DisableAntiforgery();
+          //  app.MapGet("files/{fileId}", async (Guid fileId, IBlobService blobService) =>
+          //  {
+          //      FileResponse fileResponse = await blobService.DownloadAsync(fileId);
+          //      return Results.File(fileResponse.stream, fileResponse.contentType);
+          //  }).WithTags("Files")
+          //.DisableAntiforgery();
 
-            app.MapDelete("files", async (Guid fileId, IBlobService blobService) =>
-            {
-                await blobService.DeleteAsync(fileId);
-                return Results.NoContent();
-            }).WithTags("Files")
-          .DisableAntiforgery();
+          //  app.MapDelete("files", async (Guid fileId, IBlobService blobService) =>
+          //  {
+          //      await blobService.DeleteAsync(fileId);
+          //      return Results.NoContent();
+          //  }).WithTags("Files")
+          //.DisableAntiforgery();
         }
     }
 }

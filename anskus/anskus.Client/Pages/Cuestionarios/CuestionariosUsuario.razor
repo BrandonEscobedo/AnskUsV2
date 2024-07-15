@@ -2,9 +2,9 @@
 @inject ICuestionarioService _cuestionarioService
 @inject ICuestionarioActivoServices _cuestionarioActivoServices
 @inject NavigationManager _navigationManager
-@inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
-
+@inject SweetAlertService _sweetAlert
+<link rel="stylesheet" href="/css/CuestionariosUsuario.css" />
 <MudContainer>
     @if (isLoading)
     {
@@ -16,16 +16,69 @@
         {
             @foreach (var cuestionario in Cuestionarios)
             {
-                <div class="container d-flex justify-content-center">
-                    <div class="card mx-auto" style="width: 30rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Titulo del cuestionario: @cuestionario.Titulo</h5>
-                            <p class="card-text">Cantidad de preguntas: 10</p>                   
-                            <a @onclick="()=>IniciarCuestionario(cuestionario.IdCuestionario)" class="btn btn-success">Comenzar</a>
-                            <a @onclick="()=>EditarCuestionario(cuestionario)" class="btn btn-secondary">Editar</a>
-                            <a class="btn btn-secondary">@cuestionario.Estado</a>
+                <div class="CardsUserContainer">
+                    @if (cuestionario.Estado == EstadoCuestionario.Activo)
+                    {
+                        <div class="card cardActivo ContainerCard">
+                            <div class="textContainerClass">
+                                <div class="TittleCuestionario">
+                                    @cuestionario.Titulo
+                                </div>
+                                <div class="tittlePreguntasTotal">
+                                     @cuestionario.Pregunta.Count Preguntas
+                                </div>
+                                <div class="TittleCreado">
+                                    Creador el: @cuestionario.FechaCreacion
+                                </div>
+                            </div>
+                            <div class="buttonContainers">
+                                <div @onclick="()=>IniciarCuestionario(cuestionario)" class="btnCard Activarbtn">
+                                    Comenzar
+                                </div>
+                                <div @onclick="()=>EditarCuestionario(cuestionario)" class="btnCard Editarbtn">
+                                    Editar
+                                </div>
+                                <div class="btnCard Eliminarbtn">
+                                    Eliminar
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="card  ContainerCard">
+                            <div class="textContainerClass">
+                                <div class="TittleCuestionario">
+                                    @cuestionario.Titulo
+                                </div>
+                                <div class="tittlePreguntasTotal">
+                                    @cuestionario.Pregunta.Count Preguntas
+                                </div>
+                                <div class="TittleCreado">
+                                    Creador el: @cuestionario.FechaCreacion
+                                </div>
+                            </div>
+                            <div class="buttonContainers">
+                                <div @onclick="()=>IniciarCuestionario(cuestionario)" class="btnCard Activarbtn">
+                                    Comenzar
+                                </div>
+                                <div @onclick="()=>EditarCuestionario(cuestionario)" class="btnCard Editarbtn">
+                                    Editar
+                                </div>
+                                <div class="btnCard Eliminarbtn">
+                                    Eliminar
+                                </div>
+                                @if (cuestionario.Estado == EstadoCuestionario.Borrador)
+                                {
+                                    <div class="EstadoCuestionarioBorrador">
+                                        Borrador
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    }
+
                 </div>
             }
         }
@@ -35,27 +88,27 @@
             <a href="CrearCuestionario">Crear cuestionarios</a>
         }
     }
-   
+
 </MudContainer>
 
 @code {
     private List<Cuestionario> Cuestionarios;
     private bool isLoading = false;
     private bool isAuthenticated = false;
- 
+
     protected override async void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            await Task.Delay(500);
+            await Task.Delay(800);
             isLoading = true;
             StateHasChanged();
         }
-    
+
     }
     protected override async Task OnInitializedAsync()
     {
-       
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
 
@@ -70,12 +123,38 @@
         _navigationManager.NavigateTo($"/Cuestionario/{cuestionario.IdCuestionario}");
     }
 
-    private async void IniciarCuestionario(Guid? IdCuestionario)
+    private async void IniciarCuestionario(Cuestionario cuestionario)
     {
-        var result = await _cuestionarioActivoServices.ActivarCuestionario(IdCuestionario);
-        if (result != Guid.Empty)
+        if (cuestionario.Estado == EstadoCuestionario.Borrador)
         {
-            _navigationManager.NavigateTo($"/Lobby");
+            await _sweetAlert.FireAsync("Oops...", "No puedes activar un cuestionario borrador, editalo y completa los campos requeridos ", SweetAlertIcon.Warning);
         }
+        else if (cuestionario.Estado == EstadoCuestionario.Activo)
+        {
+            SweetAlertResult result = await _sweetAlert.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Advertencia",
+                    Text = "Este cuestionario se encuentra esta activo ¿deseas desactivarlo para iniciar uno nuevo?",
+                    Icon = SweetAlertIcon.Question,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "Cancelar"
+                });
+            if (!string.IsNullOrEmpty(result.Value))
+            {
+                await _cuestionarioActivoServices.EliminarCuestionarioActivoAsync(cuestionario.IdCuestionario);
+                Cuestionarios = await _cuestionarioService.GetCuestionariobyUserAsync();
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var result = await _cuestionarioActivoServices.ActivarCuestionario(cuestionario.IdCuestionario);
+            if (result != Guid.Empty)
+            {
+                _navigationManager.NavigateTo($"/Lobby");
+            }
+        }
+
     }
 }
