@@ -16,7 +16,36 @@
     z-index: 1;
     width: auto;
 }
+.titleForTitulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 60%;
+    position: absolute;
+    font-size: 2.6em;
+}
 
+.ProgressBarContainer {
+    display: flex;
+    width: 97%;
+    height: 7%;
+    position: absolute;
+    bottom: 0;
+    margin: 15px;
+}
+
+.titleCuestionario {
+    background-color: rgba(245, 245, 220,2207);
+    border-radius: 10px;
+    border: 2px solid black;
+    padding: 10px;
+    min-width: 40dvh;
+    height: 10dvh;
+    height: auto;
+    text-align: center;
+    width: auto;
+}
 .title {
     width: auto;
     background-color: rgba(245, 245, 220,2207);

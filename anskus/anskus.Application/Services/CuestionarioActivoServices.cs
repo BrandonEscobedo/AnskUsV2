@@ -16,7 +16,7 @@ namespace anskus.Application.Services
         {
             _httpClientServices = httpClientServices;
             _hubconnectionService = hubconnectionService;
-        } 
+        }
         public async Task<Guid> ActivarCuestionario(Guid? IdCuestionario)
         {
             var response = await (await PrivateClient()).PostAsync($"{Constant.CuestionarioActivoRoute}?idcuestionario={IdCuestionario}", null);
@@ -25,8 +25,11 @@ namespace anskus.Application.Services
                 var result = await response.Content.ReadFromJsonAsync<CuestionarioActivoResponse>();
                 if (result != null)
                 {
-                    await _hubconnectionService.CreateRoom(result);
-                    return result.IdcuestionarioActivo;
+                    var resultHub = await _hubconnectionService.CreateRoom(result);
+                    if (resultHub)
+                        return result.IdcuestionarioActivo;
+                    else
+                        await EliminarCuestionarioActivoAsync(IdCuestionario);
                 }
             }
             return Guid.Empty;
@@ -36,10 +39,10 @@ namespace anskus.Application.Services
         {
 
             var response = await (await PrivateClient()).PostAsync($"{Constant.CuestionarioActivoRoute}/Sala?code={Codigo}&nombre={Nombre}", null);
-            
+
             if (response.IsSuccessStatusCode)
             {
-                var result =await response.Content.ReadFromJsonAsync<Guid>();
+                var result = await response.Content.ReadFromJsonAsync<Guid>();
                 if (result != Guid.Empty)
                 {
                     return (result, null);
@@ -48,7 +51,7 @@ namespace anskus.Application.Services
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var content=await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync();
                 var ValidationErrors = JsonSerializer.Deserialize<ValidationProblems>(content);
                 return (Guid.Empty, ValidationErrors?.errors);
             }
@@ -59,12 +62,11 @@ namespace anskus.Application.Services
         }
         public async Task EliminarCuestionarioActivoAsync(Guid? idcuestionario)
         {
-          var response=  await (await PrivateClient()).DeleteAsync($"{Constant.CuestionarioActivoRoute}/{idcuestionario}");
+            var response = await (await PrivateClient()).DeleteAsync($"{Constant.CuestionarioActivoRoute}/{idcuestionario}");
             if (response.IsSuccessStatusCode)
             {
-               
+
             }
-           
         }
         public async Task<bool> VerificarCodigo(int Code)
         {
@@ -77,7 +79,7 @@ namespace anskus.Application.Services
             {
                 return false;
             }
-           
+
         }
     }
 }

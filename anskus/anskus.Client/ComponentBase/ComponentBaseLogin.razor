@@ -2,5 +2,15 @@
 <div>
     @Body
 </div>
-
+<script type="text/javascript">
+    window.addEventListener('beforeunload', (e) => {
+        e.returnValue = 'Estas seguro';
+    });
+    window.addEventListener('popstate', () => {
+        if (confirm('Estás volviendo atrás en la página. ¿Estás seguro?')) {
+            window.location.href = 'otra_pagina.html';
+        } else {
+        }
+    });
+</script>
 

@@ -10,7 +10,7 @@ namespace anskus.Application.HubServices
     {
         private readonly HubConnection _hubConnection;
         private readonly IHubStateCreador _hubStateCreador;
-        public HubconnectionService( IHubStateCreador hubStateCreador, HubConnection hubConnection )
+        public HubconnectionService(IHubStateCreador hubStateCreador, HubConnection hubConnection)
         {
             _hubConnection = hubConnection;
             _hubStateCreador = hubStateCreador;
@@ -37,12 +37,16 @@ namespace anskus.Application.HubServices
                 Console.WriteLine($"Error en NavegarARanking: {ex.Message}");
             }
         }
-        public async Task CreateRoom(CuestionarioActivoResponse cuestionarioActivo)
+        public async Task<bool> CreateRoom(CuestionarioActivoResponse cuestionarioActivo)
         {
             bool result = await _hubConnection.InvokeAsync<bool>("CreateRoom", cuestionarioActivo.Codigo, cuestionarioActivo.IdcuestionarioActivo,
                 cuestionarioActivo.IdUsuario);
             if (result)
+            {
                 _hubStateCreador.SetCuestionario(cuestionarioActivo.Cuestionario, cuestionarioActivo.Codigo);
+                return true;
+            }
+            return false;
         }
         public async Task IniciarCuestionario()
         {

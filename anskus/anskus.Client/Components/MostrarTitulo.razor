@@ -1,39 +1,50 @@
 ﻿@layout ComponentBaseHub
 @inject IStateContainerOnPreg _stateContainer
-@implements IDisposable 
 <section class="preguntas__body">
-    <h2 class="title">
-        @_stateContainer.Titulo
-    </h2>
-    <h2 class="title">
-        @segundos
-    </h2>
+    <div class="titleForTitulo">
+        <div class="titleCuestionario">
+            @_stateContainer.Titulo
+        </div>
+    </div>
+    <section class="ProgressBarContainer">
+        <MudProgressLinear Size="Size.Large" Color="Color.Secondary" Value="@Value" Class="my-7" />
+    </section>
 </section>
 @code{
-   @using System.Threading;
-    private int segundos = 3;
     [Parameter]
     public EventCallback OnTimerOff { get; set; }
-    private Timer? _timer;
-    protected override void OnInitialized()
-    {
-        _timer = new Timer(OnTimerCallback, null, 1000, 1000);
 
-    }
-    private async void OnTimerCallback(object? state)
+    protected async override Task OnInitializedAsync()
     {
-        segundos = segundos - 1;
-        if (segundos == 0)
-        {
-            _timer?.Change(Timeout.Infinite, 0);
-            _timer?.Dispose();
-            _timer = null;
-            await OnTimerOff.InvokeAsync();
-        }
-        await InvokeAsync(StateHasChanged);
+        await SimulateProgressAsync();
     }
+
     public void Dispose()
     {
-        _timer?.Dispose();
+      
+        _disposed = true;
+    }
+    private bool _disposed;
+    public int Value { get; set; }
+    public async Task SimulateProgressAsync()
+    {
+        Value = 0;
+        do
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            Value += 2;
+            StateHasChanged();
+            await Task.Delay(130);
+            if (Value >= 100)
+            {
+                await OnTimerOff.InvokeAsync();
+            }
+        } while (Value < 100);
+
+        await SimulateProgressAsync();
     }
 }

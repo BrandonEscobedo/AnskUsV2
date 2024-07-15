@@ -1,9 +1,19 @@
 ﻿@inherits LayoutComponentBase
 <link rel="stylesheet" href="css/Preguntas.css" />
 @Body
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 <script type="text/javascript">
     window.addEventListener('beforeunload', (e) => {
         e.returnValue = 'Estas seguro';
     });
+    window.addEventListener('popstate', () => {     
+        if (confirm('Estás volviendo atrás en la página. ¿Estás seguro?')) {          
+            window.location.href = 'otra_pagina.html';
+        } else {    
+        }
+    });
 </script>
 <script type="text/javascript" src="/js/Preguntas.js"></script>
+<script src="_content/MudBlazor/MudBlazor.min.js"></script>
