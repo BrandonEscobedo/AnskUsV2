@@ -56,7 +56,13 @@ namespace anskus.Client.Pages.Cuestionarios
                 await GuardarCuestionario(Pregunta);
             }
         }
-        public async ValueTask DisposeAsync() => await GuardarCuestionario(Pregunta);
+        public async ValueTask DisposeAsync()
+        {
+            if (Cuestionario != null)
+            {
+                await GuardarCuestionario(Pregunta);
+            }
+        }
         protected override void OnInitialized()
         {
             

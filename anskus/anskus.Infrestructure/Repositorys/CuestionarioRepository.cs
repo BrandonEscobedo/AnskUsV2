@@ -14,15 +14,20 @@ namespace anskus.Infrestructure.Repositorys
             _cuestionarios = database.GetCollection<Cuestionario>("Cuestionario");
             var indexDefinition = Builders<Cuestionario>.IndexKeys.Ascending(x => x.IdCuestionario);
             _cuestionarios.Indexes.CreateOne(new CreateIndexModel<Cuestionario>(indexDefinition));
-            _context = context;       
+            _context = context;
         }
         public async Task<Cuestionario> Add(Cuestionario cuestionario, string email)
         {
-            var user =await _context.Users.FirstOrDefaultAsync(x=>x.Email == email);   
-            if(user == null)
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null )
             {
                 throw new Exception("No se encontro el usuario");
             }
+            if (cuestionario == null)
+            {
+                throw new Exception("Cuestionario nulo");
+            }
+
             cuestionario.Iduser = user.Id;
             cuestionario.IdCuestionario = Guid.NewGuid();
             await _cuestionarios.InsertOneAsync(cuestionario);
