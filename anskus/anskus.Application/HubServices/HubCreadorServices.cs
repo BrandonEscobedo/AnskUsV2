@@ -13,7 +13,6 @@ namespace anskus.Application.HubServices
         private readonly HubConnection _hubConnection;
         public HubCreadorServices(IStateParticipantes stateParticipantes, IStateContainerOnPreg stateContainer, IStateCreador stateCreador, HubConnection hubConnection)
         {
-          
             _stateParticipantes = stateParticipantes;
             _stateContainer = stateContainer;
             _stateCreador = stateCreador;
@@ -39,7 +38,6 @@ namespace anskus.Application.HubServices
         {
             _stateContainer.SetTituloPregunta(Titulo, pregunta, datosCuestionario);
         }
-
         private void OnSiguientePregunta(Pregunta pregunta)
         {
             _stateCreador.participantes = new();
@@ -50,7 +48,6 @@ namespace anskus.Application.HubServices
         {
             _stateContainer.TiempoTermino();
         }
-
         private void OnNavegarClasificacion()
         {
             _stateContainer.NavegarAClasificacion();

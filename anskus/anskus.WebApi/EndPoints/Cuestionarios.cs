@@ -1,4 +1,5 @@
 ﻿using anskus.Application.Cuestionarios.Commands.Create;
+using anskus.Application.Cuestionarios.Commands.Delete;
 using anskus.Application.Cuestionarios.Commands.Update;
 using anskus.Application.Cuestionarios.Querys.GetCuestionarioById;
 using anskus.Application.Cuestionarios.Querys.GetCuestionarioByUser;
@@ -43,26 +44,12 @@ namespace anskus.WebApi.EndPoints
                 var response = await sender.Send(new UpdateCuestionarioCommand(cuestionario));
                 return Results.Ok(response);
             });
-          //  app.MapPost("files", async (IFormFile file, IBlobService blobService) =>
-          //  {
-          //      using Stream stream = file.OpenReadStream();
-          //      Guid FileId = await blobService.UpdloadAync(stream, file.ContentType);
-          //      return Results.Ok(FileId);
-          //  }).WithTags("Files")
-          //  .DisableAntiforgery();
-          //  app.MapGet("files/{fileId}", async (Guid fileId, IBlobService blobService) =>
-          //  {
-          //      FileResponse fileResponse = await blobService.DownloadAsync(fileId);
-          //      return Results.File(fileResponse.stream, fileResponse.contentType);
-          //  }).WithTags("Files")
-          //.DisableAntiforgery();
+            groups.MapDelete("/{idCuestionario}",async (Guid idCuestionario, ISender sender, ClaimsPrincipal user)=>{
 
-          //  app.MapDelete("files", async (Guid fileId, IBlobService blobService) =>
-          //  {
-          //      await blobService.DeleteAsync(fileId);
-          //      return Results.NoContent();
-          //  }).WithTags("Files")
-          //.DisableAntiforgery();
+                var email = user.FindFirst(ClaimTypes.Email)!.Value;
+                await sender.Send(new DeleteCuestionarioCommand(idCuestionario, email));
+                return Results.Ok();
+            });
         }
     }
 }

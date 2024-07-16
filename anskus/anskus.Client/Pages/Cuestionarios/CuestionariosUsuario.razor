@@ -25,7 +25,7 @@
                                     @cuestionario.Titulo
                                 </div>
                                 <div class="tittlePreguntasTotal">
-                                     @cuestionario.Pregunta.Count Preguntas
+                                    @cuestionario.Pregunta.Count Preguntas
                                 </div>
                                 <div class="TittleCreado">
                                     Creador el: @cuestionario.FechaCreacion
@@ -38,7 +38,7 @@
                                 <div @onclick="()=>EditarCuestionario(cuestionario)" class="btnCard Editarbtn">
                                     Editar
                                 </div>
-                                <div class="btnCard Eliminarbtn">
+                                <div @onclick="()=>EliminarCuestionario(cuestionario)" class="btnCard Eliminarbtn">
                                     Eliminar
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                                 <div @onclick="()=>EditarCuestionario(cuestionario)" class="btnCard Editarbtn">
                                     Editar
                                 </div>
-                                <div class="btnCard Eliminarbtn">
+                                <div @onclick="()=>EliminarCuestionario(cuestionario)" class="btnCard Eliminarbtn">
                                     Eliminar
                                 </div>
                                 @if (cuestionario.Estado == EstadoCuestionario.Borrador)
@@ -122,7 +122,42 @@
     {
         _navigationManager.NavigateTo($"/Cuestionario/{cuestionario.IdCuestionario}");
     }
-
+    private async void EliminarCuestionario(Cuestionario cuestionario)
+    {
+        SweetAlertResult result = await _sweetAlert.FireAsync(new SweetAlertOptions
+            {
+                Title = "Advertencia",
+                Text = "¿Estas seguro de eliminar este cuestionario? No lo podras recuperar al confirmar la acción",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "Cancelar"
+            });
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            bool response = await _cuestionarioService.RemoveCuestionarioAsync(cuestionario.IdCuestionario);
+            if (response)
+            {
+                await _sweetAlert.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Éxito",
+                        Text = "El cuestionario ha sido eliminado correctamente.",
+                        Icon = SweetAlertIcon.Success
+                    });
+                Cuestionarios = await _cuestionarioService.GetCuestionariobyUserAsync();
+                StateHasChanged();
+            }
+            else
+            {
+                await _sweetAlert.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = "No se pudo eliminar el cuestionario. Por favor, intenta nuevamente.",
+                        Icon = SweetAlertIcon.Error
+                    });
+            }
+        }
+    }
     private async void IniciarCuestionario(Cuestionario cuestionario)
     {
         if (cuestionario.Estado == EstadoCuestionario.Borrador)

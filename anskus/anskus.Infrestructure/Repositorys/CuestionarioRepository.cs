@@ -25,10 +25,11 @@ namespace anskus.Infrestructure.Repositorys
                 {
                     throw new Exception("No se encontro el usuario");
                 }
-
-
                 cuestionario.Iduser = user.Id;
-                cuestionario.FechaCreacion = DateTime.UtcNow;
+                var userTimeZoneId = "Central Standard Time (Mexico)";
+                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userTimeZoneId);
+                var userLocalTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
+                cuestionario.FechaCreacion = userLocalTime;
                 cuestionario.IdCuestionario = Guid.NewGuid();
                 await _cuestionarios.InsertOneAsync(cuestionario);
                 return cuestionario;
@@ -38,7 +39,11 @@ namespace anskus.Infrestructure.Repositorys
                 throw new Exception("Cuestionario Vacio");
             }
         }
-       
+       public async Task RemoveCuestionario(Guid idCuestionario, Guid Iduser)
+        {
+            var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario == idCuestionario && c.Iduser == Iduser);
+            await _cuestionarios.DeleteOneAsync(filter);
+        }
         public async Task<Cuestionario> GetbyId(Guid id, Guid IdUser)
         {
             var filter = Builders<Cuestionario>.Filter.Where(c => c.IdCuestionario== id && c.Iduser==IdUser);

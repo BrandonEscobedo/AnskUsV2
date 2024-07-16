@@ -1,7 +1,7 @@
 ﻿@page "/IngresarCodigo"
 @inject NavigationManager NavigationManager
 @inject ICuestionarioActivoServices _cuestionarioActivoServices
-@layout ComponentBaseLobby
+@layout ComponentBaseUltimoSalir
 @inject SweetAlertService _sweetAlert
 <link rel="stylesheet" href="css/codigo.css" />
 <div class="code__body">
@@ -17,7 +17,6 @@
     <h1>Haz click arriba o pregunta al creador del juego para que te unas a la diversion</h1>
 </div>
 @code {
-
     public int code;
     public bool Mostrar = false;
     private async Task IsCodeValid()

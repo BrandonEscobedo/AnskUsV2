@@ -13,7 +13,7 @@ namespace anskus.Domain.Models
         public DateTime FechaCreacion { get; set; }
         public EstadoCuestionario Estado { get; set; }
         private ICuestionarioState _estadoActual;
-        public Guid Iduser { get; set; } 
+        public Guid Iduser { get; set; }
         public Cuestionario()
         {
             Estado = EstadoCuestionario.Borrador;
@@ -25,26 +25,31 @@ namespace anskus.Domain.Models
         }
         public bool Completo()
         {
-            int total = 0;
-            if(string.IsNullOrWhiteSpace(Titulo))
+            if (string.IsNullOrWhiteSpace(Titulo))
             {
                 return false;
             }
-            foreach(var pregunta in Pregunta)
+            foreach (var pregunta in Pregunta)
             {
                 if (string.IsNullOrWhiteSpace(pregunta.pregunta))
                     return false;
-                foreach(var respuesta in pregunta.Respuesta)
+                int validResponsesCount = 0;
+                bool hasCorrectResponse = false;              
+                foreach (var respuesta in pregunta.Respuesta)
                 {
-                    if (string.IsNullOrWhiteSpace(respuesta.respuesta))
+                    if (!string.IsNullOrWhiteSpace(respuesta.respuesta) )
                     {
-                        total++;
-                        if (total > 2)
+                        validResponsesCount++;
+                        if (respuesta.RCorrecta)
                         {
-                            return false;
+                            hasCorrectResponse = true;
                         }
                     }
-                }                  
+                }
+                if (!hasCorrectResponse || validResponsesCount < 2)
+                {
+                    return false;
+                }
             }
             return true;
         }

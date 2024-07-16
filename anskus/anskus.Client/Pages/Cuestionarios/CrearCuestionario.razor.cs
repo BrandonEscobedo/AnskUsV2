@@ -9,9 +9,11 @@ namespace anskus.Client.Pages.Cuestionarios
 {
     public partial class CrearCuestionario
     {
-        [Parameter]
+     
         public Cuestionario Cuestionario { get; set; } = new Cuestionario();
         private Pregunta Pregunta = new();
+        [Parameter]
+        public Guid? Id { get; set; }
         public string FileType { get; set; } = "";
         private const long MaxFileSize = 20 * 1024 * 1024;
         private async Task AgregarImagenPregunta(InputFileChangeEventArgs e)
@@ -63,23 +65,26 @@ namespace anskus.Client.Pages.Cuestionarios
                 await GuardarCuestionario(Pregunta);
             }
         }
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-
+            if (Id.HasValue)
+            {
+                var cuest = await CuestionarioService.GetCuestionarioByIdAsync(Id);
+                if (cuest != null)
+                {
+                    Cuestionario = cuest;
+                }
+            }
             if (Cuestionario.Pregunta.Count == 0)
             {
                 Cuestionario.Pregunta.Add(Pregunta);
 
-                Pregunta = Cuestionario.Pregunta.First();
-                StateHasChanged();
             }
-            else
-            {
                 Pregunta = Cuestionario.Pregunta.First();
-                StateHasChanged();
-            }
+            
             StateHasChanged();
             IniciarRespuestasObligatorias();
+
         }
         private void IniciarRespuestasObligatorias()
         {
@@ -160,7 +165,7 @@ namespace anskus.Client.Pages.Cuestionarios
             {
                 await EliminarImagenPregunta(preg);
                 Cuestionario.Pregunta.Remove(preg);
-                await GuardarCuestionario();
+                await GuardarCuestionario(preg);
             }
 
         }

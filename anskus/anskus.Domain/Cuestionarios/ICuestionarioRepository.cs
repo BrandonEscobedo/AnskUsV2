@@ -13,6 +13,8 @@ namespace anskus.Domain.Cuestionarios
         Task<List<Cuestionario>> GetbyUser(string email);
         Task<Cuestionario> GetbyId(Guid id,Guid IdUser);
         Task<Cuestionario> Update(Cuestionario cuestionario);
+        public Task RemoveCuestionario(Guid idCuestionario, Guid Iduser);
+
 
     }
 }

@@ -55,7 +55,16 @@ namespace anskus.Application.Services
             }
             return null!;
         }
-
+        public async Task<bool> RemoveCuestionarioAsync(Guid? idCuestionario)
+        {
+            var response = await (await PrivateClient()).DeleteAsync($"{Constant.CuestionarioRoute}/{idCuestionario}");
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
         public async Task<Cuestionario> GetCuestionarioByIdAsync(Guid? id)
         {
             var response = await (await PrivateClient()).GetFromJsonAsync<Cuestionario>($"{Constant.CuestionarioRoute}?id={id}");
