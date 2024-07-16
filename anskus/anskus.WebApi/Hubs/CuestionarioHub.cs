@@ -55,9 +55,9 @@ namespace anskus.WebApi.Hubs
             await Clients.Clients(participante.Nombre).NewParticipante(participante);
             await Clients.Group(participante.Codigo.ToString()).NewParticipante(participante);
         }
-        public async Task IniciarCuestionario(int Codigo, string Titulo, Pregunta pregunta)
+        public async Task IniciarCuestionario(int Codigo, string Titulo, Pregunta pregunta, DatosCuestionario datosCuestionario)
         {
-            await Clients.Group(Codigo.ToString()).IniciarCuestionario(Titulo, pregunta);
+            await Clients.Group(Codigo.ToString()).IniciarCuestionario(Titulo, pregunta,datosCuestionario);
         }
         public async Task SiguientePregunta(int Codigo, Pregunta pregunta)
         {
@@ -73,6 +73,17 @@ namespace anskus.WebApi.Hubs
         }
         public async Task NavegarAClasificacion(int codigo)
         {
+            if (Context.Items.TryGetValue("IdCuestionario", out var idCuestionarioObj) &&
+             idCuestionarioObj is Guid idCuestionario &&
+             idCuestionario != Guid.Empty)
+            {
+                if (Context.Items.TryGetValue("IdUsuario", out var idUsuarioOBj) &&
+                    idUsuarioOBj is Guid idUsuario && idUsuario != Guid.Empty)
+                {
+                    await sender.Send(new RemoveCuestionarioActivoCommand(idCuestionario, idUsuario));
+                }
+                Context.Items.Clear();
+            }
             await Clients.Group(codigo.ToString()).NavegarAClasificacion();
         }
 
@@ -86,7 +97,7 @@ namespace anskus.WebApi.Hubs
 
         Task ListaRanking(List<ParticipanteEnCuestDTO> participantes);
         Task PreguntaContestada(ParticipanteEnCuestDTO participante);
-        Task IniciarCuestionario(string Titulo, Pregunta pregunta);
+        Task IniciarCuestionario(string Titulo, Pregunta pregunta,DatosCuestionario datosCuestionario);
         Task SiguientePregunta(Pregunta pregunta);
         Task MensajePrueba(string mensaje);
         Task NavegarARanking();

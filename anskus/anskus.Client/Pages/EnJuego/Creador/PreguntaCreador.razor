@@ -34,13 +34,11 @@
     <div class="ContainerFooter" id="footerDiv">
         <div class="ContainerFooterSection">
             <div class="TotalPreguntas">
-                3/10
+                @_stateContainer.PreguntaActual/@_stateContainer.DatosCuestionario.CantidadPreguntas
             </div>
         </div>
     </div>
-    <h2>@segundos</h2>
 </section>
-x
 @code {
     @using System.Threading
     private Timer? _timer;

@@ -81,11 +81,12 @@ else
     private List<Respuesta> respuestasCorrectas = new();
     protected override void OnInitialized()
     {
+        segundos = _stateContainer.DatosCuestionario.TiempoPorPregunta;
         _stateContainer.OnTiempoTermino += OnTiempoTermino;
         pregunta = _stateContainer.Pregunta;
         _timer = new Timer(OnTimerCallback, null, 1000, 1000);
         respuestasCorrectas = pregunta.Respuesta.Where(x => x.RCorrecta == true).ToList();
-        base.OnInitialized();
+     
     }
     private async void OnTiempoTermino()
     {

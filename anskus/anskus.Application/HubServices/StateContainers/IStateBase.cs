@@ -1,4 +1,5 @@
-﻿using anskus.Domain.Models;
+﻿using anskus.Application.DTOs;
+using anskus.Domain.Models;
 
 namespace anskus.Application.HubServices.StateContainers
 {
@@ -10,7 +11,7 @@ namespace anskus.Application.HubServices.StateContainers
         public event Action? OnSiguientePregunta;
         public event Action? OnNavegarARanking;
         public void NavegarARanking();
-        public void SetTituloPregunta(string Titulo, Pregunta pregunta);
+        public void SetTituloPregunta(string Titulo, Pregunta pregunta,DatosCuestionario datosCuestionario);
         public void SetPregunta(Pregunta pregunta);
     }
 }

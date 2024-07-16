@@ -1,6 +1,7 @@
 ﻿@page "/Resultado"
-@layout ComponentBaseEmpty
+@layout ComponentBaseUltimoSalir
 @inject IStateJugador _stateJugador
+@inject NavigationManager _navigationManager
 <link rel="stylesheet" href="/css/Posicion.css" />
 <section class="preguntas__body js-container ">
     <div class="results-summary-container">
@@ -38,7 +39,7 @@
                 </p>
             </div>
             <div class="summary__cta">
-                <button class="btnSalir btn__continue">
+                <button @onclick="Salir" class="btnSalir btn__continue">
                     Salir
                 </button>
             </div>
@@ -48,13 +49,17 @@
 @code {
     int ultimoIndice = 0;
     int posicion = 0;
+    private void Salir()
+    {
+        _navigationManager.NavigateTo("#");
+    }
     protected override void OnInitialized()
     {
         if (_stateJugador.participantes.Count > 0)
         {
             ultimoIndice = _stateJugador.participantes.Count - +1;
-            var parOrdenados= _stateJugador.participantes.OrderByDescending(x => x.PuntosActuales).ToList();
-            posicion = parOrdenados.FindIndex(x => x.IdPeC == _stateJugador.participante.IdPeC)+1;
+            var parOrdenados = _stateJugador.participantes.OrderByDescending(x => x.PuntosActuales).ToList();
+            posicion = parOrdenados.FindIndex(x => x.IdPeC == _stateJugador.participante.IdPeC) + 1;
         }
     }
 }

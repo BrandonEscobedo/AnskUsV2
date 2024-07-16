@@ -10,41 +10,46 @@
         <MudProgressLinear Size="Size.Large" Color="Color.Secondary" Value="@Value" Class="my-7" />
     </section>
 </section>
-@code{
+
+@code {
     [Parameter]
     public EventCallback OnTimerOff { get; set; }
+    private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+    public int Value { get; set; }
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        await SimulateProgressAsync();
+        await SimulateProgressAsync(_cancellationTokenSource.Token);
     }
 
     public void Dispose()
     {
-      
-        _disposed = true;
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
     }
-    private bool _disposed;
-    public int Value { get; set; }
-    public async Task SimulateProgressAsync()
+
+    public async Task SimulateProgressAsync(CancellationToken cancellationToken)
     {
         Value = 0;
-        do
+        try
         {
-            if (_disposed)
+            while (Value < 100)
             {
-                return;
-            }
+                cancellationToken.ThrowIfCancellationRequested();
 
-            Value += 2;
-            StateHasChanged();
-            await Task.Delay(130);
-            if (Value >= 100)
-            {
-                await OnTimerOff.InvokeAsync();
-            }
-        } while (Value < 100);
+                Value += 2;
+                StateHasChanged();
+                await Task.Delay(130, cancellationToken);
 
-        await SimulateProgressAsync();
+                if (Value >= 100)
+                {
+                    await OnTimerOff.InvokeAsync();
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Log or handle the cancellation if needed
+        }
     }
 }

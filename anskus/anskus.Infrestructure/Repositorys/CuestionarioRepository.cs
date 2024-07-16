@@ -18,22 +18,25 @@ namespace anskus.Infrestructure.Repositorys
         }
         public async Task<Cuestionario> Add(Cuestionario cuestionario, string email)
         {
-            if (cuestionario == null || cuestionario.IdCuestionario!=Guid.Empty)
+            if (cuestionario.Pregunta != null)
             {
-                throw new Exception("Cuestionario nulo");
-            }
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-            if (user == null )
-            {
-                throw new Exception("No se encontro el usuario");
-            }
-           
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+                if (user == null)
+                {
+                    throw new Exception("No se encontro el usuario");
+                }
 
-            cuestionario.Iduser = user.Id;
-            cuestionario.FechaCreacion = DateTime.Now;
-            cuestionario.IdCuestionario = Guid.NewGuid();
-            await _cuestionarios.InsertOneAsync(cuestionario);
-            return cuestionario;
+
+                cuestionario.Iduser = user.Id;
+                cuestionario.FechaCreacion = DateTime.UtcNow;
+                cuestionario.IdCuestionario = Guid.NewGuid();
+                await _cuestionarios.InsertOneAsync(cuestionario);
+                return cuestionario;
+            }
+            else
+            {
+                throw new Exception("Cuestionario Vacio");
+            }
         }
        
         public async Task<Cuestionario> GetbyId(Guid id, Guid IdUser)

@@ -1,4 +1,5 @@
-﻿using anskus.Domain.Models;
+﻿using anskus.Application.DTOs;
+using anskus.Domain.Models;
 
 namespace anskus.Application.HubServices.StateContainers
 {
@@ -11,6 +12,9 @@ namespace anskus.Application.HubServices.StateContainers
         public event Action? OnNavegarARanking;
         public event Action? OnNavegarAClasificacion;
         public event Action? OnTiempoTermino;
+        public DatosCuestionario DatosCuestionario { get; private set; } = new();
+        public int PreguntaActual { get; private set; } = 0;
+
         public void TiempoTermino()
         {
             OnTiempoTermino?.Invoke();
@@ -18,6 +22,7 @@ namespace anskus.Application.HubServices.StateContainers
         public void SetPregunta(Pregunta pregunta)
         {
             Pregunta = pregunta;
+            PreguntaActual += 1;
             OnSiguientePregunta?.Invoke();
         }
         public void NavegarARanking()
@@ -28,11 +33,14 @@ namespace anskus.Application.HubServices.StateContainers
         {
             OnNavegarAClasificacion?.Invoke();
         }
-        public void SetTituloPregunta(string Titulo, Pregunta pregunta)
+        public void SetTituloPregunta(string Titulo, Pregunta pregunta,DatosCuestionario datosCuestionario)
         {
             Pregunta = pregunta;
             this.Titulo = Titulo;
+            PreguntaActual += 1;
+            this.DatosCuestionario = datosCuestionario;
             OnIniciarCuestionario?.Invoke();
+            
         }
     }
 }

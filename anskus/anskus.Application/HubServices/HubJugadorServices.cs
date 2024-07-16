@@ -16,7 +16,7 @@ namespace anskus.Application.HubServices
             _hubConnection = hubConnection;
             _stateContainer = StateContainerOnPreg;
             _stateJugador = stateJugador;
-            _hubConnection.On<string, Pregunta>("IniciarCuestionario", OnIniciarCuestionario);
+            _hubConnection.On<string, Pregunta,DatosCuestionario>("IniciarCuestionario", OnIniciarCuestionario);
             _hubConnection.On<Pregunta>("SiguientePregunta", OnSiguientePregunta);
             _hubConnection.On<ParticipanteEnCuestDTO>("PreguntaContestada", OnPreguntaContestada);
             _hubConnection.On("NavegarARanking", OnNavegarARanking);
@@ -49,10 +49,10 @@ namespace anskus.Application.HubServices
             _stateContainer.SetPregunta(pregunta);
            
         }
-       
-        private  void OnIniciarCuestionario(string Titulo, Pregunta pregunta)
+
+        private  void OnIniciarCuestionario(string Titulo, Pregunta pregunta,DatosCuestionario datosCuestionario)
         {
-            _stateContainer.SetTituloPregunta(Titulo, pregunta);
+            _stateContainer.SetTituloPregunta(Titulo, pregunta, datosCuestionario );
         }
         public async Task MandarPreguntaContestada()
         {

@@ -1,4 +1,5 @@
-﻿@layout ComponentBaseEmpty
+﻿@layout ComponentBaseUltimoSalir
+@inject NavigationManager _navigationManager
 <link rel="stylesheet" href="/css/Clasificacion.css" />
 <link rel="stylesheet" href="/css/Confetti.css" />
 <link rel="stylesheet" href="/css/Preguntas.css" />
@@ -9,7 +10,13 @@
             Ganadores
         </div>
     </div>
-
+    <div class="btnSalirClasificacionContainer">
+        <div @onclick="Salir" class="btnSalirClasificacion">
+            <div>
+                Salir
+            </div>
+        </div>
+    </div>
 
     <div class="ContainerPuestos">
         <div class="SegundoLugarContainer">
@@ -53,7 +60,7 @@
         </div>
         <div class="SegundoLugarContainer">
             <div class="imgContainer ">
-                <img src="/img/TercerLugar.png/" >
+                <img src="/img/TercerLugar.png/">
             </div>
             <div class="BloqueContainer ">
                 <div class="TextLugarContainer">
@@ -82,9 +89,9 @@
     private ParticipanteEnCuestDTO? primerLugar;
     private ParticipanteEnCuestDTO? segundoLugar;
     private ParticipanteEnCuestDTO? tercerLugar;
-    protected override void OnParametersSet()
+    private void Salir()
     {
-
+        _navigationManager.NavigateTo("#");
     }
     protected override void OnInitialized()
     {
@@ -95,6 +102,6 @@
             segundoLugar = ParticipantesOrdenado.ElementAtOrDefault(1);
             tercerLugar = ParticipantesOrdenado.ElementAtOrDefault(2);
         }
-      
+
     }
 }
