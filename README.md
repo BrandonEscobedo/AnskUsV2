@@ -14,6 +14,8 @@
 
 -AutoMapper
 
+-MediatR
+
 -MudBlazor
 
 -MongoDb
