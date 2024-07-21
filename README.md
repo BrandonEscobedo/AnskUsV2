@@ -1,6 +1,5 @@
 # Anskus
-https://img.shields.io/badge/version-2-green
-
+![Static Badge](https://img.shields.io/badge/Version-2-green)
 ## Tecnologias , librerias y Frameworks
 -Blazor WebAssembly .NET 8
 -Web Api .NET 8
