@@ -49,7 +49,7 @@ Contraseña: dr&z10Md1$
 
 La solicitud Post a la Api se envia solo una vez al crear el cuestionario, dentro del nuevo cuestionario se aplica solo PUT sobre el mismo en las siguientes solicitudes
 
-![](https://github.com/BrandonEscobedo/AnskUsV2/blob/main/img/DiagramaCrearCuestionario.png)
+![](https://github.com/BrandonEscobedo/AnskUsV2/blob/main/img/DiagramaPostCrearCuestionario.png)
 
 ### Activar Cuestionario
 
